@@ -1,26 +1,148 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* =========================================================
+   DESIGN SYSTEM — LWT (롯데월드타워·몰) — Single Source Token
+   Sumber tunggal: design (2).md — jangan menambah token di luar ini
+   ========================================================= */
+
+@theme {
+  /* colors — hanya 8 nilai sah */
+  --color-primary: #f00808;
+  --color-on-primary: #ffffff;
+  --color-background: #ffffff;
+  --color-surface: #ffffff;
+  --color-surface-inverse: #000000;
+  --color-border: #f00808;
+  --color-text: #000000;
+  --color-text-inverse: #ffffff;
+  --color-text-muted: #666666;
+
+  /* typography — family */
+  --font-display: "League Gothic", sans-serif;
+  --font-heading: "League Gothic", sans-serif;
+  --font-nav: "SUIT", sans-serif;
+  --font-body: "SUIT", sans-serif;
+  --font-sans: "SUIT", sans-serif;
+
+  /* typography — scale persis design.md (159px / 14px) */
+  --text-display: 159px;
+  --text-heading: 159px;
+  --text-nav: 14px;
+  --text-body: 14px;
+
+  /* spacing — hanya 10 nilai ini yang sah (px) */
+  --spacing-1: 1px;
+  --spacing-2: 2px;
+  --spacing-3: 3px;
+  --spacing-5: 5px;
+  --spacing-8: 8px;
+  --spacing-9: 9px;
+  --spacing-11: 11px;
+  --spacing-12: 12px;
+  --spacing-14: 14px;
+  --spacing-15: 15px;
+
+  /* radius — hanya none & pill */
+  --radius-none: 0px;
+  --radius-pill: 9999px;
+
+  /* shadows — flat only */
+  --shadow-none: none;
+
+  /* motion */
+  --duration-fast: 200ms;
+  --duration-base: 500ms;
+  --duration-slow: 1500ms;
+  --ease: cubic-bezier(0.19, 1, 0.22, 1);
+
+  /* breakpoints */
+  --breakpoint-md: 680px;
+  --breakpoint-lg: 1024px;
+
+  /* components — navbar */
+  --navbar-item-spacing: 12px; /* scale[7] */
+  --navbar-active-indicator: 2px;
+
+  /* — DEPRECATED — token lama bentrok (PRD Urban Horizon / Spatial)
+     Jangan pakai lagi. Dibuat alias ke token sah hanya supaya komponen lama
+     tidak crash sebelum refactor di prompt berikutnya. Hapus setelah migrasi.
+  */
+  --color-crimson: var(--color-primary);
+  --color-crimson-dark: var(--color-primary);
+  --color-crimson-soft: var(--color-primary);
+  --color-crimson-glow: var(--color-primary);
+  --color-gold: var(--color-primary);
+  --color-gold-bright: var(--color-primary);
+  --color-gold-soft: var(--color-primary);
+  --color-cream: var(--color-background);
+  --color-cream-mid: var(--color-surface);
+  --color-cream-card: var(--color-surface);
+  --color-cinema: var(--color-surface-inverse);
+  --color-cinema-card: var(--color-surface-inverse);
+  --color-cinema-elevated: var(--color-surface-inverse);
+  --color-spatial: var(--color-surface-inverse);
+  --color-ink: var(--color-text);
+  --color-muted: var(--color-text-muted);
+  --color-muted-soft: var(--color-text-muted);
+  --color-accent: var(--color-primary);
+  --color-accent-soft: var(--color-primary);
+  --color-glass: var(--color-surface);
+  --color-glass-border: var(--color-border);
+  --color-glass-strong: var(--color-surface);
+  --font-display-old: var(--font-display);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ——— deprecated primitive classes — tetap ada sementara, jangan pakai baru ——— */
+.cream,
+.cream-card,
+.glass,
+.glass-strong,
+.glass-subtle,
+.iridescent,
+.crimson-glow,
+.gold-ring {
+  /* @deprecated — akan dihapus setelah komponen migrasi ke token resmi */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-text-muted) transparent;
+}
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--color-text-muted);
+  border-radius: var(--radius-pill);
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+section[id] {
+  scroll-margin-top: var(--spacing-15);
 }
