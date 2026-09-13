@@ -1,148 +1,163 @@
 @import "tailwindcss";
 
-/* =========================================================
-   DESIGN SYSTEM — LWT (롯데월드타워·몰) — Single Source Token
-   Sumber tunggal: design (2).md — jangan menambah token di luar ini
-   ========================================================= */
+/* ============================================================
+   DESIGN SYSTEM — DUTA MALL BANJARMASIN
+   Pinned to DESIGN.md (LWT extraction): stark black canvas,
+   pure-white surfaces, singular red accent #F00808, League
+   Gothic display + SUIT UI, 0px corners everywhere, depth by
+   color-blocking. A neo-brutalist touch: 2px ink borders,
+   hard-offset block shadows, checker hover fills, ticker.
+   ============================================================ */
 
 @theme {
-  /* colors — hanya 8 nilai sah */
-  --color-primary: #f00808;
-  --color-on-primary: #ffffff;
-  --color-background: #ffffff;
-  --color-surface: #ffffff;
-  --color-surface-inverse: #000000;
-  --color-border: #f00808;
-  --color-text: #000000;
-  --color-text-inverse: #ffffff;
-  --color-text-muted: #666666;
+  /* colors — stark LWT system (DESIGN.md §2) */
+  --color-paper: #ffffff;
+  --color-ink: #000000;
+  --color-accent: #f00808;
+  --color-accent-ink: #0a0000;
+  --color-mute: #999999;
+  --color-ash: #b3b3b3;
+  --color-silver: #e5e5e5;
+  --color-smoke: #666666;
 
-  /* typography — family */
-  --font-display: "League Gothic", sans-serif;
-  --font-heading: "League Gothic", sans-serif;
-  --font-nav: "SUIT", sans-serif;
-  --font-body: "SUIT", sans-serif;
-  --font-sans: "SUIT", sans-serif;
+  /* type — family */
+  --font-display: var(--font-league), "Arial Narrow", "Oswald", sans-serif;
+  --font-sans: var(--font-suit), "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-space), "Courier New", monospace;
 
-  /* typography — scale persis design.md (159px / 14px) */
-  --text-display: 159px;
-  --text-heading: 159px;
-  --text-nav: 14px;
-  --text-body: 14px;
+  /* depth — hard-offset block shadows (neo-brutalist device) */
+  --shadow-brutal: 6px 6px 0 0 #000000;
+  --shadow-brutal-sm: 3px 3px 0 0 #000000;
+  --shadow-brutal-xs: 2px 2px 0 0 #000000;
+  --shadow-brutal-paper: 6px 6px 0 0 #ffffff;
+  --shadow-brutal-paper-sm: 3px 3px 0 0 #ffffff;
+  --shadow-brutal-accent: 6px 6px 0 0 #f00808;
 
-  /* spacing — hanya 10 nilai ini yang sah (px) */
-  --spacing-1: 1px;
-  --spacing-2: 2px;
-  --spacing-3: 3px;
-  --spacing-5: 5px;
-  --spacing-8: 8px;
-  --spacing-9: 9px;
-  --spacing-11: 11px;
-  --spacing-12: 12px;
-  --spacing-14: 14px;
-  --spacing-15: 15px;
-
-  /* radius — hanya none & pill */
-  --radius-none: 0px;
-  --radius-pill: 9999px;
-
-  /* shadows — flat only */
-  --shadow-none: none;
-
-  /* motion */
-  --duration-fast: 200ms;
-  --duration-base: 500ms;
-  --duration-slow: 1500ms;
-  --ease: cubic-bezier(0.19, 1, 0.22, 1);
-
-  /* breakpoints */
-  --breakpoint-md: 680px;
-  --breakpoint-lg: 1024px;
-
-  /* components — navbar */
-  --navbar-item-spacing: 12px; /* scale[7] */
-  --navbar-active-indicator: 2px;
-
-  /* — DEPRECATED — token lama bentrok (PRD Urban Horizon / Spatial)
-     Jangan pakai lagi. Dibuat alias ke token sah hanya supaya komponen lama
-     tidak crash sebelum refactor di prompt berikutnya. Hapus setelah migrasi.
-  */
-  --color-crimson: var(--color-primary);
-  --color-crimson-dark: var(--color-primary);
-  --color-crimson-soft: var(--color-primary);
-  --color-crimson-glow: var(--color-primary);
-  --color-gold: var(--color-primary);
-  --color-gold-bright: var(--color-primary);
-  --color-gold-soft: var(--color-primary);
-  --color-cream: var(--color-background);
-  --color-cream-mid: var(--color-surface);
-  --color-cream-card: var(--color-surface);
-  --color-cinema: var(--color-surface-inverse);
-  --color-cinema-card: var(--color-surface-inverse);
-  --color-cinema-elevated: var(--color-surface-inverse);
-  --color-spatial: var(--color-surface-inverse);
-  --color-ink: var(--color-text);
-  --color-muted: var(--color-text-muted);
-  --color-muted-soft: var(--color-text-muted);
-  --color-accent: var(--color-primary);
-  --color-accent-soft: var(--color-primary);
-  --color-glass: var(--color-surface);
-  --color-glass-border: var(--color-border);
-  --color-glass-strong: var(--color-surface);
-  --font-display-old: var(--font-display);
+  /* motion — instant brutalist feedback, one soft exception */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 120ms;
+  --dur-md: 200ms;
+  --dur-slow: 480ms;
 }
 
-/* ——— deprecated primitive classes — tetap ada sementara, jangan pakai baru ——— */
-.cream,
-.cream-card,
-.glass,
-.glass-strong,
-.glass-subtle,
-.iridescent,
-.crimson-glow,
-.gold-ring {
-  /* @deprecated — akan dihapus setelah komponen migrasi ke token resmi */
-}
-
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-text-muted) transparent;
-}
-*::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-*::-webkit-scrollbar-thumb {
-  background: var(--color-text-muted);
-  border-radius: var(--radius-pill);
-}
-*::-webkit-scrollbar-track {
-  background: transparent;
-}
+/* ---------- base ---------- */
 
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  background: var(--color-background);
-  color: var(--color-text);
-  font-family: var(--font-body);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
   overflow-x: hidden;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
-  background: var(--color-primary);
-  color: var(--color-on-primary);
+  background: var(--color-accent);
+  color: #fff;
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
 }
 
-section[id] {
-  scroll-margin-top: var(--spacing-15);
+section[id],
+div[id] {
+  scroll-margin-top: 96px;
+}
+
+/* stark scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-ink) var(--color-paper);
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--color-ink);
+  border: 2px solid var(--color-paper);
+}
+*::-webkit-scrollbar-track {
+  background: var(--color-paper);
+}
+
+/* ---------- brutalist devices ---------- */
+
+/* checker hover fill — the system's signature interactive feedback */
+.cell-checker {
+  position: relative;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent 0 8px,
+    rgba(0, 0, 0, 0.045) 8px 12px
+  );
+}
+
+/* outlined display text — knockout typography on ink */
+.text-outline-paper {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--color-paper);
+}
+
+.text-outline-ink {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--color-ink);
+}
+
+/* marquee ticker */
+.marquee {
+  overflow: hidden;
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 36s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* slide transition for the hero carousel */
+.hero-slide {
+  transition: opacity var(--dur-slow) var(--ease-out),
+    visibility var(--dur-slow);
+}
+.hero-slide[aria-hidden="true"] {
+  visibility: hidden;
+}
+
+/* header hide-on-scroll behavior */
+.site-header {
+  transition: transform var(--dur-md) var(--ease-out);
+}
+
+/* ---------- motion discipline ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .marquee-track {
+    animation: none;
+  }
+  .hero-slide {
+    transition: none;
+  }
+  .site-header {
+    transform: none !important;
+  }
 }

@@ -1,5 +1,6 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { leagueGothic, suit, spaceMono } from "./fonts";
 
 export const metadata: Metadata = {
   title: "Duta Mall Banjarmasin | Belanja, Cinema XXI & FUGO Hotel",
@@ -21,18 +22,29 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#000000",
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="id" className="h-full antialiased">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* League Gothic — display/heading 159px/400 */}
-        <link href="https://fonts.googleapis.com/css2?family=League+Gothic&display=swap" rel="stylesheet" />
-        {/* SUIT — nav/body 14px/700 — CDN resmi */}
-        <link href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/static/woff2/SUIT.css" rel="stylesheet" />
-      </head>
-      <body className="min-h-full flex flex-col bg-background text-text selection:bg-primary selection:text-on-primary" style={{ fontFamily: "var(--font-body)" }}>
+    <html
+      lang="id"
+      className={`${leagueGothic.variable} ${suit.variable} ${spaceMono.variable} h-full antialiased`}
+    >
+      <body className="flex min-h-full flex-col bg-paper font-sans text-ink">
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:border-2 focus:border-ink focus:bg-accent focus:px-4 focus:py-2 focus:font-mono focus:text-sm focus:font-bold focus:uppercase focus:text-ink"
+        >
+          Lewati ke konten utama
+        </a>
         {children}
       </body>
     </html>

@@ -1,51 +1,77 @@
-import * as React from "react";
+import type { AnchorHTMLAttributes, ButtonHTMLAttributes } from "react";
 
-type Variant = "primary" | "secondary" | "ghost";
-type Size = "sm" | "md";
+type Variant = "solid" | "primary" | "outline" | "outlinePaper" | "accent" | "ghost";
+type Size = "sm" | "md" | "lg";
 
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: Variant;
-  size?: Size;
+const base =
+  "inline-flex select-none items-center justify-center gap-2.5 border-2 font-sans font-bold uppercase tracking-wider transition-[transform,background-color,color,border-color,box-shadow] duration-150 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none";
+
+const variants: Record<Variant, string> = {
+  solid: "border-ink bg-ink text-paper shadow-brutal-sm hover:bg-smoke hover:shadow-brutal",
+  primary: "border-ink bg-accent text-ink shadow-brutal-sm hover:shadow-brutal",
+  outline: "border-ink bg-paper text-ink shadow-brutal-sm hover:bg-ink hover:text-paper hover:shadow-brutal",
+  outlinePaper: "border-paper bg-transparent text-paper hover:bg-paper hover:text-ink",
+  accent: "border-ink bg-accent text-ink shadow-brutal-sm hover:shadow-brutal",
+  ghost: "border-transparent bg-transparent text-current hover:bg-black/5",
+};
+
+const sizes: Record<Size, string> = {
+  sm: "h-10 px-4 text-xs",
+  md: "h-12 px-6 text-sm",
+  lg: "h-14 px-8 text-base",
+};
+
+export function BrutalButton({
+  variant = "solid",
+  size = "md",
+  className = "",
+  children,
+  ...rest
+}: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: Variant; size?: Size }) {
+  return (
+    <button
+      className={`${base} ${variants[variant]} ${sizes[size]} ${className}`}
+      {...rest}
+    >
+      {children}
+    </button>
+  );
 }
 
-/**
- * Button — design.md
- * - shape: pill (radius.pill 9999px)
- * - accent: primary #f00808 hanya untuk aksen; solid boleh untuk CTA utama
- * - tanpa box-shadow
- * - transisi hover: motion.duration-fast 200ms + motion.easing cubic-bezier(0.19,1,0.22,1)
- * - font: SUIT 14px 700 letter -0.28px line 1 (typography.nav/body)
- * - spacing dari scale [1,2,3,5,8,9,11,12,14,15]
- * - states: hover / focus-visible / active / disabled
- */
-export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className = "", variant = "primary", size = "md", disabled, children, ...props }, ref) => {
-    const base =
-      "inline-flex items-center justify-center font-[SUIT] text-[14px] font-bold leading-none tracking-[-0.28px] rounded-[9999px] border select-none " +
-      "transition-colors duration-[200ms] ease-[cubic-bezier(0.19,1,0.22,1)] " +
-      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-0 " +
-      "disabled:opacity-40 disabled:cursor-not-allowed disabled:pointer-events-none " +
-      "active:brightness-95";
+export function BrutalButtonLink({
+  variant = "solid",
+  size = "md",
+  className = "",
+  children,
+  ...rest
+}: AnchorHTMLAttributes<HTMLAnchorElement> & { variant?: Variant; size?: Size; href: string }) {
+  return (
+    <a
+      className={`${base} ${variants[variant]} ${sizes[size]} ${className}`}
+      {...rest}
+    >
+      {children}
+    </a>
+  );
+}
 
-    // spacing: px-14px/8px adalah dari scale, py 8px/5px juga dari scale
-    const sizeCls = size === "sm" ? "px-[14px] py-[5px] gap-[8px]" : "px-[15px] py-[8px] gap-[8px]";
+/** Square brutalist icon button — carousel controls, toggles. */
+export function BrutalIconButton({
+  className = "",
+  children,
+  ...rest
+}: ButtonHTMLAttributes<HTMLButtonElement>) {
+  return (
+    <button
+      className={`inline-flex size-11 shrink-0 items-center justify-center border-2 border-ink bg-paper transition-colors duration-150 hover:bg-ink hover:text-paper ${className}`}
+      {...rest}
+    >
+      {children}
+    </button>
+  );
+}
 
-    const variantCls: Record<Variant, string> = {
-      // primary: bg primary text on-primary border primary — tanpa shadow
-      primary: "bg-primary text-on-primary border-primary hover:brightness-[0.92] shadow-none",
-      // secondary: monokrom — surface bg, text, border ink/muted — primary tidak dipakai kecuali focus
-      secondary:
-        "bg-surface text-text border-text/15 hover:border-text hover:bg-surface shadow-none",
-      // ghost: transparan monokrom
-      ghost:
-        "bg-transparent text-text border-transparent hover:bg-text/5 hover:border-text/10 shadow-none",
-    };
-
-    return (
-      <button ref={ref} disabled={disabled} className={`${base} ${sizeCls} ${variantCls[variant]} ${className}`} {...props}>
-        {children}
-      </button>
-    );
-  }
-);
-Button.displayName = "Button";
+/** Backward-compatible soft aliases (legacy imports). */
+export const SoftButton = BrutalButton;
+export const SoftButtonLink = BrutalButtonLink;
+export const SoftIconButton = BrutalIconButton;

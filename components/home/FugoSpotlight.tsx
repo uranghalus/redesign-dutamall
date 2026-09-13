@@ -1,114 +1,160 @@
 "use client";
 
 import { useState } from "react";
-
-const tabs = [
-  { id: "deluxe", label: "Deluxe", price: "Rp 850K", perks: "Sarapan · Kolam renang · Mall access" },
-  { id: "suite", label: "Suite", price: "Rp 1.45jt", perks: "Lounge · Ballroom view · Late checkout" },
-  { id: "family", label: "Family", price: "Rp 1.10jt", perks: "Extra bed · Playground · Buffet" },
-] as const;
+import { Section, SectionHeading } from "@/components/ui/Section";
+import { BrutalButton, BrutalButtonLink } from "@/components/ui/Button";
+import { IconStar, IconBed, IconArrow, IconPhone } from "@/components/ui/Icons";
+import { fugo } from "@/app/data/home";
 
 export default function FugoSpotlight() {
-  const [active, setActive] = useState<(typeof tabs)[number]["id"]>("deluxe");
-  const current = tabs.find((t) => t.id === active)!;
+  const [nights, setNights] = useState(1);
+  const [guests, setGuests] = useState(2);
+  const total = nights * 850_000;
 
   return (
-    <section id="fugo" aria-labelledby="fugo-title" className="relative overflow-hidden bg-cinema py-12">
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-gold/[0.06] via-transparent to-crimson/[0.04]" aria-hidden />
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="overflow-hidden rounded-[28px] border border-gold/15 bg-gradient-to-br from-cinema-card via-cinema-card to-[#1a1611] shadow-[0_16px_48px_rgba(0,0,0,0.5)]">
-          <div className="grid md:grid-cols-[1.1fr_0.9fr] md:gap-0">
-            <div className="p-6 md:p-8">
-              <p className="inline-flex items-center gap-2 text-[10px] font-bold tracking-[0.22em] text-gold">
-                <span className="h-px w-6 bg-gold" />
-                FUGO HOTEL & SUITES · BINTANG 4
-              </p>
-              <h2 id="fugo-title" className="mt-3 text-3xl font-extrabold tracking-tight text-white md:text-4xl">
-                Menginap <span className="font-light text-white/70">di Atas Mall</span>
-              </h2>
-              <p className="mt-3 max-w-xl text-sm font-normal leading-relaxed text-white/50">Panorama kota Banjarmasin, akses langsung ke Duta Mall dari lobi hotel. Pilih tipe kamar — harga mock untuk pratinjau.</p>
+    <Section id="fugo" dark>
+      <div className="px-4 py-14 md:px-10 md:py-20">
+        <SectionHeading index="04 / HOSPITALITY" title="FUGO HOTEL & SUITES" dark />
 
-              {/* interactive tabs */}
-              <div className="mt-6 flex gap-2 rounded-full border border-white/10 bg-white/[0.04] p-1.5 backdrop-blur" role="group" aria-label="Pilih tipe kamar">
-                {tabs.map((t) => (
-                  <button
-                    key={t.id}
-                    type="button"
-                    onClick={() => setActive(t.id)}
-                    aria-pressed={active === t.id}
-                    className={`flex-1 rounded-full px-3 py-2 text-xs font-bold transition-colors ${active === t.id ? "bg-gold text-white gold-ring" : "text-white/60 hover:bg-white/10 hover:text-white"}`}
-                  >
-                    {t.label}
-                  </button>
-                ))}
-              </div>
-
-              <div className="mt-4 rounded-2xl border border-gold/15 bg-gold-soft px-4 py-3">
-                <div className="flex items-baseline justify-between gap-3">
-                  <p className="text-sm font-bold text-white">
-                    {current.label} <span className="font-normal text-white/60">· {current.perks}</span>
-                  </p>
-                  <p className="text-sm font-extrabold text-gold">{current.price}</p>
-                </div>
-                <p className="mt-1 text-xs font-medium text-white/45">Mulai / malam · Belum termasuk pajak. Ketersediaan real-time di Fase 2.</p>
-              </div>
-
-              <ul className="mt-6 grid grid-cols-2 gap-3 text-sm">
-                {[
-                  ["180", "kamar Deluxe & Suite"],
-                  ["2", "restoran fine dining"],
-                  ["300 pax", "Grand Ballroom"],
-                  ["25 mnt", "ke Bandara Syamsudin Noor"],
-                ].map(([n, d]) => (
-                  <li key={d} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur">
-                    <strong className="text-lg font-extrabold tracking-tight text-white">{n}</strong>
-                    <span className="block text-xs font-medium text-white/45">{d}</span>
-                  </li>
-                ))}
-              </ul>
+        <div className="grid gap-10 lg:grid-cols-[1.5fr_1fr]">
+          {/* story + facts */}
+          <div>
+            <div className="flex items-center gap-2" aria-label="Hotel bintang 4">
+              {Array.from({ length: fugo.stars }).map((_, i) => (
+                <IconStar key={i} size={16} className="text-accent" />
+              ))}
+              <span className="ml-2 font-mono text-xs font-bold uppercase tracking-widest text-paper/70">
+                Hotel Bintang 4 · Di Atas Mall
+              </span>
             </div>
 
-            <div className="relative flex flex-col justify-center gap-3 bg-gradient-to-br from-gold/[0.08] via-white/[0.02] to-transparent p-6 backdrop-blur md:border-l md:border-white/10">
-              {/* mock gallery */}
-              <div className="overflow-hidden rounded-[20px] border border-white/10 bg-black/20">
-                <div className="relative h-48 bg-gradient-to-br from-[#2a2215] via-[#1c1c20] to-crimson/20 p-4">
-                  <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_30%,rgba(251,191,36,0.12),transparent_60%)]" aria-hidden />
-                  <p className="relative text-[10px] font-bold tracking-[0.18em] text-gold">PREVIEW · {current.label.toUpperCase()}</p>
-                  <p className="relative mt-2 text-lg font-bold text-white">Panorama Kota Banjarmasin</p>
-                  <p className="relative text-xs font-medium text-white/45">Akses lift langsung ke mall · Jendela floor-to-ceiling</p>
-                  <div className="relative mt-4 flex gap-1.5">
-                    {tabs.map((t) => (
-                      <span key={t.id} className={`h-1 rounded-full transition-all ${t.id === active ? "w-6 bg-gold" : "w-3 bg-white/20"}`} />
-                    ))}
-                  </div>
+            <p className="mt-6 font-display text-4xl uppercase leading-[0.95] md:text-6xl">
+              PANORAMA <span className="text-outline-paper">KOTA</span>
+              <br />
+              <span className="text-accent">BANJARMASIN</span> LANGSUNG
+              <br />
+              DARI LOBI MALL
+            </p>
+
+            <p className="mt-6 max-w-xl font-sans text-base leading-relaxed text-ash">
+              180 kamar Deluxe &amp; Suite di lantai teratas Duta Mall. Dua restoran
+              fine dining, Grand Ballroom berkapasitas 300 pax, dan akses langsung ke
+              cinema serta ritel mall — 25 menit dari Bandara Samsudin Noor.
+            </p>
+
+            <dl className="mt-10 grid grid-cols-2 gap-px border-2 border-paper/40 bg-paper/40 sm:grid-cols-4">
+              {fugo.highlights.map((h) => (
+                <div key={h.label} className="bg-ink p-4">
+                  <dt className="font-mono text-xs font-bold uppercase tracking-widest text-paper/70">
+                    {h.label}
+                  </dt>
+                  <dd className="mt-2 font-display text-4xl uppercase leading-none">{h.value}</dd>
+                  <dd className="mt-1 font-mono text-xs uppercase tracking-wide text-paper/70">
+                    {h.unit}
+                  </dd>
                 </div>
-                <div className="flex gap-2 p-2">
-                  {[0, 1, 2].map((i) => (
+              ))}
+            </dl>
+
+            <div className="mt-8 flex flex-wrap gap-4">
+              <a
+                href="tel:+625113278888"
+                className="inline-flex items-center gap-2 border-2 border-paper/40 px-4 py-3 font-mono text-xs font-bold uppercase tracking-widest text-paper underline-offset-4 transition-colors hover:border-accent hover:text-accent"
+              >
+                <IconPhone size={15} />
+                {fugo.phone}
+              </a>
+            </div>
+          </div>
+
+          {/* book direct widget */}
+          <div className="border-2 border-paper/40 bg-ink">
+            <div className="border-b-2 border-paper/40 bg-accent px-5 py-3">
+              <p className="font-mono text-[11px] font-bold uppercase tracking-widest text-ink">
+                BOOK DIRECT — BEST RATE
+              </p>
+            </div>
+            <div className="p-5">
+              <label className="block font-mono text-xs font-bold uppercase tracking-widest text-paper/70">
+                Malam
+                <div className="mt-2 flex items-stretch justify-between border-2 border-paper/40 py-1">
+                  <button
+                    type="button"
+                    onClick={() => setNights((n) => Math.max(1, n - 1))}
+                    aria-label="Kurangi malam"
+                    className="px-4 font-display text-2xl transition-colors hover:bg-paper hover:text-ink"
+                  >
+                    −
+                  </button>
+                  <span
+                    className="flex flex-1 items-center justify-center font-display text-4xl"
+                    aria-live="polite"
+                  >
+                    {nights}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setNights((n) => Math.min(14, n + 1))}
+                    aria-label="Tambah malam"
+                    className="px-4 font-display text-2xl transition-colors hover:bg-paper hover:text-ink"
+                  >
+                    +
+                  </button>
+                </div>
+              </label>
+
+              <label className="mt-5 block font-mono text-xs font-bold uppercase tracking-widest text-paper/70">
+                Tamu
+                <div className="mt-2 grid grid-cols-4 gap-2">
+                  {[1, 2, 3, 4].map((g) => (
                     <button
-                      key={i}
+                      key={g}
                       type="button"
-                      onClick={() => setActive(tabs[i].id)}
-                      aria-label={`Lihat ${tabs[i].label}`}
-                      className={`h-12 flex-1 rounded-xl border text-[10px] font-bold ${tabs[i].id === active ? "border-gold bg-gold-soft text-gold" : "border-white/10 bg-white/[0.04] text-white/40 hover:bg-white/10"}`}
+                      aria-pressed={guests === g}
+                      onClick={() => setGuests(g)}
+                      className={`border-2 py-2 font-mono text-sm font-bold transition-colors ${
+                        guests === g
+                          ? "border-accent bg-accent text-ink"
+                          : "border-paper/40 text-paper hover:border-paper"
+                      }`}
                     >
-                      {tabs[i].label}
+                      {g}
                     </button>
                   ))}
                 </div>
+              </label>
+
+              <div className="mt-6 border-t border-paper/20 pt-4">
+                <div className="flex items-end justify-between">
+                  <span className="font-mono text-xs font-bold uppercase tracking-widest text-paper/70">
+                    Estimasi · {nights}M × {guests}T
+                  </span>
+                  <span className="font-display text-4xl leading-none">
+                    {(total / 1_000).toLocaleString("id-ID")}K
+                  </span>
+                </div>
+                <p className="mt-1 font-mono text-xs uppercase tracking-wide text-paper/60">
+                  Ilustrasi tarif — konfirmasi saat reservasi.
+                </p>
               </div>
 
-              <a id="booking" href="tel:+625113278888" className="inline-flex items-center justify-center gap-2 rounded-full bg-gold px-6 py-3.5 text-center text-sm font-extrabold text-white hover:bg-[#b45309] gold-ring transition-colors">
-                Book Now — {current.price}
-                <span aria-hidden>→</span>
-              </a>
-              <a href="tel:+625113278888" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3 text-center text-sm font-semibold text-white backdrop-blur hover:bg-white hover:text-cinema">
-                Meeting & Event Inquiries
-              </a>
-              <p className="text-center text-[11px] font-medium text-white/30">Tap tipe kamar untuk bandingkan · Direct call ke FUGO</p>
+              <BrutalButton variant="accent" size="lg" className="mt-6 w-full">
+                <IconBed size={17} />
+                Book Now
+              </BrutalButton>
+              <BrutalButtonLink
+                href="#whatson"
+                variant="outlinePaper"
+                size="sm"
+                className="mt-3 w-full"
+              >
+                Meeting &amp; Event Inquiries
+                <IconArrow size={14} />
+              </BrutalButtonLink>
             </div>
           </div>
         </div>
       </div>
-    </section>
+    </Section>
   );
 }

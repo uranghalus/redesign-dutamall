@@ -1,75 +1,149 @@
 "use client";
 
-import { useState } from "react";
+import { Section, SectionHeading } from "@/components/ui/Section";
+import { BrutalButtonLink } from "@/components/ui/Button";
+import { IconPin, IconPhone, IconRoute, IconClock } from "@/components/ui/Icons";
 
-export default function LocationSection() {
-  const [copied, setCopied] = useState(false);
-  const address = "Jl. Ahmad Yani KM 2 Banjarmasin";
+const mapUrl =
+  "https://www.google.com/maps/search/?api=1&query=Duta+Mall+Banjarmasin";
+const routeUrl =
+  "https://www.google.com/maps/dir/?api=1&destination=Duta+Mall+Banjarmasin";
 
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(address);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 1800);
-    } catch {
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 1800);
-    }
-  };
-
+/** Stylized structural map — authored geometry, not a screenshot. */
+function MapPanel() {
   return (
-    <section id="lokasi" aria-labelledby="lokasi-title" className="cream border-t border-ink/5 py-12">
-      <div className="mx-auto max-w-7xl px-6 md:grid md:grid-cols-2 md:gap-8 md:items-start">
-        <div>
-          <h2 id="lokasi-title" className="text-3xl font-extrabold tracking-tight text-ink md:text-4xl">
-            Lokasi <span className="font-light text-ink/50">& Akses</span>
-          </h2>
-          <p className="mt-3 inline-flex items-center gap-2 rounded-full border border-ink/10 bg-white px-3 py-1.5 text-sm font-bold text-ink">
-            <span className="h-1.5 w-1.5 rounded-full bg-crimson" />
-            {address}
-          </p>
-          <p className="mt-2 text-sm font-medium text-muted">Open Daily 10:00–22:00 WITA · Parkir 2.500+ kendaraan</p>
+    <div className="relative min-h-[320px] border-2 border-ink bg-paper p-4 shadow-brutal-sm">
+      {/* road frame */}
+      <div className="absolute inset-x-6 top-6 h-2 bg-ink" aria-hidden="true" />
+      <div className="absolute inset-y-6 right-6 w-2 bg-ink" aria-hidden="true" />
+      <span className="absolute right-3 top-9 bg-paper px-1 font-mono text-xs font-bold uppercase tracking-widest">
+        Jl. Ahmad Yani
+      </span>
 
-          <div className="mt-4 flex flex-wrap gap-2">
-            <a href="https://maps.google.com/?q=Duta+Mall+Banjarmasin" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full bg-crimson px-5 py-2.5 text-xs font-bold text-white hover:bg-crimson-dark crimson-glow">
-              Buka Rute Maps
-              <span aria-hidden>↗</span>
-            </a>
-            <a href="tel:+625113278888" className="inline-flex items-center gap-2 rounded-full border border-ink/15 bg-white px-5 py-2.5 text-xs font-bold text-ink hover:border-crimson/20 hover:text-crimson">
-              <span className="h-1.5 w-1.5 rounded-full bg-gold" />
-              (0511) 327-8888
-            </a>
-            <button type="button" onClick={copy} className="inline-flex items-center gap-2 rounded-full border border-ink/10 bg-cream-mid px-4 py-2.5 text-xs font-semibold text-ink hover:bg-white">
-              {copied ? "Tersalin ✓" : "Salin Alamat"}
-            </button>
-          </div>
-
-          <div className="mt-6 grid grid-cols-3 gap-3">
-            {[
-              ["25 mnt", "Bandara Syamsudin Noor"],
-              ["KM 2", "Jl. Ahmad Yani"],
-              ["10–22", "WITA · Setiap hari"],
-            ].map(([v, l]) => (
-              <div key={l} className="rounded-2xl border border-ink/10 bg-white px-3 py-4 text-center">
-                <p className="text-sm font-extrabold text-crimson">{v}</p>
-                <p className="text-[11px] font-medium leading-tight text-muted">{l}</p>
-              </div>
-            ))}
-          </div>
+      {/* mall block */}
+      <div className="absolute bottom-16 left-6 right-16 top-12 border-4 border-ink bg-paper">
+        <div className="absolute inset-2 border-2 border-dashed border-smoke/40" aria-hidden="true" />
+        <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-paper px-2 font-display text-2xl uppercase md:text-3xl">
+          DUTA<span className="text-accent">/</span>MALL
+        </span>
+        {/* FUGO tower */}
+        <div className="absolute bottom-2 right-2 flex h-16 w-12 flex-col justify-end border-2 border-ink bg-ink p-1">
+          <span className="text-center font-mono text-[11px] font-bold uppercase tracking-widest text-paper">
+            FUGO
+          </span>
         </div>
-
-        <div className="relative mt-6 overflow-hidden rounded-[20px] border border-ink/10 bg-white p-2 shadow-[0_8px_24px_rgba(0,0,0,0.06)] md:mt-0">
-          <iframe
-            title="Peta Duta Mall Banjarmasin"
-            src="https://maps.google.com/maps?q=Duta%20Mall%20Banjarmasin&t=&z=15&ie=UTF8&iwloc=&output=embed"
-            className="h-64 w-full rounded-[14px] border-0 md:h-[300px]"
-            loading="lazy"
-          />
-          <div className="pointer-events-none absolute bottom-4 left-4 rounded-full border border-ink/10 bg-white px-3 py-1.5 text-xs font-bold text-ink shadow-[0_4px_16px_rgba(0,0,0,0.12)]">
-            Duta Mall · Jl. Ahmad Yani KM 2
-          </div>
+        {/* parking */}
+        <div className="absolute bottom-2 left-2 border-2 border-ink bg-silver px-2 py-1 font-mono text-xs font-bold uppercase tracking-widest">
+          P 1—4
+        </div>
+        {/* entrance marker */}
+        <div className="absolute left-1/2 top-0 flex -translate-x-1/2 -translate-y-1/2 items-center gap-1.5 border-2 border-ink bg-accent px-2 py-1 font-mono text-xs font-bold uppercase tracking-widest text-ink">
+          <IconPin size={12} />
+          Main Gate
         </div>
       </div>
-    </section>
+
+      {/* coordinates readout */}
+      <span className="absolute bottom-3 left-6 font-mono text-xs font-bold uppercase tracking-widest text-smoke">
+        3.3186°S · 114.5934°E
+      </span>
+    </div>
+  );
+}
+
+export default function LocationSection() {
+  return (
+    <Section id="location">
+      <div className="px-4 py-14 md:px-10 md:py-20">
+        <SectionHeading
+          index="06 / LOCATION"
+          title="LOKASI & AKSES"
+          right={
+            <span className="font-mono text-xs font-bold uppercase tracking-widest text-smoke">
+              Banjarmasin · Kalsel
+            </span>
+          }
+        />
+
+        <div className="grid gap-8 lg:grid-cols-2">
+          <div>
+            <ul className="divide-y-2 divide-ink border-2 border-ink">
+              <li className="flex items-center gap-4 bg-paper px-4 py-4">
+                <span className="flex size-10 shrink-0 items-center justify-center border-2 border-ink">
+                  <IconPin size={18} />
+                </span>
+                <div>
+                  <p className="font-sans text-sm font-bold uppercase tracking-wide">
+                    Alamat
+                  </p>
+                  <p className="font-mono text-xs uppercase tracking-wide text-smoke">
+                    Jl. Ahmad Yani KM 2, Banjarmasin 70236
+                  </p>
+                </div>
+              </li>
+              <li className="flex items-center gap-4 bg-paper px-4 py-4">
+                <span className="flex size-10 shrink-0 items-center justify-center border-2 border-ink">
+                  <IconClock size={18} />
+                </span>
+                <div>
+                  <p className="font-sans text-sm font-bold uppercase tracking-wide">
+                    Jam Operasional
+                  </p>
+                  <p className="font-mono text-xs uppercase tracking-wide text-smoke">
+                    Open Daily 10:00–22:00 WITA · Cinema s.d. 24:00
+                  </p>
+                </div>
+              </li>
+              <li className="flex items-center gap-4 bg-paper px-4 py-4">
+                <span className="flex size-10 shrink-0 items-center justify-center border-2 border-ink">
+                  <IconPhone size={18} />
+                </span>
+                <div>
+                  <p className="font-sans text-sm font-bold uppercase tracking-wide">
+                    Hotline
+                  </p>
+                  <a
+                    href="tel:+625113278888"
+                    className="font-mono text-xs font-bold tracking-wide text-ink underline decoration-accent decoration-2 underline-offset-4 hover:bg-accent"
+                  >
+                    (0511) 327-8888
+                  </a>
+                </div>
+              </li>
+            </ul>
+
+            <div className="mt-6 flex flex-wrap gap-4">
+              <BrutalButtonLink
+                href={routeUrl}
+                variant="primary"
+                size="md"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <IconRoute size={16} />
+                Buka Rute di Maps
+              </BrutalButtonLink>
+              <BrutalButtonLink href={mapUrl} variant="outline" size="md" target="_blank" rel="noreferrer">
+                <IconPin size={16} />
+                Google Maps
+              </BrutalButtonLink>
+            </div>
+          </div>
+
+          <MapPanel />
+        </div>
+
+        <div className="mt-8 flex flex-col items-start justify-between gap-4 border-2 border-ink bg-paper p-5 shadow-brutal-sm sm:flex-row sm:items-center">
+          <p className="font-sans text-sm text-smoke">
+            <strong className="font-bold text-ink">25 menit</strong> dari Bandara
+            Samsudin Noor · <strong className="font-bold text-ink">akses langsung</strong>{" "}
+            dari Lobi FUGO Hotel.
+          </p>
+          <span className="font-mono text-[11px] font-bold uppercase tracking-widest">
+            KODE LOKASI: <span className="bg-ink px-1.5 py-0.5 text-paper">DTM-KLS-02</span>
+          </span>
+        </div>
+      </div>
+    </Section>
   );
 }

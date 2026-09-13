@@ -1,48 +1,106 @@
+import { IconPin, IconPhone, IconClock } from "@/components/ui/Icons";
+
+const columns = [
+  {
+    title: "Direktori",
+    links: [
+      { label: "Cinema XXI", href: "#cinema" },
+      { label: "Tenant & Boutique", href: "#tenants" },
+      { label: "Fasilitas Mall", href: "#facilities" },
+      { label: "Food Court", href: "#tenants" },
+    ],
+  },
+  {
+    title: "Hospitality",
+    links: [
+      { label: "FUGO Hotel & Suites", href: "#fugo" },
+      { label: "Book Direct", href: "#fugo" },
+      { label: "Meeting & Events", href: "#fugo" },
+    ],
+  },
+  {
+    title: "Informasi",
+    links: [
+      { label: "What's On", href: "#whatson" },
+      { label: "Lokasi & Parkir", href: "#location" },
+      { label: "Jam Operasional", href: "#location" },
+    ],
+  },
+  {
+    title: "Korporat",
+    links: [
+      { label: "Tentang Govindo Group", href: "#top" },
+      { label: "Kebijakan Privasi", href: "#top" },
+      { label: "Syarat & Ketentuan", href: "#top" },
+      { label: "Sewa Unit (Leasing)", href: "#top" },
+    ],
+  },
+];
+
 export default function SiteFooter() {
-  const cols = [
-    { h: "Mall Directory", links: [["Tenant", "#tenant"], ["Fasilitas", "#fasilitas"], ["Lokasi", "#lokasi"]] },
-    { h: "Entertainment", links: [["Cinema XXI", "#cinema"], ["What's On", "#whats-on"], ["FUGO Hotel", "#fugo"]] },
-    { h: "Corporate Legal", links: [["Kebijakan Privasi", "#top"], ["Syarat & Ketentuan", "#top"], ["Govindo Group", "#fugo"]] },
-  ];
   return (
-    <footer className="border-t border-white/10 bg-cinema pb-20 md:pb-8">
-      <div className="mx-auto grid max-w-7xl gap-8 px-6 py-10 md:grid-cols-4">
-        <div>
-          <p className="text-sm font-extrabold tracking-tight text-white">Duta Mall Banjarmasin</p>
-          <p className="mt-1 inline-flex items-center gap-2 text-xs font-medium text-white/50">
-            <span className="h-1 w-1 rounded-full bg-crimson" />
-            Jl. Ahmad Yani KM 2 Banjarmasin
-          </p>
-          <p className="text-xs font-medium text-white/40">Open Daily 10:00–22:00 WITA</p>
-          <div className="mt-3 flex flex-wrap gap-2">
-            <a href="tel:+625113278888" className="inline-flex rounded-full bg-crimson px-3 py-1.5 text-xs font-bold text-white hover:bg-crimson-dark">
-              (0511) 327-8888
-            </a>
-            <a href="https://maps.google.com/?q=Duta+Mall+Banjarmasin" target="_blank" rel="noopener noreferrer" className="inline-flex rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-semibold text-white hover:bg-white hover:text-cinema">
-              Rute Maps
-            </a>
+    <footer className="border-t-2 border-ink bg-ink text-paper">
+      <div className="px-4 pb-10 pt-12 md:px-10">
+        <div className="grid gap-12 lg:grid-cols-[1.4fr_2fr]">
+          {/* identity */}
+          <div>
+            <p className="font-display text-5xl uppercase leading-[0.9] md:text-6xl">
+              DUTA<span className="text-accent">/</span>MALL
+              <span className="text-outline-paper block">BANJARMASIN</span>
+            </p>
+            <p className="mt-5 max-w-sm font-sans text-sm leading-relaxed text-ash">
+              Pusat perbelanjaan, hiburan, dan gaya hidup terbesar di Kalimantan
+              Selatan — terintegrasi dengan FUGO Hotel &amp; Suites dan Cinema XXI /
+              The Premiere.
+            </p>
+            <ul className="mt-6 space-y-2.5 font-mono text-xs uppercase tracking-wide">
+              <li className="flex items-center gap-2.5">
+                <IconPin size={14} className="shrink-0 text-accent" />
+                Jl. Ahmad Yani KM 2, Banjarmasin 70236
+              </li>
+              <li className="flex items-center gap-2.5">
+                <IconPhone size={14} className="shrink-0 text-accent" />
+                <a href="tel:+625113278888" className="px-0.5 underline-offset-4 hover:text-accent hover:underline">
+                  Hotline (0511) 327-8888
+                </a>
+              </li>
+              <li className="flex items-center gap-2.5">
+                <IconClock size={14} className="shrink-0 text-accent" />
+                Open Daily 10:00–22:00 WITA
+              </li>
+            </ul>
+          </div>
+
+          {/* link columns */}
+          <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
+            {columns.map((col) => (
+              <nav key={col.title} aria-label={col.title}>
+                <h3 className="mb-4 inline-block bg-paper px-1.5 py-0.5 font-mono text-[11px] font-bold uppercase tracking-widest text-ink">
+                  {col.title}
+                </h3>
+                <ul className="space-y-2.5">
+                  {col.links.map((link) => (
+                    <li key={`${col.title}-${link.label}`}>
+                      <a
+                        href={link.href}
+                        className="font-sans text-sm text-ash underline-offset-4 transition-colors hover:text-accent hover:underline"
+                      >
+                        {link.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            ))}
           </div>
         </div>
-        {cols.map((c) => (
-          <nav key={c.h} aria-label={c.h}>
-            <p className="text-xs font-bold tracking-[0.12em] text-gold">{c.h.toUpperCase()}</p>
-            <ul className="mt-3 space-y-1.5 text-xs font-medium text-white/50">
-              {c.links.map(([label, href]) => (
-                <li key={label}>
-                  <a href={href} className="hover:text-white hover:underline decoration-crimson/50 underline-offset-4">
-                    {label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        ))}
-      </div>
-      <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-6 py-4">
-          <p className="text-[11px] font-medium tracking-wide text-white/30">© 2026 Duta Mall Banjarmasin · PT Govindo Utama · Gawi Sabumi Kawa Manuntung</p>
-          <p className="text-[11px] font-bold tracking-[0.14em] text-white/20">
-            <span className="text-crimson">●</span> CRIMSON <span className="text-gold">●</span> GOLD <span className="text-white/40">●</span> CREAM <span className="text-white/20">●</span> CINEMA #121214
+
+        {/* legal band */}
+        <div className="mt-12 flex flex-col items-start justify-between gap-4 border-t border-paper/20 pt-6 font-mono text-[11px] uppercase tracking-wide text-ash md:flex-row md:items-center">
+          <p>© {new Date().getFullYear()} PT Govindo Utama — Govindo Group.</p>
+          <p className="flex items-center gap-2">
+            <span aria-hidden="true" className="inline-block size-2 bg-accent" />
+            Gawi Sabumi Kawa Manuntung
           </p>
         </div>
       </div>

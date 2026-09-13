@@ -1,0 +1,15 @@
+▲ Next.js 16.3.5 (Turbopack)
+- Local:         http://localhost:3100
+- Network:       http://100.78.34.83:3100
+✓ Ready in 1994ms
+⚠ Warning: Next.js ignored package-lock.json in D:\NextJs because it is outside the current Git repository (D:\NextJs\redesign-dutamall).
+ To use this directory, set `turbopack.root` in your Next.js config.
+
+✓ Running next.config.ts took 116ms
+⚠ Slow filesystem detected. The benchmark took 248ms. If \\?\D:\NextJs\redesign-dutamall\.next\dev is a network drive, consider moving it to a local folder.
+See more: https://nextjs.org/docs/app/guides/local-development
+
+ GET / 200 in 4.1s (next.js: 3.4s, application-code: 719ms)
+ GET / 200 in 716ms (next.js: 424ms, application-code: 292ms)
+ GET / 200 in 204ms (next.js: 33ms, application-code: 171ms)
+[?25h
