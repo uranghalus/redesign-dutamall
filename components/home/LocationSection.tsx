@@ -1,6 +1,7 @@
 "use client";
 
 import { Section, SectionHeading } from "@/components/ui/Section";
+import Reveal from "@/components/ui/Reveal";
 import { BrutalButtonLink } from "@/components/ui/Button";
 import { IconPin, IconPhone, IconRoute, IconClock } from "@/components/ui/Icons";
 
@@ -65,7 +66,7 @@ export default function LocationSection() {
           }
         />
 
-        <div className="grid gap-8 lg:grid-cols-2">
+        <Reveal className="grid gap-8 lg:grid-cols-2">
           <div>
             <ul className="divide-y-2 divide-ink border-2 border-ink">
               <li className="flex items-center gap-4 bg-paper px-4 py-4">
@@ -131,9 +132,9 @@ export default function LocationSection() {
           </div>
 
           <MapPanel />
-        </div>
+        </Reveal>
 
-        <div className="mt-8 flex flex-col items-start justify-between gap-4 border-2 border-ink bg-paper p-5 md:shadow-brutal-sm sm:flex-row sm:items-center">
+        <Reveal variant="ink" className="mt-8 flex flex-col items-start justify-between gap-4 border-2 border-ink bg-paper p-5 md:shadow-brutal-sm sm:flex-row sm:items-center">
           <p className="font-sans text-sm text-smoke">
             <strong className="font-bold text-ink">25 menit</strong> dari Bandara
             Samsudin Noor · <strong className="font-bold text-ink">akses langsung</strong>{" "}
@@ -142,7 +143,7 @@ export default function LocationSection() {
           <span className="font-mono text-[11px] font-bold uppercase tracking-widest">
             KODE LOKASI: <span className="bg-ink px-1.5 py-0.5 text-paper">DTM-KLS-02</span>
           </span>
-        </div>
+        </Reveal>
       </div>
     </Section>
   );

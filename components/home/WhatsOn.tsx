@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Section, SectionHeading } from "@/components/ui/Section";
+import Reveal from "@/components/ui/Reveal";
 import { IconCalendar, IconArrow } from "@/components/ui/Icons";
 import { events } from "@/app/data/home";
 
@@ -88,18 +89,17 @@ export default function WhatsOn() {
           }
         />
 
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+        <Reveal variant="seq" as="div" className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
           {events.map((ev) => (
             <EventCard
               key={ev.id}
               date={ev.date}
               category={ev.category}
               title={ev.title}
-              excerpt={ev.excerpt}
-              accent={ev.accent}
-            />
-          ))}
-        </div>
+              excerpt={ev.excerpt}            accent={ev.accent}
+          />
+        ))}
+        </Reveal>
       </div>
     </Section>
   );

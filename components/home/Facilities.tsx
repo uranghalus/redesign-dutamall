@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Section, SectionHeading } from "@/components/ui/Section";
+import Reveal from "@/components/ui/Reveal";
 import { IconArrow } from "@/components/ui/Icons";
 import {
   IconInfo,
@@ -50,7 +51,7 @@ export default function Facilities() {
           }
         />
 
-        <div className="grid gap-8 lg:grid-cols-[2fr_1fr]">
+        <Reveal className="grid gap-8 lg:grid-cols-[2fr_1fr]">
           {/* interactive facility grid — mall-map cell logic */}
           <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
             {facilities.map((f) => {
@@ -84,7 +85,7 @@ export default function Facilities() {
           </ul>
 
           {/* detail panel — updates with the active facility */}
-          <div className="self-start border-2 border-ink md:shadow-brutal">
+          <Reveal variant="ink" delay={3} className="self-start border-2 border-ink md:shadow-brutal">
             <div className="border-b-2 border-ink bg-ink px-5 py-3">
               <p className="font-mono text-[11px] font-bold uppercase tracking-widest text-paper">
                 DETAIL FASILITAS
@@ -121,11 +122,11 @@ export default function Facilities() {
                 <IconArrow size={14} />
               </a>
             </div>
-          </div>
-        </div>
+          </Reveal>
+        </Reveal>
 
         {/* parking stat band */}
-        <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <Reveal variant="seq" as="div" className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
           {[
             { v: "2.500+", l: "Mobil & Motor" },
             { v: "P1–P4", l: "Empat Lantai Parkir" },
@@ -139,7 +140,7 @@ export default function Facilities() {
               </p>
             </div>
           ))}
-        </div>
+        </Reveal>
       </div>
     </Section>
   );

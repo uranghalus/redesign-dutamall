@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Section, SectionHeading } from "@/components/ui/Section";
+import Reveal from "@/components/ui/Reveal";
 import { BrutalButton } from "@/components/ui/Button";
 import { IconPlay, IconClock } from "@/components/ui/Icons";
 import { movies, type Movie } from "@/app/data/home";
@@ -208,16 +209,16 @@ export default function Cinema() {
         />
 
         {/* Mobile: flush artwork plates with hairline seams; md+ restores the brutalist frame */}
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <Reveal variant="seq" as="div" className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {list.map((movie) => (
             <MovieCard key={movie.id} movie={movie} />
           ))}
-        </div>
+        </Reveal>
 
-        <p className="mt-8 flex items-center gap-2 font-mono text-xs tracking-wide text-paper/70">
+        <Reveal className="mt-8 flex items-center gap-2 font-mono text-xs tracking-wide text-paper/70">
           <span aria-hidden="true" className="inline-block size-2 bg-accent" />
           Jadwal dapat berubah — konfirmasi di lobi Cinema XXI, Lantai 3.
-        </p>
+        </Reveal>
       </div>
     </Section>
   );

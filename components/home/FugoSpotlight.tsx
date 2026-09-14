@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { Section, SectionHeading } from "@/components/ui/Section";
+import Reveal from "@/components/ui/Reveal";
+import CountUp from "@/components/ui/CountUp";
 import { BrutalButtonLink } from "@/components/ui/Button";
 import { IconStar, IconBed, IconArrow, IconPhone } from "@/components/ui/Icons";
 import { fugo } from "@/app/data/home";
@@ -16,7 +18,7 @@ export default function FugoSpotlight() {
       <div className="px-4 py-14 md:px-10 md:py-20">
         <SectionHeading index="04 / HOSPITALITY" title="FUGO HOTEL & SUITES" dark />
 
-        <div className="grid gap-10 lg:grid-cols-[1.5fr_1fr]">
+        <Reveal className="grid gap-10 lg:grid-cols-[1.5fr_1fr]">
           {/* story + facts */}
           <div>
             <div className="flex items-center gap-2" aria-label="Hotel bintang 4">
@@ -49,7 +51,9 @@ export default function FugoSpotlight() {
                   <dt className="font-mono text-xs font-bold uppercase tracking-widest text-paper/70">
                     {h.label}
                   </dt>
-                  <dd className="mt-2 font-display text-4xl uppercase leading-none">{h.value}</dd>
+                  <dd className="mt-2 font-display text-4xl uppercase leading-none">
+                    <CountUp value={Number(h.value)} />
+                  </dd>
                   <dd className="mt-1 font-mono text-xs uppercase tracking-wide text-paper/70">
                     {h.unit}
                   </dd>
@@ -69,7 +73,7 @@ export default function FugoSpotlight() {
           </div>
 
           {/* book direct widget — flush counter plate, hairline seams */}
-          <div className="border-paper/40 bg-ink max-md:border-b max-md:border-paper/15 md:border-2">
+          <Reveal variant="ink" delay={3} className="border-paper/40 bg-ink max-md:border-b max-md:border-paper/15 md:border-2">
             <div className="border-paper/40 bg-accent px-5 py-3 max-md:border-b max-md:border-paper/15 md:border-b-2">
               <p className="font-mono text-[11px] font-bold uppercase tracking-widest text-ink">
                 BOOK DIRECT — BEST RATE
@@ -161,8 +165,8 @@ export default function FugoSpotlight() {
                 <IconArrow size={14} />
               </BrutalButtonLink>
             </div>
-          </div>
-        </div>
+          </Reveal>
+        </Reveal>
       </div>
     </Section>
   );

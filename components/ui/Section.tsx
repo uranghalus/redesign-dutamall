@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Reveal from "@/components/ui/Reveal";
 
 /** Section shell — full-width stark band. Dark inverts to canvas black. */
 export function Section({
@@ -47,7 +48,10 @@ export function SectionHeading({
         {right}
       </div>
       <h2 className="font-display uppercase leading-[0.9] tracking-tight">
-        <span className="block text-5xl md:text-7xl">{title}</span>
+        {/* ink-shutter wipe — the signage metaphor: the sign mounts as the visitor reads */}
+        <Reveal variant="wipe" as="span" className="block text-5xl md:text-7xl">
+          {title}
+        </Reveal>
       </h2>
     </div>
   );

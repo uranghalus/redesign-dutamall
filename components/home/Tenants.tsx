@@ -2,6 +2,7 @@
 
 import { useDeferredValue, useMemo, useRef, useState } from "react";
 import { Section, SectionHeading } from "@/components/ui/Section";
+import Reveal from "@/components/ui/Reveal";
 import { IconArrow, IconClose, IconRoute, IconSearch } from "@/components/ui/Icons";
 import { tenants, tenantCategories, type TenantCategory } from "@/app/data/home";
 
@@ -195,9 +196,10 @@ export default function Tenants() {
           </div>
         )}
 
-        {/* logo wall — one plate field, hairline seams; plates select */}
+        {/* logo wall — one plate field, hairline seams; plates select.
+            The field fades as one mass (the wall is the section's plate). */}
         {matched.length > 0 ? (
-          <ul className="grid grid-cols-2 gap-px border border-ink bg-ink sm:grid-cols-3 lg:grid-cols-4">
+          <Reveal variant="ink" as="ul" className="grid grid-cols-2 gap-px border border-ink bg-ink sm:grid-cols-3 lg:grid-cols-4">
             {matched.map((t) => {
               const selected = pickedTenant?.name === t.name;
               return (
@@ -252,31 +254,7 @@ export default function Tenants() {
                 </li>
               );
             })}
-
-            {/* promo tile — closes the grid as the directory CTA */}
-            <li className="col-span-2">
-              <a
-                href="#tenants"
-                aria-label="Lihat direktori lengkap — 200+ tenant, GF sampai L2"
-                className="group flex h-full min-h-[124px] flex-col justify-between gap-3 bg-ink p-4 text-paper transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent md:p-5"
-              >
-                <span className="font-mono text-[11px] font-bold uppercase tracking-widest text-paper/70">
-                  +200 brand lainnya · GF–L2
-                </span>
-                <span className="flex items-center justify-between gap-3">
-                  <span className="font-display text-2xl uppercase leading-[0.95] md:text-3xl">
-                    Lihat direktori
-                    <br />
-                    lengkap<span className="text-accent">.</span>
-                  </span>
-                  <IconArrow
-                    size={22}
-                    className="shrink-0 text-accent transition-transform duration-150 group-hover:translate-x-1.5"
-                  />
-                </span>
-              </a>
-            </li>
-          </ul>
+          </Reveal>
         ) : (
           /* empty state — always offers recovery, never a dead end */
           <div className="border-2 border-ink p-8 text-center md:p-10">
@@ -297,6 +275,63 @@ export default function Tenants() {
             </button>
           </div>
         )}
+
+        {/* directory band — full-width ink CTA closing the section. Lives outside
+            the grid on purpose: a spanned tile leaves grid-ground voids whenever
+            a filtered count doesn't fill its row. The link box covers headline +
+            arrow; the chip row below is a REAL second filter control (nested
+            interactive elements are invalid, so the chips are siblings, not
+            children, of the anchor). */}
+        <Reveal variant="ink" className="border border-ink">
+          <div className="bg-ink p-5 text-paper md:p-6">
+            <a
+              href="#tenants"
+              aria-label="Lihat direktori lengkap — 200+ tenant, GF sampai L2"
+              className="group flex flex-wrap items-center justify-between gap-x-8 gap-y-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            >
+              <div>
+                <p className="font-mono text-[11px] font-bold uppercase tracking-widest text-paper/70">
+                  +200 brand lainnya · GF–L2
+                </p>
+                <p className="mt-2 font-display text-3xl uppercase leading-[0.95] md:text-4xl">
+                  Lihat direktori
+                  <br className="sm:hidden" />
+                  <span className="hidden sm:inline"> </span>
+                  lengkap<span className="text-accent">.</span>
+                </p>
+              </div>
+              <span className="flex size-12 items-center justify-center border-2 border-paper/30 transition-colors duration-150 group-hover:border-accent group-hover:bg-accent md:size-14">
+                <IconArrow
+                  size={22}
+                  className="text-accent transition-all duration-150 group-hover:translate-x-0.5 group-hover:text-ink"
+                />
+              </span>
+            </a>
+            <div className="mt-5 flex flex-wrap items-center gap-x-2 gap-y-2 border-t border-paper/15 pt-4" role="group" aria-label="Filter kategori dari indeks bawah">
+              {tenantCategories.map((c) => {
+                const active = c === category;
+                return (
+                  <button
+                    key={c}
+                    type="button"
+                    aria-pressed={active}
+                    onClick={() => setCategory(c)}
+                    className={`border px-2 py-1 font-mono text-[11px] font-bold uppercase tracking-widest transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+                      active
+                        ? "border-accent bg-accent text-ink"
+                        : "border-transparent text-paper/60 hover:border-paper/40 hover:text-paper"
+                    }`}
+                  >
+                    {c}
+                  </button>
+                );
+              })}
+              <span className="ml-auto font-mono text-[11px] font-bold uppercase tracking-widest text-paper/60">
+                {matched.length}/{tenants.length} ditampilkan
+              </span>
+            </div>
+          </div>
+        </Reveal>
       </div>
     </Section>
   );

@@ -850,6 +850,16 @@ earned neo-brutalist layer (user brief: "a touch of neo-brutalism"):
   the letter tile. The grid closes with a full-width ink promo tile ("+200
   brand lainnya — Lihat direktori lengkap.") as the directory CTA. Filter
   pills unchanged. Supersedes the unit-code row list for this surface.
+  **v2 (2026-09-14): the CTA left the grid** — it is now a full-width ink
+  directory band below the wall (framed `border-ink`, boxed arrow chip on
+  hover-fill, category index strip + live "n/n ditampilkan" count inside).
+  Reason: a spanned tile inside the seam grid leaves grid-ground voids
+  whenever a filtered plate count doesn't fill its last row. Bands close
+  sections; tiles fill cells. **Chips are live filters** (v2.1): the band's
+  category index doubles as a second filter control — bordered chips,
+  accent fill when active, `aria-pressed`, mirrored with the top pills.
+  Chip row is a SIBLING of the headline anchor, not its child (nested
+  interactive elements invalid); the link box covers headline + arrow only.
 - **Interactive directory wall** (2026-09-14): the tenant wall is a working
   directory, not a static grid. A brutalist search field (IconSearch, clear
   button, `useDeferredValue`) composes with the category pills; plates are
@@ -859,6 +869,23 @@ earned neo-brutalist layer (user brief: "a touch of neo-brutalism"):
   the empty state always offers "Lihat semua tenant" recovery. Picked state =
   silver fill + 3px accent inset frame + corner tick. Per-plate floor/unit
   sublines (mono 11px) make wayfinding scannable without interaction.
+- **Scroll-reveal system** (2026-09-14): one entrance language for every
+  section — a confident rise-and-settle (opacity + translate 18px, 640ms,
+  `--ease-out`), played ONCE per element via `components/ui/Reveal.tsx`
+  (IntersectionObserver, −8% bottom rootMargin, no replay, no scroll-scrub).
+  Variants: default rise; `ink` pure fade for large ink plates (detail panel,
+  booking widget, tenant wall, location band — the mass is the ground, it
+  doesn't travel); `wipe` clip-path left→right on section display titles (the
+  signage metaphor); `seq` DOM-order stagger for genuine lists (cinema cards,
+  facility stats, event cards), 60ms steps capped at 6. Hidden start states
+  exist only under a `.js` html class set pre-paint in `app/layout.tsx` —
+  failed JS can never blank the page. `prefers-reduced-motion` drops the
+  travel and shows content instantly (movement goes, arrival stays).
+  **Count-up numerals**: the FUGO stat plate's values count 0→final on first
+  viewport entry (`components/ui/CountUp.tsx`, ~1.1s quartic ease-out, plays
+  once, id-ID formatting). SSR renders the FINAL value — data is the truth;
+  the count is a replay, not the source. Reduced motion keeps the final
+  value without the count.
 - **Knockout accent**: `.text-outline-accent` (1.5px #EA4124 stroke) joins the
   paper/ink knockouts; used for ghost wayfinding codes on the hero field.
 - **Warmed neutrals** (2026-09-14): paper, silver, smoke, mute, and ash carry a

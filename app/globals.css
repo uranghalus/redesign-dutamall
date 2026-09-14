@@ -249,6 +249,53 @@ div[id] {
   translate: -6px 0;
 }
 
+/* ---------- scroll reveals ----------
+   One material idea per the motion thesis: a confident rise-and-settle,
+   played once per element as it enters. Hidden start states exist ONLY under
+   the `.js` gate (set by an inline script in app/layout.tsx before paint), so
+   a failed script can never hide the page. Stagger is capped at 6 steps and
+   reserved for genuine lists/sequences. */
+.js .reveal-seq > *,
+.js .reveal-ink,
+.js .reveal-wipe,
+.js [data-reveal] {
+  transition:
+    opacity 640ms var(--ease-out),
+    translate 640ms var(--ease-out),
+    clip-path 720ms var(--ease-out);
+  transition-delay: calc(var(--r-i, 0) * 60ms);
+}
+.js [data-reveal] {
+  opacity: 0.001;
+  translate: 0 18px;
+}
+.js .reveal-ink {
+  opacity: 0.001;
+}
+.js .reveal-wipe {
+  clip-path: inset(0 100% 0 0);
+  translate: 0 10px;
+}
+.js .reveal-seq > * {
+  opacity: 0.001;
+  translate: 0 18px;
+}
+.js .is-in[data-reveal],
+.js .is-in.reveal-ink,
+.js .is-in.reveal-wipe,
+.js .reveal-seq.is-in > * {
+  opacity: 1;
+  translate: 0 0;
+  clip-path: inset(0 0 0 0);
+}
+/* sequence slots — DOM-order stagger inside a reveal-seq parent */
+.reveal-seq > :nth-child(2) { --r-i: 1; }
+.reveal-seq > :nth-child(3) { --r-i: 2; }
+.reveal-seq > :nth-child(4) { --r-i: 3; }
+.reveal-seq > :nth-child(5) { --r-i: 4; }
+.reveal-seq > :nth-child(6) { --r-i: 5; }
+.reveal-seq > :nth-child(7) { --r-i: 6; }
+
 /* ---------- motion discipline ---------- */
 
 @media (prefers-reduced-motion: reduce) {
@@ -279,5 +326,17 @@ div[id] {
   }
   .quicknav-fold {
     transition: none;
+  }
+  /* reveals: reduced motion gets instant visibility — the state change
+     (content present) stays, the spatial movement goes */
+  .js [data-reveal],
+  .js .reveal-ink,
+  .js .reveal-wipe,
+  .js .reveal-seq > * {
+    transition: none;
+    opacity: 1;
+    translate: none;
+    clip-path: none;
+    transition-delay: 0ms;
   }
 }
