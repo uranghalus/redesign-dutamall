@@ -18,7 +18,7 @@ source:
   extractedAt: 2026-09-13
   tokensMeasured: true
 colors:
-  primary: '#F00808'
+  primary: '#EA4124'
   canvas: '#000000'
   surface-alt: '#FFFFFF'
   on-primary: '#FFFFFF'
@@ -227,7 +227,7 @@ themes:
     border: '#DBD4D4'
     accent: '#DC0707'
     accentFg: '#FFFFFF'
-    focusRing: '#F00808'
+    focusRing: '#EA4124'
     elevation: shadow
   dark:
     bg: '#000000'
@@ -236,9 +236,9 @@ themes:
     text: '#FFFFFF'
     textMuted: '#999999'
     border: '#E5E5E5'
-    accent: '#F00808'
+    accent: '#EA4124'
     accentFg: '#0B0B0C'
-    focusRing: '#F00808'
+    focusRing: '#EA4124'
     elevation: 'border+surface'
   contrastFailures:
     - 'dark: text on surface = 1:1 (needs 4.5:1)'
@@ -410,7 +410,8 @@ Lotte World Tower • Mall's design system embodies a **bold, contemporary luxur
 
 ### Primary
 
-- **Primary / Brand** (`{colors.primary}` — `#F00808`): Primary CTA fills, brand accent, active link states, hero accents, and key interactive indicators. Applied to buttons, badges, and navigation highlights.
+- **Primary / Brand** (`{colors.primary}` — `#EA4124`, re-pinned 2026-09-14 to the
+  Duta Mall logo red measured from `public/assets/img/Duta-Mall.png`; was `#EA4124`): Primary CTA fills, brand accent, active link states, hero accents, and key interactive indicators. Applied to buttons, badges, and navigation highlights.
 
 ### Neutral Scale
 
@@ -462,25 +463,25 @@ Lotte World Tower • Mall's design system embodies a **bold, contemporary luxur
 - Font Family: SUIT
 - Font Size: 16px
 - Font Weight: 700
-- Text Color: `{colors.primary}` (`#F00808`)
+- Text Color: `{colors.primary}` (`#EA4124`)
 - Background: `rgba(0, 0, 0, 0)` (transparent)
-- Border: `1px solid {colors.primary}` (`1px solid #F00808`)
+- Border: `1px solid {colors.primary}` (`1px solid #EA4124`)
 - Border Radius: `{rounded.none}` (0px)
 - Line Height: 16px
 - Height: 56.47px
 - Width: 304.52px (full-width reference)
 - Padding: 0px
 - Box Shadow: none
-- Hover State: Color becomes `#F00808`, opacity 1, no background change (outline remains bold)
+- Hover State: Color becomes `#EA4124`, opacity 1, no background change (outline remains bold)
 
 **Outline Small**
 
 - Font Family: SUIT
 - Font Size: 14px
 - Font Weight: 700
-- Text Color: `{colors.primary}` (`#F00808`)
+- Text Color: `{colors.primary}` (`#EA4124`)
 - Background: `rgba(0, 0, 0, 0)` (transparent)
-- Border: `1px solid {colors.primary}` (`1px solid #F00808`)
+- Border: `1px solid {colors.primary}` (`1px solid #EA4124`)
 - Border Radius: `{rounded.none}` (0px)
 - Line Height: 14px
 - Height: 50px
@@ -605,7 +606,7 @@ Lotte World Tower • Mall's design system embodies a **bold, contemporary luxur
 - Width: 583.31px (reference)
 - Padding: 0px 0px 29.4px 0px
 - Box Shadow: none
-- Hover State: Color becomes `{colors.primary}` (`#F00808`), opacity 1, transform scale(1.1)
+- Hover State: Color becomes `{colors.primary}` (`#EA4124`), opacity 1, transform scale(1.1)
 
 **Link Small**
 
@@ -621,7 +622,7 @@ Lotte World Tower • Mall's design system embodies a **bold, contemporary luxur
 - Width: 277px (reference)
 - Padding: 0px
 - Box Shadow: none
-- Hover State: Color becomes `{colors.primary}` (`#F00808`), opacity 1
+- Hover State: Color becomes `{colors.primary}` (`#EA4124`), opacity 1
 
 ### Footer
 
@@ -688,7 +689,7 @@ This design system uses **color-blocking** for depth rather than multi-layered s
 
 - **Base/Flat**: Components sit flush on their canvas (no box-shadow)
 - **Raised**: Alternate background colors (`{colors.surface-alt}` or `{colors.canvas}`) create layering perception without box-shadow
-- **Interactive Feedback**: Hover and active states use opacity shifts and transform (scale/translate) rather than shadow lift
+- **Interactive Feedback**: Hover and active states use fill inversion (background color swap) on mobile; transform lift + shadow growth at md+ per the project layer's responsive brutalism rule
 
 **Philosophy**: Shadows are omitted entirely. Depth derives from stark color contrast and scale transforms. This maintains the system's clean, modernist aesthetic and ensures legibility on varied backgrounds.
 
@@ -708,7 +709,7 @@ This design system uses **color-blocking** for depth rather than multi-layered s
 ### Do
 
 - Use sharp corners (`{rounded.none}` 0px) on all interactive elements to maintain system cohesion
-- Apply `{colors.primary}` (`#F00808`) as the sole brand accent; use it for CTAs, active states, and focal accents
+- Apply `{colors.primary}` (`#EA4124`) as the sole brand accent; use it for CTAs, active states, and focal accents
 - Leverage high contrast between `{colors.canvas}` and `{colors.surface-alt}` to communicate hierarchy and section boundaries
 - Stack full-width color bands (alternating black/white) for section division; this is the primary depth mechanism
 - Scale typography aggressively: use League Gothic for display/hero scale, SUIT for utility and body
@@ -761,7 +762,7 @@ Minimum touch target size: **48px** (as measured on button components like text-
 
 ### Quick Color Reference
 
-- **Primary CTA & Brand Accent**: Primary (`#F00808`) — use on button outlines, active links, and hero accents
+- **Primary CTA & Brand Accent**: Primary (`#EA4124`) — use on button outlines, active links, and hero accents
 - **Page Background / Dark Section**: Canvas (`#000000`) — full-width bands, footer
 - **Light Section / Primary Text**: Surface Alt (`#FFFFFF`) — alternating bands, headings, on-dark labels
 - **Body Copy**: Body (`#999999`) — supporting text, less prominent content
@@ -805,14 +806,97 @@ The extraction above is the pinned foundation. The Duta Mall build extends it wi
 earned neo-brutalist layer (user brief: "a touch of neo-brutalism"):
 
 - **Hard-offset block shadows** (zero blur): `6px 6px 0 #000` (shadow-brutal), `3px` (-sm),
-  `2px` (-xs); hover lifts to the 6px offset, active presses to 0. Buttons/cards only.
+  `2px` (-xs); hover lifts to the 6px offset, active presses to 0. Buttons, chips, and
+  signage only — never static cards.
+- **Elevation language — responsive split** (2026-09-14 audit, re-scoped same day by
+  user direction): the uniform 2px ink frame is site-wide at every breakpoint. Below
+  `md`, cards sit flat and hover/active is fill inversion (silver ground, ink-inverted
+  active). At `md+`, the light sections regain their persistent hard-offset shadows
+  and hover lift (facility cells, detail panel, stat cards, event cards, tenant CTA
+  band, map panel, airport band) — the original neo-brutalist reading. The hero
+  carousel likewise regains its 2px frame + shadow at `md+`. The only all-sizes
+  exception is the hero poster's **mobile** presentation: full-bleed plate with a
+  1px boundary, no shadow (it must not clip the viewport edge).
 - **Checker hover fill**: `.cell-checker` — 45° repeating hairline diagonal on row hover.
 - **Knockout type**: `.text-outline-paper` / `.text-outline-ink` (1.5px stroke) for ghost
   wayfinding words on plates and the footer identity line.
-- **Accent-on-ink text rule**: white text never sits on #F00808 below display scale
+- **Accent-on-ink text rule**: white text never sits on #EA4124 below display scale
   (4.4:1). Ink (#000) is the accent-fill foreground at label sizes; white-on-red only at
   display scale where 3:1 applies.
 - **Ticker**: red marquee band under the status row, pauses on hover, static under
   reduced motion.
 - **Swap rule**: campaign/cinema artwork ships as authored typographic plates until
   licensed assets land; every plate is a labeled placeholder with real PRD copy.
+  **Cinema assets landed (2026-09-14):** six supplied banner photos under
+  `/assets/banner-film` render in the cinema cards via `movie.image` — photo
+  plate with ink rating chip + accent BARU chip overlaid; the typographic plate
+  stays as the fallback for any title without a photo. Movie `code` fields now
+  carry the real film titles (MUNAFIK, SUANGGI, HOPE, RUNNER, RESIDENT EVIL,
+  BABY UDON) shown in the card's title row. At `md+`, hovering (or keyboard
+  focusing) a photo card reveals a details overlay on the poster — ink/85 scrim,
+  genre line, and the same showtime quick-pick buttons as the info column
+  (state shared; picking in either place highlights both). **Tenant assets landed
+  (2026-09-14):** twelve supplied logo photos under `/assets/tenant-photo` render in
+  the directory rows via `tenant.image` — logo plate (ink hairline frame, object-
+  contain on paper) replaces the letter-initial tile; tenants without a photo keep
+  the letter tile as fallback. The sample catalog grew from 12 to 19 entries to
+  carry the supplied brands (Beauty Haul, Excelso, Everbest, Sushi OK, Willie's
+  Bakery, New Balance, Garmin) with sample floor/unit data. **Directory form
+  (2026-09-14, user-directed revamp):** the tenant directory is a **logo wall**,
+  not a list — one plate field of grid cells on 1px hairline seams
+  (`gap-px bg-ink` + `border`), each cell a checker-fill plate (min 110px,
+  silver fill on hover, brutalist lift at md+) holding the supplied logo at
+  `object-contain` over a centered display name; tenants without photos keep
+  the letter tile. The grid closes with a full-width ink promo tile ("+200
+  brand lainnya — Lihat direktori lengkap.") as the directory CTA. Filter
+  pills unchanged. Supersedes the unit-code row list for this surface.
+- **Interactive directory wall** (2026-09-14): the tenant wall is a working
+  directory, not a static grid. A brutalist search field (IconSearch, clear
+  button, `useDeferredValue`) composes with the category pills; plates are
+  `aria-pressed` toggles that open an ink detail strip (TERPILIH name, floor /
+  unit / category readout, accent "Lihat rute" cross-link to #location) with
+  Escape-to-dismiss; a single atomic `role="status"` announces result counts;
+  the empty state always offers "Lihat semua tenant" recovery. Picked state =
+  silver fill + 3px accent inset frame + corner tick. Per-plate floor/unit
+  sublines (mono 11px) make wayfinding scannable without interaction.
+- **Knockout accent**: `.text-outline-accent` (1.5px #EA4124 stroke) joins the
+  paper/ink knockouts; used for ghost wayfinding codes on the hero field.
+- **Warmed neutrals** (2026-09-14): paper, silver, smoke, mute, and ash carry a
+  faint warm cast to harmonize with the vermilion accent — paper `#FFFDFA`,
+  silver `#EAE4DC`, smoke `#6B6259` (5.97:1), mute `#9E958A` (holds its prior
+  ~2.8:1 decorative class), ash `#B8AFA5`. Ink stays true black; contrast
+  classes unchanged. Raw-white fallback poster colorways are exempt (artwork).
+- **Checker band**: `.checker-band` is the absolute-bottom variant of the checker
+  fill for plates and decorative floors — `.cell-checker` carries an unlayered
+  `position: relative` that overrides layered positioning utilities, so absolute
+  placements must use `.checker-band`.
+- **Hero wayfinding field**: the hero's paper ground is a live map margin — ghost
+  codes (C21/FGO/PRK/FNB) with per-element `--field-glow` proximity response,
+  whole-layer pointer parallax (`--field-px/--field-py`), 44s ambient drift, red
+  structural band + vertical rule; all static under `prefers-reduced-motion`.
+- **Fold pattern**: collapsible bars (quick-nav) measure each branch's natural
+  width into a `--fold-w` custom property and transition the track to 0 when
+  folded (`.quicknav-fold`) — the bar folds smoothly to its anchor; branch
+  content fades with a small translate nudge. A `0fr↔1fr` grid track cannot
+  collapse a horizontal branch inside a flex row (the flex item keeps its
+  intrinsic width as its base), and an inline `style.width` would outrank the
+  folded rule — hence the measured custom property. Static under reduced
+  motion.
+- **Carousel plates**: the hero campaign card is a flush plate — no border,
+  no hard-offset shadow (the brutalist layer stays on buttons, chips, and
+  the quick-nav bar); the card reads as artwork, not as a framed component.
+  Full-bleed edge-to-edge below `md`.
+- **Responsive brutalism rule** (2026-09-14, user-directed): neo-brutalist
+  treatment (2px frames, hard-offset shadows, 2px seams) is a **desktop/tablet
+  (`md+`) language; mobile (<md) is the flush-plate language** — hairline
+  seams, no shadows. The hero carousel is the canonical pattern:
+  `max-md:border` (1px boundary so the full-bleed card still reads as a
+  carousel) + `md:border-2 md:shadow-brutal`, control-bar seams 1px/15%
+  on mobile and 2px solid at `md+`.  Cinema cards and the FUGO stat plate /
+  booking widget follow the same split (`max-md` flush + hairlines,
+  `md:border-2` frames restored); small controls (tabs, showtimes, stepper,
+  guest buttons) keep their 2px borders at every breakpoint. Extended the same
+  day to the light sections: Facilities, WhatsOn, Tenants, and Location regain
+  their persistent hard-offset shadows + hover lift at `md+` (mobile stays
+  flat with fill inversion), superseding the earlier "border emphasis at all
+  sizes" elevation decision.

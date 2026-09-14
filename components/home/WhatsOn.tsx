@@ -5,7 +5,7 @@ import { Section, SectionHeading } from "@/components/ui/Section";
 import { IconCalendar, IconArrow } from "@/components/ui/Icons";
 import { events } from "@/app/data/home";
 
-/** Event card — hard offset shadow lifts on hover (neo-brutalist press). */
+/** Event card — mobile: fill-inversion; md+: persistent shadow + brutalist hover lift. */
 function EventCard({
   date,
   category,
@@ -23,11 +23,13 @@ function EventCard({
 
   return (
     <article
-      className={`group relative border-2 border-ink transition-[transform,box-shadow] duration-150 hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-brutal ${
-        accent ? "shadow-brutal" : "shadow-brutal-sm"
+      className={`group relative border-2 border-ink transition-[background-color,transform,box-shadow] duration-150 ${
+        accent
+          ? "bg-silver md:bg-paper md:shadow-brutal"
+          : "bg-paper hover:bg-silver md:shadow-brutal-sm md:hover:bg-paper md:hover:-translate-x-[2px] md:hover:-translate-y-[2px] md:hover:shadow-brutal"
       }`}
     >
-      <div className="flex h-full flex-col bg-paper">
+      <div className="flex h-full flex-col">
         <div
           className={`flex items-center justify-between border-b-2 border-ink px-4 py-2.5 ${
             category === "CSR" ? "bg-paper" : "bg-ink"

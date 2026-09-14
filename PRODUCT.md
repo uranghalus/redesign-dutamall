@@ -17,7 +17,7 @@ Web platform for Duta Mall Banjarmasin (PT Govindo Utama / Govindo Group) — th
 - Mobile-first performance (85%+ of visitors are on phones on-site); fixed bottom quick bar under md.
 
 ## Brand commitments
-- Visual world is pinned by DESIGN.md: stark Lotte World Tower extraction — black canvas, white plates, single red #F00808, League Gothic + SUIT + Space Mono, 0px corners, color-blocking depth, with an earned neo-brutalist layer (2px ink borders, hard-offset shadows, checker hover fills, red ticker).
+- Visual world is pinned by DESIGN.md: stark Lotte World Tower extraction — black canvas, white plates, single red #EA4124, League Gothic + SUIT + Space Mono, 0px corners, color-blocking depth, with an earned neo-brutalist layer (2px ink borders, hard-offset shadows, checker hover fills, red ticker).
 - The Duta Mall logo (red script + hibiscus mark) is the only pictorial brand asset; hero/campaign photography may be added later when licensed artwork exists.
 
 ## Out of scope (phase 2 per PRD)

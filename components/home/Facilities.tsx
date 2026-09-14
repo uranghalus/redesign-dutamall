@@ -62,10 +62,10 @@ export default function Facilities() {
                     type="button"
                     aria-pressed={isActive}
                     onClick={() => setActiveId(f.id)}
-                    className={`flex h-full min-h-[110px] w-full flex-col items-start justify-between gap-5 border-2 border-ink p-4 text-left transition-[background-color,color,box-shadow,transform] duration-150 hover:shadow-brutal-sm ${
+                    className={`flex h-full min-h-[110px] w-full flex-col items-start justify-between gap-5 border-2 border-ink p-4 text-left transition-[background-color,color,box-shadow,transform] duration-150 ${
                       isActive
-                        ? "bg-ink text-paper shadow-brutal-sm"
-                        : "bg-paper hover:-translate-x-[1px] hover:-translate-y-[1px]"
+                        ? "bg-ink text-paper md:shadow-brutal-sm"
+                        : "bg-paper hover:bg-silver md:hover:bg-paper md:hover:-translate-x-[1px] md:hover:-translate-y-[1px] md:hover:shadow-brutal-sm"
                     }`}
                   >
                     <span className="flex w-full items-start justify-between">
@@ -84,7 +84,7 @@ export default function Facilities() {
           </ul>
 
           {/* detail panel — updates with the active facility */}
-          <div className="self-start border-2 border-ink shadow-brutal">
+          <div className="self-start border-2 border-ink md:shadow-brutal">
             <div className="border-b-2 border-ink bg-ink px-5 py-3">
               <p className="font-mono text-[11px] font-bold uppercase tracking-widest text-paper">
                 DETAIL FASILITAS
@@ -115,7 +115,7 @@ export default function Facilities() {
               </dl>
               <a
                 href="#location"
-                className="mt-5 inline-flex items-center gap-2 border-2 border-ink bg-paper px-3 py-2 text-xs font-bold uppercase tracking-widest text-ink shadow-brutal-xs transition-colors hover:bg-ink hover:text-paper"
+                className="mt-5 inline-flex items-center gap-2 border-2 border-ink bg-paper px-3 py-2 text-xs font-bold uppercase tracking-widest text-ink transition-colors hover:bg-ink hover:text-paper md:shadow-brutal-xs"
               >
                 Lihat di peta lantai
                 <IconArrow size={14} />
@@ -132,7 +132,7 @@ export default function Facilities() {
             { v: "24 Jam", l: "Akses Parkir" },
             { v: "GPS", l: "Ladies & Disabilitas Zone" },
           ].map((s) => (
-            <div key={s.l} className="border-2 border-ink bg-paper p-5 text-center shadow-brutal-sm">
+            <div key={s.l} className="border-2 border-ink bg-paper p-5 text-center md:shadow-brutal-sm">
               <p className="font-display text-3xl uppercase leading-none text-ink md:text-4xl">{s.v}</p>
               <p className="mt-2 font-mono text-xs font-bold uppercase tracking-widest text-smoke">
                 {s.l}

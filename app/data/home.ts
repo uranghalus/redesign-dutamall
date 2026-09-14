@@ -1,7 +1,7 @@
 /* ============================================================
    CONTENT — Duta Mall Banjarmasin
-   Facts from PRD §5.3–§5.8. Poster colorways are authored
-   placeholders standing in for licensed Cinema XXI artwork.
+   Facts from PRD §5.3–§5.8. Banner photos supplied under /assets/banner-film;
+   poster colorways remain the fallback plate for titles without a photo.
    ============================================================ */
 
 export type MovieRating = "SU" | "13+" | "17+";
@@ -16,8 +16,10 @@ export interface Movie {
   duration: string;
   genre: string;
   badges: TheaterBadge[];
-  /** authored poster colorway — placeholder for licensed artwork */
+  /** authored poster colorway — fallback when no photo is supplied */
   poster: { bg: string; fg: string; accent?: boolean };
+  /** supplied banner photo under /assets/banner-film (optional; falls back to the typographic plate) */
+  image?: string;
   /** new = released within this week */
   fresh?: boolean;
   showtimes: string[];
@@ -27,70 +29,76 @@ export const movies: Movie[] = [
   {
     id: "regular-01",
     title: "Regular",
-    code: "SUPERNATURAL",
-    rating: "13+",
+    code: "MUNAFIK",
+    rating: "17+",
     duration: "2j 8m",
     genre: "Horror",
     badges: ["Dolby Atmos", "D-BOX"],
     poster: { bg: "#000000", fg: "#ffffff", accent: true },
+    image: "/assets/banner-film/16MMIS.jpg",
     fresh: true,
     showtimes: ["12:40", "15:10", "17:45", "20:15", "22:50"],
   },
   {
     id: "regular-02",
     title: "Regular",
-    code: "HUTAN",
-    rating: "SU",
+    code: "SUANGGI",
+    rating: "17+",
     duration: "1j 47m",
-    genre: "Animasi",
+    genre: "Horror",
     badges: ["Dolby Atmos"],
     poster: { bg: "#ffffff", fg: "#000000" },
+    image: "/assets/banner-film/16SIKN.jpg",
     showtimes: ["11:20", "13:55", "16:30", "19:00"],
   },
   {
     id: "regular-03",
     title: "Regular",
-    code: "SALKIM",
+    code: "HOPE",
     rating: "13+",
     duration: "1j 52m",
-    genre: "Drama",
+    genre: "Thriller",
     badges: ["Dolby Atmos"],
     poster: { bg: "#000000", fg: "#ffffff" },
+    image: "/assets/banner-film/26HOPE.jpg",
     showtimes: ["12:10", "14:45", "17:20", "21:35"],
   },
   {
     id: "regular-04",
     title: "Regular",
-    code: "KUALITAS 4",
+    code: "RUNNER",
     rating: "17+",
     duration: "2j 21m",
     genre: "Aksi",
     badges: ["D-BOX"],
     poster: { bg: "#ffffff", fg: "#000000", accent: true },
+    image: "/assets/banner-film/26RUNR.jpg",
     fresh: true,
     showtimes: ["13:30", "16:05", "18:55", "21:40"],
   },
   {
     id: "premiere-01",
     title: "Premiere",
-    code: "MATAHARI",
-    rating: "13+",
+    code: "RESIDENT EVIL",
+    rating: "17+",
     duration: "2j 4m",
-    genre: "Sci-Fi",
+    genre: "Horror",
     badges: ["The Premiere", "Dolby Atmos"],
     poster: { bg: "#000000", fg: "#ffffff", accent: true },
+    image: "/assets/banner-film/26REVL.jpg",
     fresh: true,
     showtimes: ["14:00", "16:45", "19:30", "22:15"],
   },
   {
     id: "premiere-02",
     title: "Premiere",
-    code: "SENJA",
-    rating: "SU",
+    code: "BABY UDON",
+    rating: "13+",
     duration: "1j 39m",
     genre: "Keluarga",
     badges: ["The Premiere"],
     poster: { bg: "#ffffff", fg: "#000000" },
+    image: "/assets/banner-film/16BUDN.jpg",
     showtimes: ["11:45", "14:20", "17:00", "19:45"],
   },
 ];
@@ -216,21 +224,102 @@ export interface Tenant {
   category: Exclude<TenantCategory, "Semua">;
   floor: string;
   unit: string;
+  /** supplied logo photo under /assets/tenant-photo (optional; falls back to the letter tile) */
+  image?: string;
 }
 
 export const tenants: Tenant[] = [
-  { name: "Erha Ultimate", category: "Beauty & Wellness", floor: "1st Fl", unit: "12" },
+  {
+    name: "Erha Ultimate",
+    category: "Beauty & Wellness",
+    floor: "1st Fl",
+    unit: "12",
+    image: "/assets/tenant-photo/Erha-Ultimate.png",
+  },
   { name: "Guardian", category: "Beauty & Wellness", floor: "GF", unit: "08" },
   { name: "Watsons", category: "Beauty & Wellness", floor: "GF", unit: "21" },
-  { name: "Fore Coffee", category: "F&B & Coffee", floor: "Ground Fl", unit: "A-01" },
-  { name: "Kopi Kenangan", category: "F&B & Coffee", floor: "Ground Fl", unit: "A-07" },
+  {
+    name: "Beauty Haul",
+    category: "Beauty & Wellness",
+    floor: "1st Fl",
+    unit: "19",
+    image: "/assets/tenant-photo/Beauty-Haul.png",
+  },
+  {
+    name: "Fore Coffee",
+    category: "F&B & Coffee",
+    floor: "Ground Fl",
+    unit: "A-01",
+    image: "/assets/tenant-photo/FORE.png",
+  },
+  {
+    name: "Kopi Kenangan",
+    category: "F&B & Coffee",
+    floor: "Ground Fl",
+    unit: "A-07",
+    image: "/assets/tenant-photo/Kopi-Kenangan.png",
+  },
   { name: "Starbucks", category: "F&B & Coffee", floor: "1st Fl", unit: "22" },
-  { name: "Lascada", category: "Fashion & Lifestyle", floor: "1st Fl", unit: "15" },
+  {
+    name: "Excelso",
+    category: "F&B & Coffee",
+    floor: "Ground Fl",
+    unit: "A-15",
+    image: "/assets/tenant-photo/Excelso.png",
+  },
+  {
+    name: "Everbest",
+    category: "F&B & Coffee",
+    floor: "P2",
+    unit: "F-03",
+    image: "/assets/tenant-photo/Everbest.png",
+  },
+  {
+    name: "Sushi OK",
+    category: "F&B & Coffee",
+    floor: "P2",
+    unit: "F-08",
+    image: "/assets/tenant-photo/Sushi-OK.png",
+  },
+  {
+    name: "Willie's Bakery",
+    category: "F&B & Coffee",
+    floor: "Ground Fl",
+    unit: "A-21",
+    image: "/assets/tenant-photo/Willies-Bakery.png",
+  },
+  { name: "Owned By Unicorn", category: "F&B & Coffee", floor: "Ground Fl", unit: "A-12" },
+  {
+    name: "Marugame Udon",
+    category: "F&B & Coffee",
+    floor: "2nd Fl",
+    unit: "28",
+    image: "/assets/tenant-photo/Marugame-Udon.png",
+  },
+  {
+    name: "Lascada",
+    category: "Fashion & Lifestyle",
+    floor: "1st Fl",
+    unit: "15",
+    image: "/assets/tenant-photo/Lascada.png",
+  },
   { name: "Regatta", category: "Fashion & Lifestyle", floor: "1st Fl", unit: "18" },
   { name: "Eiger", category: "Fashion & Lifestyle", floor: "2nd Fl", unit: "31" },
   { name: "Grand 99", category: "Fashion & Lifestyle", floor: "GF", unit: "05" },
-  { name: "Owned By Unicorn", category: "F&B & Coffee", floor: "Ground Fl", unit: "A-12" },
-  { name: "Marugame Udon", category: "F&B & Coffee", floor: "2nd Fl", unit: "28" },
+  {
+    name: "New Balance",
+    category: "Fashion & Lifestyle",
+    floor: "1st Fl",
+    unit: "24",
+    image: "/assets/tenant-photo/New-Balance.png",
+  },
+  {
+    name: "Garmin",
+    category: "Fashion & Lifestyle",
+    floor: "2nd Fl",
+    unit: "33",
+    image: "/assets/tenant-photo/Garmin.png",
+  },
 ];
 
 export const fugo = {

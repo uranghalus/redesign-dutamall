@@ -3,22 +3,23 @@
 /* ============================================================
    DESIGN SYSTEM — DUTA MALL BANJARMASIN
    Pinned to DESIGN.md (LWT extraction): stark black canvas,
-   pure-white surfaces, singular red accent #F00808, League
+   pure-white surfaces, singular red accent #EA4124 (Duta Mall logo red), League
    Gothic display + SUIT UI, 0px corners everywhere, depth by
    color-blocking. A neo-brutalist touch: 2px ink borders,
    hard-offset block shadows, checker hover fills, ticker.
    ============================================================ */
 
 @theme {
-  /* colors — stark LWT system (DESIGN.md §2) */
-  --color-paper: #ffffff;
+  /* colors — stark LWT system (DESIGN.md §2); neutrals warmed 2026-09-14
+     to harmonize with the vermilion accent (see DESIGN.md project layer) */
+  --color-paper: #fffdfa;
   --color-ink: #000000;
-  --color-accent: #f00808;
+  --color-accent: #ea4124;
   --color-accent-ink: #0a0000;
-  --color-mute: #999999;
-  --color-ash: #b3b3b3;
-  --color-silver: #e5e5e5;
-  --color-smoke: #666666;
+  --color-mute: #9e958a;
+  --color-ash: #b8afa5;
+  --color-silver: #eae4dc;
+  --color-smoke: #6b6259;
 
   /* type — family */
   --font-display: var(--font-league), "Arial Narrow", "Oswald", sans-serif;
@@ -29,9 +30,9 @@
   --shadow-brutal: 6px 6px 0 0 #000000;
   --shadow-brutal-sm: 3px 3px 0 0 #000000;
   --shadow-brutal-xs: 2px 2px 0 0 #000000;
-  --shadow-brutal-paper: 6px 6px 0 0 #ffffff;
-  --shadow-brutal-paper-sm: 3px 3px 0 0 #ffffff;
-  --shadow-brutal-accent: 6px 6px 0 0 #f00808;
+  --shadow-brutal-paper: 6px 6px 0 0 #fffdfa;
+  --shadow-brutal-paper-sm: 3px 3px 0 0 #fffdfa;
+  --shadow-brutal-accent: 6px 6px 0 0 #ea4124;
 
   /* motion — instant brutalist feedback, one soft exception */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -99,6 +100,21 @@ div[id] {
   );
 }
 
+/* checker floor band — absolute-bottom variant for plates and the
+   hero field (cell-checker's relative position wins the cascade
+   over layered utilities, so absolute placements use this) */
+.checker-band {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent 0 8px,
+    rgba(0, 0, 0, 0.045) 8px 12px
+  );
+}
+
 /* outlined display text — knockout typography on ink */
 .text-outline-paper {
   color: transparent;
@@ -108,6 +124,73 @@ div[id] {
 .text-outline-ink {
   color: transparent;
   -webkit-text-stroke: 1.5px var(--color-ink);
+}
+
+/* accent knockout — red wayfinding stroke on paper (hero ghost field) */
+.text-outline-accent {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--color-accent);
+}
+
+/* hero ghost wayfinding field — decorative layer inside #hero.
+   Codes start faint and brighten as the pointer nears (JS sets
+   --field-glow per code). Ambient drift is slow; the field stays
+   static under reduced motion and pointer parallax applies to
+   the whole layer, never the content. */
+.hero-field {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transform: translate3d(
+    calc(var(--field-px, 0) * 10px),
+    calc(var(--field-py, 0) * 10px),
+    0
+  );
+  will-change: transform;
+}
+
+.hero-field-ghost {
+  opacity: var(--field-glow, 0.14);
+  transition: opacity var(--dur-md) var(--ease-out);
+}
+
+@keyframes hero-field-drift {
+  from {
+    translate: 0 0;
+  }
+  to {
+    translate: -14px 8px;
+  }
+}
+
+.hero-field-drift {
+  animation: hero-field-drift 44s ease-in-out infinite alternate;
+}
+
+/* hero enter — content settles once from slight offset; the
+   field itself never animates in (stays visible by default) */
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    translate: 0 14px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+.hero-rise {
+  animation: hero-rise var(--dur-slow) var(--ease-out) both;
+}
+
+.hero-rise-2 {
+  animation-delay: 90ms;
+}
+
+.hero-rise-3 {
+  animation-delay: 180ms;
 }
 
 /* marquee ticker */
@@ -145,6 +228,27 @@ div[id] {
   transition: transform var(--dur-md) var(--ease-out);
 }
 
+/* quick-nav fold — measured-width collapse. A 0fr↔1fr grid track
+   cannot collapse a branch inside a flex row: the flex item keeps
+   its intrinsic content width as its base size, so the bar holds a
+   transparent gap. The component captures the branch's natural
+   width into --fold-w (a custom property — an inline width would
+   outrank the folded rule and re-create the stuck-width bug) and
+   the track transitions to 0; content fades + nudges. */
+.quicknav-fold {
+  width: var(--fold-w, auto);
+  min-width: 0;
+  overflow: hidden;
+  transition: width var(--dur-md) var(--ease-out),
+    opacity var(--dur-fast) var(--ease-out),
+    translate var(--dur-md) var(--ease-out);
+}
+.quicknav-fold[data-folded="true"] {
+  width: 0;
+  opacity: 0;
+  translate: -6px 0;
+}
+
 /* ---------- motion discipline ---------- */
 
 @media (prefers-reduced-motion: reduce) {
@@ -159,5 +263,21 @@ div[id] {
   }
   .site-header {
     transform: none !important;
+  }
+  .hero-field {
+    transform: none;
+    will-change: auto;
+  }
+  .hero-field-drift,
+  .hero-rise,
+  .hero-rise-2,
+  .hero-rise-3 {
+    animation: none;
+  }
+  .hero-field-ghost {
+    transition: none;
+  }
+  .quicknav-fold {
+    transition: none;
   }
 }

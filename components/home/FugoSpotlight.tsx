@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Section, SectionHeading } from "@/components/ui/Section";
-import { BrutalButton, BrutalButtonLink } from "@/components/ui/Button";
+import { BrutalButtonLink } from "@/components/ui/Button";
 import { IconStar, IconBed, IconArrow, IconPhone } from "@/components/ui/Icons";
 import { fugo } from "@/app/data/home";
 
@@ -42,7 +42,8 @@ export default function FugoSpotlight() {
               cinema serta ritel mall — 25 menit dari Bandara Samsudin Noor.
             </p>
 
-            <dl className="mt-10 grid grid-cols-2 gap-px border-2 border-paper/40 bg-paper/40 sm:grid-cols-4">
+            {/* facts — flush stat plate: hairline grid seams, no outer frame */}
+            <dl className="mt-10 grid grid-cols-2 gap-px border-paper/40 bg-paper/15 max-md:border-0 sm:grid-cols-4 md:border-2">
               {fugo.highlights.map((h) => (
                 <div key={h.label} className="bg-ink p-4">
                   <dt className="font-mono text-xs font-bold uppercase tracking-widest text-paper/70">
@@ -67,9 +68,9 @@ export default function FugoSpotlight() {
             </div>
           </div>
 
-          {/* book direct widget */}
-          <div className="border-2 border-paper/40 bg-ink">
-            <div className="border-b-2 border-paper/40 bg-accent px-5 py-3">
+          {/* book direct widget — flush counter plate, hairline seams */}
+          <div className="border-paper/40 bg-ink max-md:border-b max-md:border-paper/15 md:border-2">
+            <div className="border-paper/40 bg-accent px-5 py-3 max-md:border-b max-md:border-paper/15 md:border-b-2">
               <p className="font-mono text-[11px] font-bold uppercase tracking-widest text-ink">
                 BOOK DIRECT — BEST RATE
               </p>
@@ -81,8 +82,9 @@ export default function FugoSpotlight() {
                   <button
                     type="button"
                     onClick={() => setNights((n) => Math.max(1, n - 1))}
+                    disabled={nights <= 1}
                     aria-label="Kurangi malam"
-                    className="px-4 font-display text-2xl transition-colors hover:bg-paper hover:text-ink"
+                    className="px-4 font-display text-2xl transition-colors enabled:hover:bg-paper enabled:hover:text-ink disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     −
                   </button>
@@ -95,8 +97,9 @@ export default function FugoSpotlight() {
                   <button
                     type="button"
                     onClick={() => setNights((n) => Math.min(14, n + 1))}
+                    disabled={nights >= 14}
                     aria-label="Tambah malam"
-                    className="px-4 font-display text-2xl transition-colors hover:bg-paper hover:text-ink"
+                    className="px-4 font-display text-2xl transition-colors enabled:hover:bg-paper enabled:hover:text-ink disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     +
                   </button>
@@ -124,13 +127,13 @@ export default function FugoSpotlight() {
                 </div>
               </label>
 
-              <div className="mt-6 border-t border-paper/20 pt-4">
+              <div className="mt-6 border-t border-paper/15 pt-4">
                 <div className="flex items-end justify-between">
                   <span className="font-mono text-xs font-bold uppercase tracking-widest text-paper/70">
-                    Estimasi · {nights}M × {guests}T
+                    Estimasi · {nights} malam × {guests} tamu
                   </span>
                   <span className="font-display text-4xl leading-none">
-                    {(total / 1_000).toLocaleString("id-ID")}K
+                    {total.toLocaleString("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 })}
                   </span>
                 </div>
                 <p className="mt-1 font-mono text-xs uppercase tracking-wide text-paper/60">
@@ -138,10 +141,16 @@ export default function FugoSpotlight() {
                 </p>
               </div>
 
-              <BrutalButton variant="accent" size="lg" className="mt-6 w-full">
+              <BrutalButtonLink
+                href="tel:+625113278888"
+                variant="accent"
+                size="lg"
+                className="mt-6 w-full"
+                aria-label={`Reservasi via telepon ${fugo.phone}`}
+              >
                 <IconBed size={17} />
-                Book Now
-              </BrutalButton>
+                Reservasi Sekarang
+              </BrutalButtonLink>
               <BrutalButtonLink
                 href="#whatson"
                 variant="outlinePaper"

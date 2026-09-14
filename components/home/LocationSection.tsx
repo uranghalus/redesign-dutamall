@@ -12,7 +12,7 @@ const routeUrl =
 /** Stylized structural map — authored geometry, not a screenshot. */
 function MapPanel() {
   return (
-    <div className="relative min-h-[320px] border-2 border-ink bg-paper p-4 shadow-brutal-sm">
+    <div className="relative min-h-[320px] border-2 border-ink bg-paper p-4 md:shadow-brutal-sm">
       {/* road frame */}
       <div className="absolute inset-x-6 top-6 h-2 bg-ink" aria-hidden="true" />
       <div className="absolute inset-y-6 right-6 w-2 bg-ink" aria-hidden="true" />
@@ -133,7 +133,7 @@ export default function LocationSection() {
           <MapPanel />
         </div>
 
-        <div className="mt-8 flex flex-col items-start justify-between gap-4 border-2 border-ink bg-paper p-5 shadow-brutal-sm sm:flex-row sm:items-center">
+        <div className="mt-8 flex flex-col items-start justify-between gap-4 border-2 border-ink bg-paper p-5 md:shadow-brutal-sm sm:flex-row sm:items-center">
           <p className="font-sans text-sm text-smoke">
             <strong className="font-bold text-ink">25 menit</strong> dari Bandara
             Samsudin Noor · <strong className="font-bold text-ink">akses langsung</strong>{" "}
