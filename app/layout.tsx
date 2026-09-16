@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import { leagueGothic, suit, spaceMono } from "./fonts";
+import { leagueGothic, suit } from "./fonts";
 
 export const metadata: Metadata = {
   title: "Duta Mall Banjarmasin | Belanja, Cinema XXI & FUGO Hotel",
@@ -37,20 +37,22 @@ export default function RootLayout({
     <html
       lang="id"
       suppressHydrationWarning
-      className={`${leagueGothic.variable} ${suit.variable} ${spaceMono.variable} h-full antialiased`}
+      className={`${leagueGothic.variable} ${suit.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-paper font-sans text-ink">
-        {/* Motion gate: marks JS availability before first paint. Scroll-reveal
-            start states only hide content under `.js`, so a failed script can
-            never leave the page blank. */}
+        {/* Before first paint: (1) the .js motion gate — reveal start states
+            only hide content under it, so a failed script can never blank the
+            page; (2) --vw — a scrollbar-proof 1vw so the fluid type scale
+            doesn't jump when the scrollbar appears, as on lwt.co.kr. */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `document.documentElement.classList.add("js");`,
+            __html: `document.documentElement.classList.add("js");` +
+              `try{var f=function(){document.documentElement.style.setProperty("--vw",document.documentElement.clientWidth+"px")};f();addEventListener("resize",f,{passive:true})}catch(e){}`,
           }}
         />
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:border-2 focus:border-ink focus:bg-accent focus:px-4 focus:py-2 focus:font-mono focus:text-sm focus:font-bold focus:uppercase focus:text-ink"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:bg-ink focus:px-4 focus:py-2 focus:font-sans focus:text-sm focus:font-bold focus:uppercase focus:text-paper"
         >
           Lewati ke konten utama
         </a>

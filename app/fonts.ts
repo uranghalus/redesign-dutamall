@@ -7,7 +7,7 @@ export const leagueGothic = localFont({
   display: "swap",
 });
 
-/** SUIT — geometric sans for body, UI and navigation. */
+/** SUIT — geometric sans for body, UI and navigation (the only LWT text face). */
 export const suit = localFont({
   src: [
     { path: "./fonts/SUIT-Regular.woff2", weight: "400", style: "normal" },
@@ -16,15 +16,5 @@ export const suit = localFont({
     { path: "./fonts/SUIT-Bold.woff2", weight: "700", style: "normal" },
   ],
   variable: "--font-suit",
-  display: "swap",
-});
-
-/** Space Mono — price-tag utility voice: meta labels, badges, wayfinding codes. */
-export const spaceMono = localFont({
-  src: [
-    { path: "./fonts/SpaceMono-Regular.woff2", weight: "400", style: "normal" },
-    { path: "./fonts/SpaceMono-Bold.woff2", weight: "700", style: "normal" },
-  ],
-  variable: "--font-space",
   display: "swap",
 });

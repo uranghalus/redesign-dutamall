@@ -1,28 +1,33 @@
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes } from "react";
 
-type Variant = "solid" | "primary" | "outline" | "outlinePaper" | "accent" | "ghost";
+type Variant = "solid" | "outline" | "accent" | "ghost";
 type Size = "sm" | "md" | "lg";
 
+/**
+ * LWT button language — 1px black frame, white ground, bold uppercase SUIT.
+ * Hover is fill inversion (black fill / white text), never a shadow.
+ * `accent` is the red plate with black text (LWT's red-on-fill contrast rule
+ * at label sizes); `solid` is black fill / white text.
+ */
 const base =
-  "inline-flex select-none items-center justify-center gap-2.5 border-2 font-sans font-bold uppercase tracking-wider transition-[transform,background-color,color,border-color,box-shadow] duration-150 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none";
+  "inline-flex select-none items-center justify-center gap-2.5 border border-ink font-sans font-bold uppercase tracking-wide transition-colors duration-200";
 
 const variants: Record<Variant, string> = {
-  solid: "border-ink bg-ink text-paper shadow-brutal-sm hover:bg-smoke hover:shadow-brutal",
-  primary: "border-ink bg-accent text-ink shadow-brutal-sm hover:shadow-brutal",
-  outline: "border-ink bg-paper text-ink shadow-brutal-sm hover:bg-ink hover:text-paper hover:shadow-brutal",
-  outlinePaper: "border-paper bg-transparent text-paper hover:bg-paper hover:text-ink",
-  accent: "border-ink bg-accent text-ink shadow-brutal-sm hover:shadow-brutal",
-  ghost: "border-transparent bg-transparent text-current hover:bg-black/5",
+  solid: "bg-ink text-paper hover:bg-dim",
+  outline: "bg-paper text-ink hover:bg-ink hover:text-paper",
+  accent: "border-accent bg-accent text-ink hover:bg-ink hover:border-ink hover:text-paper",
+  ghost: "border-transparent bg-transparent text-current hover:bg-silver",
 };
 
+/* h-10/h-12/h-14 at the 62.5% root = LWT's 40/48/56px touch heights */
 const sizes: Record<Size, string> = {
   sm: "h-10 px-4 text-xs",
   md: "h-12 px-6 text-sm",
   lg: "h-14 px-8 text-base",
 };
 
-export function BrutalButton({
-  variant = "solid",
+export function LwtButton({
+  variant = "outline",
   size = "md",
   className = "",
   children,
@@ -38,8 +43,8 @@ export function BrutalButton({
   );
 }
 
-export function BrutalButtonLink({
-  variant = "solid",
+export function LwtButtonLink({
+  variant = "outline",
   size = "md",
   className = "",
   children,
@@ -55,15 +60,15 @@ export function BrutalButtonLink({
   );
 }
 
-/** Square brutalist icon button — carousel controls, toggles. */
-export function BrutalIconButton({
+/** Square icon button — hairline frame, fill inversion on hover. */
+export function LwtIconButton({
   className = "",
   children,
   ...rest
 }: ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <button
-      className={`inline-flex size-11 shrink-0 items-center justify-center border-2 border-ink bg-paper transition-colors duration-150 hover:bg-ink hover:text-paper ${className}`}
+      className={`inline-flex size-11 shrink-0 items-center justify-center border border-ink bg-paper transition-colors duration-200 hover:bg-ink hover:text-paper ${className}`}
       {...rest}
     >
       {children}
@@ -71,7 +76,7 @@ export function BrutalIconButton({
   );
 }
 
-/** Backward-compatible soft aliases (legacy imports). */
-export const SoftButton = BrutalButton;
-export const SoftButtonLink = BrutalButtonLink;
-export const SoftIconButton = BrutalIconButton;
+/** Backward-compatible aliases (legacy imports). */
+export const BrutalButton = LwtButton;
+export const BrutalButtonLink = LwtButtonLink;
+export const BrutalIconButton = LwtIconButton;

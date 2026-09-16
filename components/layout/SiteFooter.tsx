@@ -1,107 +1,70 @@
-import { IconPin, IconPhone, IconClock } from "@/components/ui/Icons";
+import { IconArrow } from "@/components/ui/Icons";
 
-const columns = [
-  {
-    title: "Direktori",
-    links: [
-      { label: "Cinema XXI", href: "#cinema" },
-      { label: "Tenant & Boutique", href: "#tenants" },
-      { label: "Fasilitas Mall", href: "#facilities" },
-      { label: "Food Court", href: "#tenants" },
-    ],
-  },
-  {
-    title: "Hospitality",
-    links: [
-      { label: "FUGO Hotel & Suites", href: "#fugo" },
-      { label: "Book Direct", href: "#fugo" },
-      { label: "Meeting & Events", href: "#fugo" },
-    ],
-  },
-  {
-    title: "Informasi",
-    links: [
-      { label: "What's On", href: "#whatson" },
-      { label: "Lokasi & Parkir", href: "#location" },
-      { label: "Jam Operasional", href: "#location" },
-    ],
-  },
-  {
-    title: "Korporat",
-    links: [
-      { label: "Tentang Govindo Group", href: "#top" },
-      { label: "Kebijakan Privasi", href: "#top" },
-      { label: "Syarat & Ketentuan", href: "#top" },
-      { label: "Sewa Unit (Leasing)", href: "#top" },
-    ],
-  },
+const footerLinks = [
+  { label: "Direktori Tenant", href: "#tenants" },
+  { label: "Jadwal Cinema", href: "#cinema" },
+  { label: "FUGO Hotel", href: "#fugo" },
+  { label: "What's On", href: "#whatson" },
+  { label: "Kebijakan Privasi", href: "#top", underline: true },
 ];
 
 export default function SiteFooter() {
   return (
-    <footer className="border-t-2 border-ink bg-ink text-paper">
-      <div className="px-4 pb-10 pt-12 md:px-10">
-        <div className="grid gap-12 lg:grid-cols-[1.4fr_2fr]">
-          {/* identity */}
-          <div>
-            <p className="font-display text-5xl uppercase leading-[0.9] md:text-6xl">
-              DUTA<span className="text-accent">/</span>MALL
-              <span className="text-outline-paper block">BANJARMASIN</span>
-            </p>
-            <p className="mt-5 max-w-sm font-sans text-sm leading-relaxed text-ash">
-              Pusat perbelanjaan, hiburan, dan gaya hidup terbesar di Kalimantan
-              Selatan — terintegrasi dengan FUGO Hotel &amp; Suites dan Cinema XXI /
-              The Premiere.
-            </p>
-            <ul className="mt-6 space-y-2.5 font-mono text-xs uppercase tracking-wide">
-              <li className="flex items-center gap-2.5">
-                <IconPin size={14} className="shrink-0 text-accent" />
-                Jl. Ahmad Yani KM 2, Banjarmasin 70236
-              </li>
-              <li className="flex items-center gap-2.5">
-                <IconPhone size={14} className="shrink-0 text-accent" />
-                <a href="tel:+625113278888" className="px-0.5 underline-offset-4 hover:text-accent hover:underline">
-                  Hotline (0511) 327-8888
-                </a>
-              </li>
-              <li className="flex items-center gap-2.5">
-                <IconClock size={14} className="shrink-0 text-accent" />
-                Open Daily 10:00–22:00 WITA
-              </li>
+    <footer className="bg-ink text-paper">
+      <div className="px-4 pb-12 pt-10 md:px-10 md:pb-16 md:pt-12">
+        <div className="flex flex-col justify-between gap-10 md:flex-row md:items-end">
+          {/* left — identity, bold link row, dim address block */}
+          <div className="max-w-2xl">
+            <a
+              href="#top"
+              aria-label="Duta Mall Banjarmasin — kembali ke atas"
+              className="inline-block font-display text-5xl uppercase md:text-6xl"
+            >
+              Duta<span className="text-accent">/</span>Mall
+            </a>
+
+            <ul className="mt-7 flex flex-wrap gap-x-8 gap-y-2 border-t border-paper/15 pt-6">
+              {footerLinks.map((l) => (
+                <li key={l.label} className="font-sans text-sm font-bold leading-relaxed">
+                  <a
+                    href={l.href}
+                    className={`transition-colors hover:text-accent ${
+                      l.underline ? "underline underline-offset-4" : ""
+                    }`}
+                  >
+                    {l.label}
+                  </a>
+                </li>
+              ))}
             </ul>
+
+            <address className="mt-6 font-sans text-sm not-italic leading-relaxed text-paper/60">
+              PT Govindo Utama — Govindo Group
+              <br />
+              Jl. Ahmad Yani KM 2, Banjarmasin, Kalimantan Selatan 70236
+            </address>
+            <p className="mt-1 font-sans text-sm leading-relaxed text-paper/60">
+              Hotline (0511) 327-8888 · Open Daily 10:00–22:00 WITA
+            </p>
+            <p className="mt-4 font-sans text-xs uppercase tracking-wide text-paper/40">
+              © {new Date().getFullYear()} Duta Mall Banjarmasin. Hak cipta dilindungi.
+            </p>
           </div>
 
-          {/* link columns */}
-          <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
-            {columns.map((col) => (
-              <nav key={col.title} aria-label={col.title}>
-                <h3 className="mb-4 inline-block bg-paper px-1.5 py-0.5 font-mono text-[11px] font-bold uppercase tracking-widest text-ink">
-                  {col.title}
-                </h3>
-                <ul className="space-y-2.5">
-                  {col.links.map((link) => (
-                    <li key={`${col.title}-${link.label}`}>
-                      <a
-                        href={link.href}
-                        className="font-sans text-sm text-ash underline-offset-4 transition-colors hover:text-accent hover:underline"
-                      >
-                        {link.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            ))}
+          {/* right — back to top */}
+          <div className="flex items-end justify-between md:flex-col md:items-end md:gap-6">
+            <a
+              href="#top"
+              aria-label="Kembali ke atas"
+              className="flex size-12 items-center justify-center border border-paper/30 transition-colors hover:border-accent hover:bg-accent"
+            >
+              <IconArrow size={18} className="-rotate-90" />
+            </a>
+            <p className="font-sans text-xs font-bold uppercase tracking-widest text-paper/60 md:text-right">
+              Gawi Sabumi
+              <br className="hidden md:block" /> Kawa Manuntung
+            </p>
           </div>
-        </div>
-
-        {/* legal band */}
-        <div className="mt-12 flex flex-col items-start justify-between gap-4 border-t border-paper/20 pt-6 font-mono text-[11px] uppercase tracking-wide text-ash md:flex-row md:items-center">
-          <p>© {new Date().getFullYear()} PT Govindo Utama — Govindo Group.</p>
-          <p className="flex items-center gap-2">
-            <span aria-hidden="true" className="inline-block size-2 bg-accent" />
-            Gawi Sabumi Kawa Manuntung
-          </p>
         </div>
       </div>
     </footer>

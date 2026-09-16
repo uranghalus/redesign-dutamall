@@ -1,27 +1,19 @@
 "use client";
 
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  type CSSProperties,
-  type PointerEvent as ReactPointerEvent,
-} from "react";
-import { Section } from "@/components/ui/Section";
-import { IconArrow, IconPlay } from "@/components/ui/Icons";
+import { useCallback, useEffect, useRef, useState } from "react";
+import Reveal from "@/components/ui/Reveal";
+import { IconArrow } from "@/components/ui/Icons";
 
 /* ============================================================
-   HERO — v3: interactive wayfinding field on paper.
-   The white ground is a mall map margin: knockout ghost codes
-   (C21/FGO/PRK/FNB) drift on a red structural band; the whole
-   section answers the pointer (parallax + proximity glow) and
-   the keyboard (←/→ drives the carousel from anywhere in the
-   hero). Campaign poster card right (slightly smaller), static
-   tagline left (hidden below md — the motto lives in the red
-   ticker on phones). Mobile stacks with the card first.
-   Slides are authored typographic posters in the wayfinding
-   world; each carries an `image` slot for licensed artwork.
+   HERO — LWT key visual (§sectionKv): two-column flex under the
+   fixed header. Left: the motto as a masked-line League Gothic
+   block (title reveal translateY(230%)→settle). Right: the
+   campaign carousel at aspect-ratio 1280/1080 with the white
+   "utils" bar beneath it (1px black frame, League Gothic
+   pagination "1 / 5", clamped title, hairline prev/next cells).
+   Slides are authored typographic posters; each carries an
+   `image` slot for licensed artwork. Autoplay keeps the full
+   discipline (pause on hover/focus/offscreen/hidden/reduced).
    ============================================================ */
 
 type Ground = "accent" | "ink" | "paper";
@@ -29,13 +21,11 @@ type Ground = "accent" | "ink" | "paper";
 interface Slide {
   id: string;
   kicker: string;
-  /** poster display lines; `hi` marks the emphasis line */
   lines: { text: string; hi?: boolean }[];
   title: string;
   date: string;
   href: string;
   ground: Ground;
-  /** optional artwork — renders instead of the authored poster */
   image?: { src: string; alt: string };
 }
 
@@ -91,7 +81,7 @@ const slides: Slide[] = [
   },
 ];
 
-/** Per-ground poster styling: kicker chip, title ink, pill, art tint. */
+/** Per-ground poster styling: kicker chip, title ink, pill. */
 const groundStyles: Record<
   Ground,
   { kicker: string; title: string; hi: string; pill: string }
@@ -103,7 +93,7 @@ const groundStyles: Record<
     pill: "border-ink text-ink hover:bg-ink hover:text-paper",
   },
   ink: {
-    kicker: "bg-accent text-ink",
+    kicker: "bg-accent text-paper",
     title: "text-paper",
     hi: "text-accent",
     pill: "border-paper/60 text-paper hover:bg-paper hover:text-ink",
@@ -116,60 +106,25 @@ const groundStyles: Record<
   },
 };
 
-/** Ghost wayfinding codes — decorative field anchors (desktop only). */
-const fieldGhosts: {
-  code: string;
-  className: string;
-  outline: string;
-  baseOpacity: number;
-}[] = [
-  {
-    code: "C21",
-    className: "-right-4 top-[3%] text-[clamp(8rem,14vw,14rem)]",
-    outline: "text-outline-ink",
-    baseOpacity: 0.1,
-  },
-  {
-    code: "FGO",
-    className: "-left-2 top-[30%] text-[clamp(7rem,11vw,11rem)]",
-    outline: "text-outline-accent",
-    baseOpacity: 0.15,
-  },
-  {
-    code: "PRK",
-    className: "left-[30%] top-[6%] text-[clamp(5rem,8vw,8rem)]",
-    outline: "text-outline-accent",
-    baseOpacity: 0.1,
-  },
-  {
-    code: "FNB",
-    className: "bottom-[1%] left-[5%] text-[clamp(7rem,11vw,11rem)]",
-    outline: "text-outline-ink",
-    baseOpacity: 0.08,
-  },
-];
-
 const AUTOPLAY_MS = 6000;
-/** proximity radius (px) in which a ghost brightens toward the pointer */
-const GLOW_RADIUS = 440;
 
 /** Authored poster art — bottom-anchored stark geometry per slide. */
 function PosterArt({ slide }: { slide: Slide }) {
   if (slide.id === "festival-banjar") {
     return (
       <div className="absolute inset-0 bg-accent" aria-hidden="true">
-        <span className="text-outline-paper pointer-events-none absolute -left-2 bottom-0 select-none font-display text-[9.5625rem] uppercase leading-none opacity-25">
-          BANJAR
+        <span className="pointer-events-none absolute -left-2 bottom-0 select-none font-display text-[9.5625rem] uppercase leading-none opacity-25 text-paper">
+          Banjar
         </span>
-        <div className="checker-band h-8 border-t-2 border-ink opacity-40" />
+        <div className="absolute inset-x-0 bottom-0 h-3 bg-ink/20" />
       </div>
     );
   }
   if (slide.id === "live-acoustic") {
     return (
       <div className="absolute inset-0 bg-ink" aria-hidden="true">
-        <span className="text-outline-paper pointer-events-none absolute -right-4 bottom-16 hidden select-none font-display text-[6.094rem] uppercase leading-none opacity-[0.07] md:block">
-          LIVE
+        <span className="pointer-events-none absolute -right-4 bottom-16 hidden select-none font-display text-[6.094rem] uppercase leading-none opacity-[0.07] text-paper md:block">
+          Live
         </span>
         <div className="absolute bottom-6 left-5 flex items-end gap-1.5">
           {[16, 30, 46, 22, 38, 54, 26, 42, 18, 50, 34, 12].map((h, i) => (
@@ -186,12 +141,12 @@ function PosterArt({ slide }: { slide: Slide }) {
   if (slide.id === "cinema-premiere") {
     return (
       <div className="absolute inset-0 bg-ink" aria-hidden="true">
-        <div className="absolute bottom-0 left-0 right-0 flex h-9 items-center gap-4 overflow-hidden border-t-2 border-paper/20 px-5">
+        <div className="absolute bottom-0 left-0 right-0 flex h-9 items-center gap-4 overflow-hidden border-t border-paper/20 px-5">
           {Array.from({ length: 20 }).map((_, i) => (
             <span key={i} className="h-3 w-6 shrink-0 border border-paper/30" />
           ))}
         </div>
-        <span className="text-outline-paper pointer-events-none absolute -right-3 bottom-14 hidden select-none font-display text-[6.094rem] uppercase leading-none opacity-[0.07] md:block">
+        <span className="pointer-events-none absolute -right-3 bottom-14 hidden select-none font-display text-[6.094rem] uppercase leading-none opacity-[0.07] text-paper md:block">
           C21
         </span>
       </div>
@@ -200,20 +155,20 @@ function PosterArt({ slide }: { slide: Slide }) {
   if (slide.id === "fugo-hotel") {
     return (
       <div className="absolute inset-0 bg-paper" aria-hidden="true">
-        <span className="text-outline-ink pointer-events-none absolute -left-3 bottom-0 hidden select-none font-display text-[6.094rem] uppercase leading-none opacity-[0.06] md:block">
-          FUGO
+        <span className="pointer-events-none absolute -left-3 bottom-0 hidden select-none font-display text-[6.094rem] uppercase leading-none opacity-[0.06] text-ink md:block">
+          Fugo
         </span>
-        <div className="absolute bottom-5 left-5 right-5 h-24 border-2 border-ink/10" />
+        <div className="absolute bottom-5 left-5 right-5 h-24 border border-ink/10" />
         <div className="absolute bottom-10 left-9 right-9 h-12 border border-ink/10" />
       </div>
     );
   }
   return (
     <div className="absolute inset-0 bg-paper" aria-hidden="true">
-      <span className="text-outline-ink pointer-events-none absolute -left-2 bottom-0 select-none font-display text-[9.5625rem] uppercase leading-none opacity-[0.08]">
+      <span className="pointer-events-none absolute -left-2 bottom-0 select-none font-display text-[9.5625rem] uppercase leading-none opacity-[0.08] text-ink">
         P1
       </span>
-      <div className="absolute bottom-6 right-6 flex -translate-y-0 flex-col items-center gap-1">
+      <div className="absolute bottom-6 right-6 flex flex-col items-center gap-1">
         {Array.from({ length: 5 }).map((_, i) => (
           <span key={i} className={`block w-14 border-t-4 ${i === 2 ? "border-accent" : "border-ink/15"}`} />
         ))}
@@ -226,9 +181,6 @@ export default function Hero() {
   const [index, setIndex] = useState(0);
   const [userPaused, setUserPaused] = useState(false);
   const regionRef = useRef<HTMLDivElement>(null);
-  const gridRef = useRef<HTMLDivElement>(null);
-  const fieldRef = useRef<HTMLDivElement>(null);
-  const pointerStart = useRef<{ x: number; y: number } | null>(null);
 
   const go = useCallback((dir: 1 | -1) => {
     setIndex((i) => (i + dir + slides.length) % slides.length);
@@ -306,85 +258,6 @@ export default function Hero() {
     };
   }, [userPaused]);
 
-  /* Wayfinding field: pointer parallax on the whole layer + per-ghost
-     proximity glow. rAF-throttled; skipped for touch pointers and
-     reduced motion (static field at base opacity). */
-  useEffect(() => {
-    const grid = gridRef.current;
-    const field = fieldRef.current;
-    if (!grid || !field) return;
-
-    const ghosts = Array.from(
-      grid.querySelectorAll<HTMLElement>("[data-field-ghost]"),
-    );
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let raf = 0;
-    let px = 0;
-    let py = 0;
-
-    const apply = () => {
-      raf = 0;
-      if (field) {
-        field.style.setProperty("--field-px", px.toFixed(3));
-        field.style.setProperty("--field-py", py.toFixed(3));
-      }
-      if (reduced.matches) return;
-
-      const rootRect = grid.getBoundingClientRect();
-      const cx = rootRect.left + rootRect.width * (0.5 + px * 0.5);
-      const cy = rootRect.top + rootRect.height * (0.5 + py * 0.5);
-      for (const g of ghosts) {
-        const b = g.getBoundingClientRect();
-        if (b.width === 0 && b.height === 0) continue; // hidden on mobile
-        const d = Math.hypot(b.left + b.width / 2 - cx, b.top + b.height / 2 - cy);
-        const t = Math.max(0, 1 - d / GLOW_RADIUS);
-        const base = Number(g.dataset.baseOpacity ?? "0.12");
-        g.style.setProperty("--field-glow", (base + t * 0.55).toFixed(3));
-      }
-    };
-
-    const schedule = () => {
-      if (raf === 0) raf = requestAnimationFrame(apply);
-    };
-
-    const onMove = (e: PointerEvent) => {
-      if (e.pointerType === "touch" || reduced.matches) return;
-      const rect = grid.getBoundingClientRect();
-      px = Math.max(-1, Math.min(1, ((e.clientX - rect.left) / rect.width) * 2 - 1));
-      py = Math.max(-1, Math.min(1, ((e.clientY - rect.top) / rect.height) * 2 - 1));
-      schedule();
-    };
-
-    const reset = () => {
-      px = 0;
-      py = 0;
-      if (raf !== 0) {
-        cancelAnimationFrame(raf);
-        raf = 0;
-      }
-      apply();
-      for (const g of ghosts) {
-        g.style.setProperty("--field-glow", String(Number(g.dataset.baseOpacity ?? "0.12")));
-      }
-    };
-
-    const onReducedChange = () => {
-      if (reduced.matches) reset();
-    };
-
-    grid.addEventListener("pointermove", onMove);
-    grid.addEventListener("pointerleave", reset);
-    reduced.addEventListener("change", onReducedChange);
-
-    return () => {
-      if (raf !== 0) cancelAnimationFrame(raf);
-      grid.removeEventListener("pointermove", onMove);
-      grid.removeEventListener("pointerleave", reset);
-      reduced.removeEventListener("change", onReducedChange);
-      reset();
-    };
-  }, []);
-
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowRight") {
       e.preventDefault();
@@ -395,43 +268,186 @@ export default function Hero() {
     }
   };
 
-  const onPointerDown = (e: ReactPointerEvent) => {
-    pointerStart.current = { x: e.clientX, y: e.clientY };
-  };
-  const onPointerUp = (e: ReactPointerEvent) => {
-    const start = pointerStart.current;
-    pointerStart.current = null;
-    if (!start) return;
-    const dx = e.clientX - start.x;
-    const dy = e.clientY - start.y;
-    if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.5) {
-      go(dx < 0 ? 1 : -1);
-    }
-  };
-
   const slide = slides[index];
 
   return (
-    <Section id="hero" className="border-b-2 border-ink">
-      {/* ---------- wayfinding field (decorative ground) ---------- */}
-      <div ref={fieldRef} className="hero-field" aria-hidden="true">
-        <div className="hero-field-drift absolute inset-0">
-          <div className="absolute inset-x-0 top-0 h-1.5 bg-accent" />
-          <div className="checker-band h-7 border-t-2 border-ink/10" />
-          <div className="absolute bottom-7 left-[46%] top-7 w-0.5 bg-accent/20 max-lg:hidden" />
-          <div className="absolute left-3 top-3 size-4 border-l-2 border-t-2 border-ink/25 max-md:hidden" />
-          <div className="absolute bottom-3 right-3 size-4 border-b-2 border-r-2 border-ink/25 max-md:hidden" />
-          {fieldGhosts.map((g) => (
-            <span
-              key={g.code}
-              data-field-ghost={g.code}
-              data-base-opacity={g.baseOpacity}
-              style={{ "--field-glow": g.baseOpacity } as CSSProperties}
-              className={`hero-field-ghost pointer-events-none absolute hidden select-none font-display uppercase leading-none tracking-tight md:block ${g.outline} ${g.className}`}
-            >
-              {g.code}
+    <section id="hero" className="relative bg-paper text-ink">
+      <div className="flex flex-col gap-10 px-4 pb-14 pt-28 md:px-10 lg:min-h-[100svh] lg:flex-row lg:items-end lg:gap-[max(1.6rem,1.25vw)] lg:pb-[max(2.4rem,1.6667vw)] lg:pt-[max(8rem,5.2083vw)] lg:pr-[max(2.4rem,1.6667vw)]">
+        {/* ---------- left column — motto as masked-line display block ---------- */}
+        <div className="order-2 min-w-0 flex-1 lg:order-1">
+          <h1 className="font-display text-ink">
+            <Reveal variant="mask" as="span" className="block text-[clamp(4.2rem,8.5vw,9.2rem)]">
+              Gawi Sabumi
+            </Reveal>
+            <Reveal variant="mask" as="span" delay={1} className="block text-[clamp(4.2rem,8.5vw,9.2rem)]">
+              Kawa
+            </Reveal>
+            <Reveal variant="mask" as="span" delay={2} className="block text-[clamp(4.2rem,8.5vw,9.2rem)]">
+              Manuntung<span className="text-accent">.</span>
+            </Reveal>
+          </h1>
+
+          <Reveal delay={3} className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 font-sans text-sm font-bold uppercase tracking-wide">
+            <span className="flex items-center gap-2.5">
+              <span aria-hidden="true" className="inline-block size-2 bg-accent" />
+              Open Daily 10:00–22:00 WITA
             </span>
-          ))}
+            <span aria-hidden="true" className="hidden h-4 w-px bg-hairline sm:block" />
+            <a
+              href="#location"
+              className="text-mute transition-colors hover:text-accent hover:underline underline-offset-4"
+            >
+              Jl. Ahmad Yani KM 2
+            </a>
+          </Reveal>
+        </div>
+
+        {/* ---------- right column — KV carousel with utils bar ---------- */}
+        <div className="order-1 w-full min-w-0 lg:order-2 lg:w-[46%] lg:shrink-0">
+          <Reveal variant="ink">
+            <div
+              ref={regionRef}
+              role="region"
+              aria-roledescription="carousel"
+              aria-label="Kampanye utama Duta Mall"
+              onKeyDown={onKeyDown}
+              className="w-full"
+            >
+              {/* stage — LWT KV aspect ratio */}
+              <div
+                className="relative aspect-[4/5] w-full overflow-hidden border border-ink bg-silver sm:aspect-[4/3] lg:aspect-[1280/1080]"
+                style={{ touchAction: "pan-y" }}
+                {...({
+                  onPointerDown: (e: React.PointerEvent) => {
+                    (e.currentTarget as HTMLElement).dataset.x0 = String(e.clientX);
+                  },
+                  onPointerUp: (e: React.PointerEvent) => {
+                    const x0 = (e.currentTarget as HTMLElement).dataset.x0;
+                    if (x0 === undefined) return;
+                    const dx = e.clientX - Number(x0);
+                    if (Math.abs(dx) > 48) go(dx < 0 ? 1 : -1);
+                    delete (e.currentTarget as HTMLElement).dataset.x0;
+                  },
+                } as React.HTMLAttributes<HTMLDivElement>)}
+              >
+                {slides.map((s, i) => {
+                  const active = i === index;
+                  const style = groundStyles[s.ground];
+                  return (
+                    <div
+                      key={s.id}
+                      role="group"
+                      aria-roledescription="slide"
+                      aria-label={`Slide ${i + 1} dari ${slides.length}`}
+                      aria-hidden={!active}
+                      inert={!active}
+                      className={`hero-slide absolute inset-0 ${active ? "z-10" : ""}`}
+                    >
+                      {s.image ? (
+                        // eslint-disable-next-line @next/next/no-img-element -- licensed artwork slot, swap-ready
+                        <img
+                          src={s.image.src}
+                          alt={s.image.alt}
+                          className="absolute inset-0 h-full w-full object-cover"
+                        />
+                      ) : (
+                        <PosterArt slide={s} />
+                      )}
+
+                      {/* poster text block */}
+                      <div className="absolute inset-x-0 top-0 flex flex-col items-center px-5 pt-6 text-center md:px-6 md:pt-8">
+                        <p
+                          className={`inline-block px-2.5 py-1.5 font-sans text-xs font-bold uppercase tracking-widest ${style.kicker}`}
+                        >
+                          {s.kicker}
+                        </p>
+                        <p
+                          className={`mt-4 font-display uppercase ${style.title}`}
+                        >
+                          {s.lines.map((ln, li) => (
+                            <span
+                              key={li}
+                              className={`block text-[clamp(1.8rem,4vw,3rem)] max-md:text-[clamp(2.4rem,8.5vw,3.6rem)] ${ln.hi ? style.hi : ""}`}
+                            >
+                              {ln.text}
+                            </span>
+                          ))}
+                        </p>
+                        <a
+                          href={s.href}
+                          tabIndex={active ? 0 : -1}
+                          className={`mt-5 inline-flex items-center gap-2 border px-4 py-1.5 font-sans text-xs font-bold uppercase tracking-widest transition-colors md:px-5 md:py-2 md:text-sm ${style.pill}`}
+                        >
+                          {s.date}
+                          <IconArrow size={13} />
+                        </a>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* ---------- utils bar — the LWT carousel control bar ---------- */}
+              <div className="flex items-stretch border border-t-0 border-ink bg-paper text-ink">
+                {/* League Gothic pagination: current / total */}
+                <div className="flex shrink-0 items-center gap-1.5 px-3 py-2" aria-hidden="true">
+                  <span className="font-display text-2xl text-ink">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span className="relative h-3 w-2">
+                    <span className="absolute left-1/2 top-0 h-3 w-px origin-center rotate-[20deg] bg-ink" />
+                  </span>
+                  <span className="font-display text-2xl text-ghost">
+                    {String(slides.length).padStart(2, "0")}
+                  </span>
+                </div>
+
+                {/* title — hairline separator, single line, clamped */}
+                <p className="utils-tit min-w-0 flex-1 overflow-hidden truncate border-l border-ink px-4 font-sans text-sm font-bold uppercase tracking-wide leading-[3.9] max-md:leading-[3.9]">
+                  {slide.title}
+                </p>
+
+                {/* prev / next — hairline cells */}
+                <div className="flex shrink-0 items-stretch">
+                  <button
+                    type="button"
+                    onClick={() => go(-1)}
+                    aria-label="Slide sebelumnya"
+                    className="flex w-12 items-center justify-center border-l border-ink transition-colors hover:bg-ink hover:text-paper"
+                  >
+                    <IconArrow size={16} className="rotate-180" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => go(1)}
+                    aria-label="Slide berikutnya"
+                    className="flex w-12 items-center justify-center border-l border-ink transition-colors hover:bg-ink hover:text-paper"
+                  >
+                    <IconArrow size={16} />
+                  </button>
+                  {/* pause — square accent cell, LWT red plate */}
+                  <button
+                    type="button"
+                    onClick={() => setUserPaused((v) => !v)}
+                    aria-pressed={userPaused}
+                    aria-label={userPaused ? "Putar otomatis" : "Jeda putar otomatis"}
+                    className={`flex w-12 items-center justify-center border-l border-ink transition-colors ${
+                      userPaused ? "bg-accent text-paper" : "hover:bg-silver"
+                    }`}
+                  >
+                    {userPaused ? (
+                      <IconArrow size={14} className="rotate-90" />
+                    ) : (
+                      <span aria-hidden="true" className="flex gap-1">
+                        <span className="block h-3.5 w-1 bg-current" />
+                        <span className="block h-3.5 w-1 bg-current" />
+                      </span>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </Reveal>
         </div>
       </div>
 
@@ -439,166 +455,6 @@ export default function Hero() {
       <p aria-live={userPaused ? "polite" : "off"} className="sr-only">
         Slide {index + 1} dari {slides.length}: {slide.title}
       </p>
-
-      <div
-        ref={gridRef}
-        tabIndex={-1}
-        onKeyDown={onKeyDown}
-        className="relative z-10 grid grid-cols-[minmax(0,1fr)] gap-10 px-4 pb-14 pt-8 outline-none md:px-10 lg:min-h-[calc(100svh-140px)] lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-14 lg:pb-0 lg:pt-0"
-      >
-        {/* ---------- static tagline block (LWT left column) ---------- */}
-        <div className="hero-rise order-2 flex flex-col justify-start py-2 lg:order-1 lg:pt-10">
-          <h1 className="hidden font-display uppercase leading-[0.9] tracking-tight text-ink md:block">
-            <span className="block text-[clamp(3.2rem,7.2vw,6.8rem)]">Gawi Sabumi</span>
-            <span className="block text-[clamp(3.2rem,7.2vw,6.8rem)]">Kawa</span>
-            <span className="block text-[clamp(3.2rem,7.2vw,6.8rem)]">
-              Manuntung<span className="text-accent">.</span>
-            </span>
-          </h1>
-          <p className="mt-4 hidden font-mono text-xs font-bold uppercase tracking-widest text-smoke md:block">
-            Motto kota Banjarmasin
-          </p>
-
-          <div className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-3 font-mono text-xs font-bold uppercase tracking-widest text-ink">
-            <span className="flex items-center gap-2.5">
-              <span aria-hidden="true" className="inline-block size-2 bg-accent" />
-              Open Daily 10:00–22:00 WITA
-            </span>
-            <span className="hidden h-4 w-0.5 bg-silver sm:block" aria-hidden="true" />
-            <a
-              href="#location"
-              className="text-smoke underline-offset-4 transition-colors hover:text-ink hover:underline"
-            >
-              Jl. Ahmad Yani KM 2
-            </a>
-          </div>
-        </div>
-
-        {/* ---------- campaign poster card (right column; full-bleed <md) ---------- */}
-        <div className="hero-rise hero-rise-2 order-1 max-md:-mx-4 lg:order-2 lg:flex lg:items-center lg:py-14">
-          <div
-            ref={regionRef}
-            role="region"
-            aria-roledescription="carousel"
-            aria-label="Kampanye utama Duta Mall"
-            className="flex h-full w-full flex-col overflow-hidden border-ink bg-paper max-md:border md:border-2 md:shadow-brutal"
-          >
-            {/* stage */}
-            <div
-              className="relative aspect-[4/5] w-full overflow-hidden sm:aspect-[4/3] lg:aspect-auto lg:min-h-[430px] lg:flex-1"
-              onPointerDown={onPointerDown}
-              onPointerUp={onPointerUp}
-              style={{ touchAction: "pan-y" }}
-            >
-              {slides.map((s, i) => {
-                const active = i === index;
-                const style = groundStyles[s.ground];
-                return (
-                  <div
-                    key={s.id}
-                    role="group"
-                    aria-roledescription="slide"
-                    aria-label={`Slide ${i + 1} dari ${slides.length}`}
-                    aria-hidden={!active}
-                    inert={!active}
-                    className="hero-slide absolute inset-0"
-                  >
-                    {/* poster ground + art */}
-                    {s.image ? (
-                      // eslint-disable-next-line @next/next/no-img-element -- licensed artwork slot, swap-ready
-                      <img
-                        src={s.image.src}
-                        alt={s.image.alt}
-                        className="absolute inset-0 h-full w-full object-cover"
-                      />
-                    ) : (
-                      <PosterArt slide={s} />
-                    )}
-
-                    {/* poster text block */}
-                    <div className="absolute inset-x-0 top-0 flex flex-col items-center px-5 pt-6 text-center max-md:px-6 max-md:pt-8">
-                      <p
-                        className={`inline-block px-2.5 py-1.5 font-mono text-xs font-bold uppercase tracking-widest ${style.kicker}`}
-                      >
-                        {s.kicker}
-                      </p>
-                      <p
-                        className={`mt-4 font-display uppercase leading-[0.92] tracking-tight ${style.title}`}
-                      >
-                        {s.lines.map((ln, li) => (
-                          <span
-                            key={li}
-                            className={`block text-[clamp(1.8rem,4vw,3rem)] max-md:text-[clamp(2.4rem,8.5vw,3.6rem)] ${ln.hi ? style.hi : ""}`}
-                          >
-                            {ln.text}
-                          </span>
-                        ))}
-                      </p>
-                      <a
-                        href={s.href}
-                        tabIndex={active ? 0 : -1}
-                        className={`mt-5 inline-flex items-center gap-2 rounded-full border-2 px-4 py-1.5 font-mono text-xs font-bold uppercase tracking-widest transition-colors max-md:mt-6 max-md:px-5 max-md:py-2 max-md:text-sm ${style.pill}`}
-                      >
-                        {s.date}
-                        <IconArrow size={13} />
-                      </a>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* ---------- control bar (hairline seams mobile; 2px brutalist seams md+) ---------- */}
-            <div className="flex items-stretch border-t max-md:border-ink/15 md:border-t-2 bg-paper">
-              <div className="flex items-baseline gap-1.5 border-r max-md:border-ink/15 md:border-r-2 px-4 py-3">
-                <span className="font-display text-2xl uppercase leading-none text-accent">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <span className="font-mono text-xs font-bold uppercase text-smoke">
-                  / {String(slides.length).padStart(2, "0")}
-                </span>
-              </div>
-              <p className="flex min-w-0 flex-1 items-center truncate px-4 font-sans text-sm font-bold uppercase tracking-wide">
-                {slide.title}
-              </p>
-              <div className="flex shrink-0 items-stretch divide-x max-md:divide-ink/15 md:divide-x-2 max-md:border-l max-md:border-ink/15 md:border-l-2">
-                <button
-                  type="button"
-                  onClick={() => setUserPaused((v) => !v)}
-                  aria-pressed={userPaused}
-                  aria-label={userPaused ? "Putar otomatis" : "Jeda putar otomatis"}
-                  className="flex w-12 items-center justify-center bg-paper transition-colors hover:bg-silver"
-                >
-                  {userPaused ? (
-                    <IconPlay size={15} />
-                  ) : (
-                    <span aria-hidden="true" className="flex gap-1">
-                      <span className="block h-4 w-1.5 bg-ink" />
-                      <span className="block h-4 w-1.5 bg-ink" />
-                    </span>
-                  )}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => go(-1)}
-                  aria-label="Slide sebelumnya"
-                  className="flex w-12 items-center justify-center bg-paper transition-colors hover:bg-ink hover:text-paper"
-                >
-                  <IconArrow size={17} className="rotate-180" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => go(1)}
-                  aria-label="Slide berikutnya"
-                  className="flex w-12 items-center justify-center bg-paper transition-colors hover:bg-ink hover:text-paper"
-                >
-                  <IconArrow size={17} />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </Section>
+    </section>
   );
 }

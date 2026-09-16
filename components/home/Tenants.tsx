@@ -10,9 +10,12 @@ const norm = (s: string) => s.toLowerCase().trim();
 
 /**
  * Tenant directory wall — an interactive plate field, not a static grid.
- * Search composes with category pills; picking a plate opens an ink detail
- * strip (floor, unit, category) with a route cross-link to #location;
- * an atomic live status announces result counts; the empty state resets.
+ * Search composes with category pills; picking a plate opens a detail strip
+ * (floor, unit, category) with a route cross-link to #location; an atomic
+ * live status announces result counts; the empty state resets.
+ * 2026-09-16: restyled to the LWT hairline language — 1px seams on white,
+ * fill-inversion hover, no lift, and the directory CTA as an LWT outlink
+ * plate (red headline on hover, reveal-on-hover sub, 45°-arrow box).
  */
 export default function Tenants() {
   const [category, setCategory] = useState<TenantCategory>("Semua");
@@ -53,7 +56,7 @@ export default function Tenants() {
   };
 
   return (
-    <Section id="tenants" className="bg-ground:bg-paper">
+    <Section id="tenants">
       <div
         className="px-4 py-14 md:px-10 md:py-20"
         onKeyDown={(e) => {
@@ -64,7 +67,7 @@ export default function Tenants() {
           index="03 / DIRECTORY"
           title="TENANT & BOUTIQUE"
           right={
-            <span className="font-mono text-xs font-bold uppercase tracking-widest text-smoke">
+            <span className="font-sans text-xs font-bold uppercase tracking-widest text-mute">
               200+ tenant · GF–L2
             </span>
           }
@@ -86,7 +89,7 @@ export default function Tenants() {
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Cari tenant, unit, lantai…"
               aria-label="Cari tenant, unit, atau lantai"
-              className="w-full border-2 border-ink bg-paper py-2.5 pl-10 pr-10 font-mono text-xs font-bold uppercase tracking-wide placeholder:font-normal placeholder:text-smoke focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              className="w-full border border-ink bg-paper py-2.5 pl-10 pr-10 font-sans text-sm uppercase tracking-wide placeholder:text-mute focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2"
             />
             {query !== "" && (
               <button
@@ -96,26 +99,26 @@ export default function Tenants() {
                   searchRef.current?.focus();
                 }}
                 aria-label="Bersihkan pencarian"
-                className="absolute right-2 top-1/2 flex size-6 -translate-y-1/2 items-center justify-center border-2 border-ink bg-paper transition-colors hover:bg-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                className="absolute right-2 top-1/2 flex size-6 -translate-y-1/2 items-center justify-center text-mute transition-colors hover:text-accent"
               >
-                <IconClose size={11} />
+                <IconClose size={12} />
               </button>
             )}
           </div>
 
-          <div className="flex flex-wrap gap-3" role="group" aria-label="Filter kategori tenant">
+          <div className="flex flex-wrap gap-2" role="group" aria-label="Filter kategori tenant">
             {tenantCategories.map((c) => (
               <button
                 key={c}
                 type="button"
                 aria-pressed={category === c}
                 onClick={() => setCategory(c)}
-                className={`border-2 border-ink px-4 py-2 font-mono text-xs font-bold uppercase tracking-widest transition-colors ${
-                  category === c ? "bg-ink text-paper" : "bg-paper hover:bg-silver"
+                className={`border px-4 py-2 font-sans text-xs font-bold uppercase tracking-widest transition-colors ${
+                  category === c ? "border-ink bg-ink text-paper" : "border-hairline bg-paper hover:border-ink"
                 }`}
               >
                 {c}
-                <span className={`ml-2 ${category === c ? "text-accent" : "text-smoke"}`}>
+                <span className={`ml-2 ${category === c ? "text-accent" : "text-mute"}`}>
                   {counts.get(c)}
                 </span>
               </button>
@@ -127,14 +130,14 @@ export default function Tenants() {
         <p
           role="status"
           aria-atomic="true"
-          className="mb-5 font-mono text-[11px] font-bold uppercase tracking-widest text-smoke"
+          className="mb-5 font-sans text-xs font-bold uppercase tracking-widest text-mute"
         >
           {status}
         </p>
 
         {/* detail strip — the picked plate's wayfinding readout */}
         {pickedTenant && (
-          <div className="mb-6 border-2 border-ink bg-ink p-4 text-paper md:p-5">
+          <div className="mb-6 border border-ink bg-ink p-4 text-paper md:p-5">
             <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
               {pickedTenant.image ? (
                 // eslint-disable-next-line @next/next/no-img-element -- supplied logo slot, swap-ready
@@ -146,20 +149,18 @@ export default function Tenants() {
               ) : (
                 <span
                   aria-hidden="true"
-                  className="flex size-10 items-center justify-center border-2 border-paper font-display text-xl uppercase leading-none"
+                  className="flex size-10 items-center justify-center border border-paper font-display text-xl uppercase"
                 >
                   {pickedTenant.name.charAt(0)}
                 </span>
               )}
               <div>
-                <p className="font-mono text-[11px] font-bold uppercase tracking-widest text-paper/60">
+                <p className="font-sans text-xs font-bold uppercase tracking-widest text-paper/60">
                   Terpilih
                 </p>
-                <p className="font-display text-2xl uppercase leading-tight">
-                  {pickedTenant.name}
-                </p>
+                <p className="font-display text-2xl uppercase">{pickedTenant.name}</p>
               </div>
-              <dl className="flex gap-6 font-mono text-[11px] uppercase tracking-widest">
+              <dl className="flex gap-6 font-sans text-xs uppercase tracking-widest">
                 <div>
                   <dt className="text-paper/60">Lantai</dt>
                   <dd className="font-bold">{pickedTenant.floor}</dd>
@@ -176,7 +177,7 @@ export default function Tenants() {
               <div className="flex w-full gap-3 md:ml-auto md:w-auto">
                 <a
                   href="#location"
-                  className="flex flex-1 items-center justify-center gap-2 border-2 border-ink bg-accent px-4 py-2 font-mono text-xs font-bold uppercase tracking-widest text-ink transition-colors hover:bg-paper md:flex-none"
+                  className="flex flex-1 items-center justify-center gap-2 border border-accent bg-accent px-4 py-2 font-sans text-xs font-bold uppercase tracking-widest text-paper transition-colors hover:bg-ink hover:border-ink md:flex-none"
                 >
                   <IconRoute size={14} />
                   Lihat rute
@@ -187,7 +188,7 @@ export default function Tenants() {
                     setPicked(null);
                     searchRef.current?.focus();
                   }}
-                  className="flex-1 border-2 border-paper/40 px-4 py-2 font-mono text-xs font-bold uppercase tracking-widest transition-colors hover:bg-paper hover:text-ink md:flex-none"
+                  className="flex-1 border border-paper/40 px-4 py-2 font-sans text-xs font-bold uppercase tracking-widest transition-colors hover:bg-paper hover:text-ink md:flex-none"
                 >
                   Tutup
                 </button>
@@ -196,10 +197,9 @@ export default function Tenants() {
           </div>
         )}
 
-        {/* logo wall — one plate field, hairline seams; plates select.
-            The field fades as one mass (the wall is the section's plate). */}
+        {/* logo wall — one plate field, 1px hairline seams on white */}
         {matched.length > 0 ? (
-          <Reveal variant="ink" as="ul" className="grid grid-cols-2 gap-px border border-ink bg-ink sm:grid-cols-3 lg:grid-cols-4">
+          <Reveal variant="ink" as="ul" className="grid grid-cols-2 gap-px bg-hairline sm:grid-cols-3 lg:grid-cols-4">
             {matched.map((t) => {
               const selected = pickedTenant?.name === t.name;
               return (
@@ -209,14 +209,14 @@ export default function Tenants() {
                     aria-pressed={selected}
                     onClick={() => setPicked(selected ? null : t.name)}
                     aria-label={`${t.name} — ${t.category}, ${t.floor}, Unit ${t.unit}`}
-                    className={`cell-checker group relative flex h-full w-full min-h-[124px] flex-col items-center justify-between gap-2 p-4 text-center transition-[background-color,transform,box-shadow] duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+                    className={`group relative flex h-full w-full min-h-[124px] flex-col items-center justify-between gap-2 p-4 text-center transition-colors duration-200 ${
                       selected ? "bg-silver" : "bg-paper hover:bg-silver"
-                    } md:hover:-translate-x-[1px] md:hover:-translate-y-[1px] md:hover:shadow-brutal-sm`}
+                    }`}
                   >
                     {selected && (
                       <span
                         aria-hidden="true"
-                        className="pointer-events-none absolute inset-0 border-[3px] border-accent"
+                        className="pointer-events-none absolute inset-0 border border-accent"
                       />
                     )}
                     {selected && (
@@ -233,7 +233,7 @@ export default function Tenants() {
                     ) : (
                       <span
                         aria-hidden="true"
-                        className="mx-auto flex size-14 items-center justify-center border-2 border-ink font-display text-2xl uppercase leading-none md:size-16"
+                        className="mx-auto flex size-14 items-center justify-center border border-ink font-display text-2xl uppercase md:size-16"
                       >
                         {t.name.charAt(0)}
                       </span>
@@ -243,8 +243,8 @@ export default function Tenants() {
                         {t.name}
                       </span>
                       <span
-                        className={`mt-0.5 block font-mono text-[11px] font-bold uppercase tracking-widest transition-colors ${
-                          selected ? "text-ink" : "text-smoke group-hover:text-ink"
+                        className={`mt-0.5 block font-sans text-xs font-bold uppercase tracking-widest transition-colors ${
+                          selected ? "text-ink" : "text-mute group-hover:text-ink"
                         }`}
                       >
                         {t.floor} · {t.unit}
@@ -257,11 +257,11 @@ export default function Tenants() {
           </Reveal>
         ) : (
           /* empty state — always offers recovery, never a dead end */
-          <div className="border-2 border-ink p-8 text-center md:p-10">
-            <p className="font-display text-3xl uppercase leading-none">
+          <div className="border border-ink p-8 text-center md:p-10">
+            <p className="font-display text-3xl uppercase">
               Tidak ada hasil<span className="text-accent">.</span>
             </p>
-            <p className="mx-auto mt-3 max-w-md font-mono text-xs uppercase tracking-wide text-smoke">
+            <p className="mx-auto mt-3 max-w-md font-sans text-sm uppercase tracking-wide text-mute">
               {q ? `Tidak ada tenant cocok "${query.trim()}"` : "Kategori ini belum berisi tenant"}
               {category !== "Semua" ? ` di kategori ${category}` : ""}. Coba kata kunci lain,
               atau lihat seluruh katalog.
@@ -269,45 +269,47 @@ export default function Tenants() {
             <button
               type="button"
               onClick={resetAll}
-              className="mt-5 border-2 border-ink bg-ink px-5 py-2.5 font-mono text-xs font-bold uppercase tracking-widest text-paper transition-colors hover:bg-accent hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              className="mt-5 border border-ink bg-ink px-5 py-2.5 font-sans text-xs font-bold uppercase tracking-widest text-paper transition-colors hover:bg-accent hover:border-accent"
             >
               Lihat semua tenant
             </button>
           </div>
         )}
 
-        {/* directory band — full-width ink CTA closing the section. Lives outside
-            the grid on purpose: a spanned tile leaves grid-ground voids whenever
-            a filtered count doesn't fill its row. The link box covers headline +
-            arrow; the chip row below is a REAL second filter control (nested
-            interactive elements are invalid, so the chips are siblings, not
-            children, of the anchor). */}
-        <Reveal variant="ink" className="border border-ink">
-          <div className="bg-ink p-5 text-paper md:p-6">
+        {/* directory band — the LWT outlink plate: bordered box whose headline
+            turns red on hover, sub-description reveals, arrow rotates 45°.
+            The link box covers headline + arrow; the chip row below is a REAL
+            second filter control (nested interactive elements are invalid, so
+            the chips are siblings, not children, of the anchor). */}
+        <Reveal variant="ink" className="mt-10 border border-ink">
+          <div className="bg-paper p-5 md:p-6">
             <a
               href="#tenants"
               aria-label="Lihat direktori lengkap — 200+ tenant, GF sampai L2"
-              className="group flex flex-wrap items-center justify-between gap-x-8 gap-y-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              className="group flex flex-wrap items-center justify-between gap-x-8 gap-y-4"
             >
-              <div>
-                <p className="font-mono text-[11px] font-bold uppercase tracking-widest text-paper/70">
+              <div className="max-w-xl">
+                <p className="font-sans text-xs font-bold uppercase tracking-widest text-mute">
                   +200 brand lainnya · GF–L2
                 </p>
-                <p className="mt-2 font-display text-3xl uppercase leading-[0.95] md:text-4xl">
-                  Lihat direktori
-                  <br className="sm:hidden" />
-                  <span className="hidden sm:inline"> </span>
-                  lengkap<span className="text-accent">.</span>
+                <p className="mt-2 font-display text-4xl uppercase leading-[1.05] transition-colors duration-200 group-hover:text-accent md:text-5xl">
+                  Lihat direktori lengkap
+                  <IconArrow
+                    size={28}
+                    className="ml-3 inline-block rotate-45 opacity-0 transition-all duration-300 group-hover:rotate-0 group-hover:opacity-100"
+                  />
+                </p>
+                <p className="mt-1 max-h-0 overflow-hidden opacity-0 transition-all duration-500 group-hover:max-h-16 group-hover:opacity-100">
+                  <span className="font-sans text-sm text-dim">
+                    200+ tenant — fashion, F&amp;B, beauty, dan gaya hidup di GF–L2.
+                  </span>
                 </p>
               </div>
-              <span className="flex size-12 items-center justify-center border-2 border-paper/30 transition-colors duration-150 group-hover:border-accent group-hover:bg-accent md:size-14">
-                <IconArrow
-                  size={22}
-                  className="text-accent transition-all duration-150 group-hover:translate-x-0.5 group-hover:text-ink"
-                />
+              <span className="flex size-12 items-center justify-center border border-ink transition-colors duration-200 group-hover:border-accent group-hover:bg-accent group-hover:text-paper md:size-14">
+                <IconArrow size={22} />
               </span>
             </a>
-            <div className="mt-5 flex flex-wrap items-center gap-x-2 gap-y-2 border-t border-paper/15 pt-4" role="group" aria-label="Filter kategori dari indeks bawah">
+            <div className="mt-5 flex flex-wrap items-center gap-x-2 gap-y-2 border-t border-hairline pt-4" role="group" aria-label="Filter kategori dari indeks bawah">
               {tenantCategories.map((c) => {
                 const active = c === category;
                 return (
@@ -316,17 +318,17 @@ export default function Tenants() {
                     type="button"
                     aria-pressed={active}
                     onClick={() => setCategory(c)}
-                    className={`border px-2 py-1 font-mono text-[11px] font-bold uppercase tracking-widest transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+                    className={`border px-2 py-1 font-sans text-xs font-bold uppercase tracking-widest transition-colors ${
                       active
-                        ? "border-accent bg-accent text-ink"
-                        : "border-transparent text-paper/60 hover:border-paper/40 hover:text-paper"
+                        ? "border-accent bg-accent text-paper"
+                        : "border-transparent text-mute hover:border-ink hover:text-ink"
                     }`}
                   >
                     {c}
                   </button>
                 );
               })}
-              <span className="ml-auto font-mono text-[11px] font-bold uppercase tracking-widest text-paper/60">
+              <span className="ml-auto font-sans text-xs font-bold uppercase tracking-widest text-mute">
                 {matched.length}/{tenants.length} ditampilkan
               </span>
             </div>

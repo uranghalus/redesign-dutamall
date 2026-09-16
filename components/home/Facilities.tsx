@@ -39,21 +39,21 @@ export default function Facilities() {
   const active = facilities.find((f) => f.id === activeId)!;
 
   return (
-    <Section id="facilities">
+    <Section id="facilities" className="bg-silver">
       <div className="px-4 py-14 md:px-10 md:py-20">
         <SectionHeading
           index="02 / GUEST COMFORT"
           title="12 FASILITAS UTAMA"
           right={
-            <span className="font-mono text-xs font-bold uppercase tracking-widest text-smoke">
+            <span className="font-sans text-xs font-bold uppercase tracking-widest text-mute">
               Pilih untuk detail
             </span>
           }
         />
 
         <Reveal className="grid gap-8 lg:grid-cols-[2fr_1fr]">
-          {/* interactive facility grid — mall-map cell logic */}
-          <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+          {/* interactive facility grid — hairline cells on the silver band */}
+          <ul className="grid grid-cols-2 gap-px bg-hairline sm:grid-cols-3 lg:grid-cols-4">
             {facilities.map((f) => {
               const Icon = icons[f.id];
               const isActive = f.id === activeId;
@@ -63,15 +63,13 @@ export default function Facilities() {
                     type="button"
                     aria-pressed={isActive}
                     onClick={() => setActiveId(f.id)}
-                    className={`flex h-full min-h-[110px] w-full flex-col items-start justify-between gap-5 border-2 border-ink p-4 text-left transition-[background-color,color,box-shadow,transform] duration-150 ${
-                      isActive
-                        ? "bg-ink text-paper md:shadow-brutal-sm"
-                        : "bg-paper hover:bg-silver md:hover:bg-paper md:hover:-translate-x-[1px] md:hover:-translate-y-[1px] md:hover:shadow-brutal-sm"
+                    className={`flex h-full min-h-[110px] w-full flex-col items-start justify-between gap-5 p-4 text-left transition-colors duration-200 ${
+                      isActive ? "bg-ink text-paper" : "bg-paper hover:bg-silver"
                     }`}
                   >
                     <span className="flex w-full items-start justify-between">
                       <Icon size={22} className={isActive ? "text-accent" : ""} />
-                      <span className="font-mono text-xs font-bold uppercase tracking-widest opacity-80">
+                      <span className="font-sans text-xs font-bold uppercase tracking-widest opacity-80">
                         {f.floor}
                       </span>
                     </span>
@@ -85,29 +83,29 @@ export default function Facilities() {
           </ul>
 
           {/* detail panel — updates with the active facility */}
-          <Reveal variant="ink" delay={3} className="self-start border-2 border-ink md:shadow-brutal">
-            <div className="border-b-2 border-ink bg-ink px-5 py-3">
-              <p className="font-mono text-[11px] font-bold uppercase tracking-widest text-paper">
+          <Reveal variant="ink" delay={3} className="self-start border border-ink bg-paper">
+            <div className="border-b border-ink bg-ink px-5 py-3">
+              <p className="font-sans text-xs font-bold uppercase tracking-widest text-paper">
                 DETAIL FASILITAS
               </p>
             </div>
-            <div className="bg-paper p-5" aria-live="polite">
-              <p className="font-display text-5xl uppercase leading-[0.9]">{active.name}</p>
-              <p className="mt-3 font-sans text-sm leading-relaxed text-smoke">{active.detail}</p>
-              <dl className="mt-6 space-y-2.5 font-mono text-xs uppercase tracking-wide">
-                <div className="flex justify-between border-b border-silver pb-2">
-                  <dt className="text-smoke">Lantai</dt>
+            <div className="p-5" aria-live="polite">
+              <p className="font-display text-5xl uppercase">{active.name}</p>
+              <p className="mt-3 font-sans text-sm leading-relaxed text-dim">{active.detail}</p>
+              <dl className="mt-6 space-y-2.5 font-sans text-xs uppercase tracking-wide">
+                <div className="flex justify-between border-b border-hairline pb-2">
+                  <dt className="text-mute">Lantai</dt>
                   <dd className="font-bold">{active.floor}</dd>
                 </div>
-                <div className="flex justify-between border-b border-silver pb-2">
-                  <dt className="text-smoke">Zona</dt>
+                <div className="flex justify-between border-b border-hairline pb-2">
+                  <dt className="text-mute">Zona</dt>
                   <dd className="font-bold">
                     GRID {String(active.grid[0]).padStart(2, "0")}–
                     {String(active.grid[1]).padStart(2, "0")}
                   </dd>
                 </div>
                 <div className="flex justify-between">
-                  <dt className="text-smoke">Status</dt>
+                  <dt className="text-mute">Status</dt>
                   <dd className="flex items-center gap-2 font-bold">
                     <span aria-hidden="true" className="inline-block size-2 bg-accent" />
                     Terbuka
@@ -116,7 +114,7 @@ export default function Facilities() {
               </dl>
               <a
                 href="#location"
-                className="mt-5 inline-flex items-center gap-2 border-2 border-ink bg-paper px-3 py-2 text-xs font-bold uppercase tracking-widest text-ink transition-colors hover:bg-ink hover:text-paper md:shadow-brutal-xs"
+                className="mt-5 inline-flex items-center gap-2 border border-ink px-3 py-2 font-sans text-xs font-bold uppercase tracking-widest transition-colors hover:bg-ink hover:text-paper"
               >
                 Lihat di peta lantai
                 <IconArrow size={14} />
@@ -126,16 +124,16 @@ export default function Facilities() {
         </Reveal>
 
         {/* parking stat band */}
-        <Reveal variant="seq" as="div" className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <Reveal variant="seq" as="div" className="mt-10 grid grid-cols-2 gap-px bg-hairline sm:grid-cols-4">
           {[
             { v: "2.500+", l: "Mobil & Motor" },
             { v: "P1–P4", l: "Empat Lantai Parkir" },
             { v: "24 Jam", l: "Akses Parkir" },
             { v: "GPS", l: "Ladies & Disabilitas Zone" },
           ].map((s) => (
-            <div key={s.l} className="border-2 border-ink bg-paper p-5 text-center md:shadow-brutal-sm">
-              <p className="font-display text-3xl uppercase leading-none text-ink md:text-4xl">{s.v}</p>
-              <p className="mt-2 font-mono text-xs font-bold uppercase tracking-widest text-smoke">
+            <div key={s.l} className="bg-paper p-5 text-center">
+              <p className="font-display text-3xl uppercase text-ink md:text-4xl">{s.v}</p>
+              <p className="mt-2 font-sans text-xs font-bold uppercase tracking-widest text-mute">
                 {s.l}
               </p>
             </div>

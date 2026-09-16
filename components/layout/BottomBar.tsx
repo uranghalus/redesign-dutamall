@@ -12,24 +12,25 @@ export default function BottomBar() {
   return (
     <nav
       aria-label="Akses cepat"
-      className="fixed inset-x-0 bottom-0 z-50 border-t-2 border-ink bg-paper pb-[env(safe-area-inset-bottom)] md:hidden"
+      className="fixed inset-x-0 bottom-0 z-50 border-t border-hairline bg-paper pb-[env(safe-area-inset-bottom)] md:hidden"
     >
-      <div className="grid grid-cols-4 gap-px bg-ink">
+      <ul className="grid grid-cols-4">
         {items.map((item) => (
-          <a
-            key={item.label}
-            href={item.href}
-            className={`flex min-h-[60px] flex-col items-center justify-center gap-1 font-mono text-xs font-bold uppercase tracking-widest transition-colors ${
-              item.accent
-                ? "bg-accent text-ink"
-                : "bg-paper text-ink hover:bg-silver"
-            }`}
-          >
-            <item.icon size={20} />
-            {item.label}
-          </a>
+          <li key={item.label} className="border-r border-hairline last:border-r-0">
+            <a
+              href={item.href}
+              className={`flex min-h-[60px] flex-col items-center justify-center gap-1 font-sans text-xs font-bold uppercase tracking-wide transition-colors ${
+                item.accent
+                  ? "bg-accent text-paper"
+                  : "bg-paper text-ink hover:bg-silver active:bg-ink active:text-paper"
+              }`}
+            >
+              <item.icon size={20} />
+              {item.label}
+            </a>
+          </li>
         ))}
-      </div>
+      </ul>
     </nav>
   );
 }
