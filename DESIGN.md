@@ -927,3 +927,48 @@ earned neo-brutalist layer (user brief: "a touch of neo-brutalism"):
   their persistent hard-offset shadows + hover lift at `md+` (mobile stays
   flat with fill inversion), superseding the earlier "border emphasis at all
   sizes" elevation decision.
+
+---
+
+## Project Layer — Root scaling fix (2026-09-17, user-directed)
+
+The 62.5% root (1rem = 10px) shrank every Tailwind rem utility to 62.5% of
+its authored size (text-xs rendered 7.5px, h-10 buttons 25px — below the
+44px touch floor). Root is now **100%**: rem values read at true px
+(text-xs = 12px, h-10 = 40px), matching DESIGN.md's 16px-convention rem
+literals. The handful of 10px-convention layout rems were converted to
+explicit px (header 72px, sticky offsets 90px, hero paddings 16/24/128px,
+offcanvas 600px); body text is explicitly 1rem = 16px. Detector: 0 findings
+on the touched files.
+
+---
+
+## Project Layer — Hero blueprint restage (2026-09-17, user mock 1:1)
+
+The hero was rebuilt to the user's supplied mock: a 42/58 split with a
+warm-bone blueprint column (kicker `00 — LANDMARK BLUEPRINT`, four-line
+League Gothic display with an ink→grey step, SUIT deck, solid + outline
+CTAs, coordinates/civic-scale facts row) and a right photo carousel with
+a white index chip (top-left) and black annotation chip (bottom-right).
+The 01–04 stats strip below doubles as the carousel control: one state
+drives photo, chips, and strip; the active cell carries a brass progress
+rule mirroring the 6.5s autoplay.
+
+New tokens: `--color-bone #f4f2ee` (hero ground), `--color-brass
+#7d611f` (text-safe gold, ≥4.5:1 on bone/paper), `--color-brass-soft
+#c2a15c` (decorative rules only). Slides 02–04 use the documented
+poster-plate convention until real photos are supplied; set `image` on a
+slide and the plate disappears. Autoplay discipline: stops for reduced
+motion, user pause, pointer hold, offscreen, hidden tab; strip is a real
+tablist; swipe on touch; arrow keys on the stage and strip.
+
+Navigation follows the hero's blueprint grammar (SiteHeader,
+MobileOffcanvas, BottomBar): desktop links are numbered index items
+(01–06) in SUIT caps with a brass underline rule on hover/active; the
+header's scrolled "light" state uses bone (not white) so it melts into
+the hero's paper column; the mobile offcanvas is the hero's blueprint
+column expanded full-screen — bone ground, numbered League Gothic groups
+with hairline dividers, brass active/expanded states, and wayfinding
+chips ("C21 L3") restyled as bone plate + brass number; the bottom bar
+quick-actions use the hero's ink-fill square CTA language for the primary
+action; the global focus ring is brass.

@@ -43,7 +43,7 @@ export function SectionHeading({
     <div className="mb-10 md:mb-14">
       <div className="mb-5 flex flex-wrap items-center gap-x-6 gap-y-3">
         <span
-          className={`inline-block px-2 py-1 font-sans text-[11px] font-bold uppercase tracking-widest ${
+          className={`inline-block px-2 py-1 font-sans text-xs font-bold uppercase tracking-widest ${
             red ? "bg-accent text-paper" : "bg-ink text-paper"
           }`}
         >

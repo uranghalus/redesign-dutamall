@@ -19,7 +19,7 @@ const variants: Record<Variant, string> = {
   ghost: "border-transparent bg-transparent text-current hover:bg-silver",
 };
 
-/* h-10/h-12/h-14 at the 62.5% root = LWT's 40/48/56px touch heights */
+/* h-10/h-12/h-14 = LWT's 40/48/56px touch heights (rem = 16px) */
 const sizes: Record<Size, string> = {
   sm: "h-10 px-4 text-xs",
   md: "h-12 px-6 text-sm",

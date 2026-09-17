@@ -31,7 +31,7 @@ export default function FugoSpotlight() {
         {/* sticky left menu — LWT leftMenuBox */}
         <nav
           aria-label="Indeks bagian"
-          className="hidden shrink-0 lg:sticky lg:top-[calc(max(2.4em,1.6667vw)+9rem)] lg:block lg:self-start"
+          className="hidden shrink-0 lg:sticky lg:top-[calc(max(2.4em,1.6667vw)+90px)] lg:block lg:self-start"
         >
           <ul className="flex flex-col gap-1">
             {menu.map((m) => (

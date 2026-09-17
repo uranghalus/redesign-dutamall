@@ -25,7 +25,7 @@ export default function WhatsOn() {
         {/* left menu — LWT leftMenuBox */}
         <nav
           aria-label="Filter agenda"
-          className="shrink-0 lg:sticky lg:top-[calc(max(2.4em,1.6667vw)+9rem)] lg:self-start"
+          className="shrink-0 lg:sticky lg:top-[calc(max(2.4em,1.6667vw)+90px)] lg:self-start"
         >
           <p className="mb-4 font-sans text-xs font-bold uppercase tracking-widest text-mute">
             Agenda

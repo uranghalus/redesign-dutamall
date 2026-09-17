@@ -20,13 +20,14 @@ interface SearchHit {
   href: string;
 }
 
+/* blueprint nav — every item carries the hero's index numbers (00, 01–04) */
 const nav = [
-  { href: "#cinema", label: "Cinema" },
-  { href: "#facilities", label: "Fasilitas" },
-  { href: "#tenants", label: "Tenant" },
-  { href: "#fugo", label: "FUGO Hotel" },
-  { href: "#whatson", label: "What's On" },
-  { href: "#location", label: "Lokasi" },
+  { href: "#cinema", label: "Cinema", num: "01" },
+  { href: "#facilities", label: "Fasilitas", num: "02" },
+  { href: "#tenants", label: "Tenant", num: "03" },
+  { href: "#fugo", label: "FUGO Hotel", num: "04" },
+  { href: "#whatson", label: "What's On", num: "05" },
+  { href: "#location", label: "Lokasi", num: "06" },
 ];
 
 export default function SiteHeader() {
@@ -156,10 +157,10 @@ export default function SiteHeader() {
             ? "bg-transparent text-ink"
             : solid === "dark"
               ? "bg-ink text-paper"
-              : "bg-paper text-ink shadow-[0_1px_0_0_#e5e5e5]"
+              : "bg-bone text-ink shadow-[0_1px_0_0_#e5e5e5]"
         }`}
       >
-        <div className="flex items-center justify-between gap-6 px-4 py-3 md:px-10 lg:h-[7.2rem] lg:py-0">
+        <div className="flex items-center justify-between gap-6 px-4 py-3 md:px-10 lg:h-[72px] lg:py-0">
           {/* brand logo */}
           <a href="#top" className="flex items-center" aria-label="Duta Mall Banjarmasin — kembali ke atas">
             <Image
@@ -179,12 +180,15 @@ export default function SiteHeader() {
               <a
                 key={item.href}
                 href={item.href}
-                className="group relative px-1 py-2 font-sans text-sm font-bold uppercase tracking-wide"
+                className="group relative flex items-baseline gap-2 px-1 py-2 font-sans text-sm font-bold uppercase tracking-[0.18em]"
               >
+                <span aria-hidden="true" className="text-xs font-bold tracking-widest text-brass">
+                  {item.num}
+                </span>
                 {item.label}
                 <span
                   aria-hidden="true"
-                  className="absolute inset-x-1 bottom-0 h-0.5 origin-left scale-x-0 bg-accent transition-transform duration-300 group-hover:scale-x-100"
+                  className="absolute inset-x-1 bottom-0 h-0.5 origin-left scale-x-0 bg-brass-soft transition-transform duration-300 group-hover:scale-x-100"
                 />
               </a>
             ))}
@@ -197,7 +201,7 @@ export default function SiteHeader() {
               aria-label={searchOpen ? "Tutup pencarian" : "Cari tenant, film, atau fasilitas"}
               aria-expanded={searchOpen}
               onClick={() => setSearchOpen((v) => !v)}
-              className="flex size-11 items-center justify-center transition-colors hover:text-accent"
+              className="flex size-11 items-center justify-center transition-colors hover:text-brass"
             >
               {searchOpen ? <IconClose size={20} /> : <IconSearch size={20} />}
             </button>
@@ -205,7 +209,7 @@ export default function SiteHeader() {
               <IconTicket size={14} />
               Jadwal Film
             </LwtButtonLink>
-            <LwtButtonLink href="#fugo" variant="solid" size="sm" className="max-lg:hidden gap-2">
+            <LwtButtonLink href="#fugo" variant="solid" size="sm" className="max-lg:hidden gap-2 border-ink tracking-[0.2em]">
               <IconBed size={14} />
               Pesan Kamar
             </LwtButtonLink>
@@ -224,7 +228,7 @@ export default function SiteHeader() {
 
         {/* instant search overlay */}
         {searchOpen && (
-          <div className="border-t border-hairline bg-paper text-ink">
+          <div className="border-t border-hairline bg-bone text-ink">
             <div className="px-4 py-4 md:px-10">
               <div className="flex items-center gap-3 border border-ink px-3">
                 <IconSearch size={18} className="shrink-0" />
@@ -242,7 +246,7 @@ export default function SiteHeader() {
                     type="button"
                     onClick={() => setQuery("")}
                     aria-label="Hapus pencarian"
-                    className="text-mute transition-colors hover:text-accent"
+                    className="text-mute transition-colors hover:text-brass"
                   >
                     <IconClose size={16} />
                   </button>
@@ -266,7 +270,7 @@ export default function SiteHeader() {
                             setSearchOpen(false);
                             setQuery("");
                           }}
-                          className="flex items-center justify-between gap-4 bg-paper px-4 py-3 transition-colors hover:bg-silver"
+                          className="flex items-center justify-between gap-4 bg-paper px-4 py-3 transition-colors hover:bg-bone"
                         >
                           <span className="flex min-w-0 items-baseline gap-3">
                             <span className="shrink-0 bg-ink px-1.5 py-0.5 font-sans text-xs font-bold uppercase text-paper">

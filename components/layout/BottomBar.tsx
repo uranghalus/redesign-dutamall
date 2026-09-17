@@ -21,8 +21,8 @@ export default function BottomBar() {
               href={item.href}
               className={`flex min-h-[60px] flex-col items-center justify-center gap-1 font-sans text-xs font-bold uppercase tracking-wide transition-colors ${
                 item.accent
-                  ? "bg-accent text-paper"
-                  : "bg-paper text-ink hover:bg-silver active:bg-ink active:text-paper"
+                  ? "bg-ink text-paper"
+                  : "bg-paper text-ink hover:bg-bone active:bg-ink active:text-paper"
               }`}
             >
               <item.icon size={20} />

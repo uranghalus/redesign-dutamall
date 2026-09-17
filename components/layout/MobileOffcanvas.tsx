@@ -5,10 +5,12 @@ import { IconClose, IconArrow } from "@/components/ui/Icons";
 import { wayfinding } from "@/app/data/home";
 
 /**
- * LWT offcanvas menu — black, full-height, from the right (60rem wide on
- * the reference). Giant League Gothic items, red active/expanded state,
- * accordion sublinks, expo-out slide, body-scroll lock, Escape close,
- * focus moves in on open and returns to the trigger on close.
+ * Blueprint offcanvas — the hero's left column expanded full-screen:
+ * warm-bone ground, ink League Gothic groups, brass active/expanded
+ * state, hairline dividers, and the wayfinding codes as numbered
+ * blueprint cells (hero strip grammar). Expo-out slide, body-scroll
+ * lock, Escape close, focus moves in on open and returns via the
+ * header trigger.
  */
 export default function MobileOffcanvas({
   open,
@@ -35,8 +37,14 @@ export default function MobileOffcanvas({
     };
   }, [open, onClose]);
 
-  const groups: { title: string; items: { label: string; href: string }[] }[] = [
+  /* numbered groups — the hero's index grammar (00 kicker, 01–04 strip) */
+  const groups: {
+    num: string;
+    title: string;
+    items: { label: string; href: string }[];
+  }[] = [
     {
+      num: "01",
       title: "Shopping",
       items: [
         { label: "Cinema XXI & The Premiere", href: "#cinema" },
@@ -45,6 +53,7 @@ export default function MobileOffcanvas({
       ],
     },
     {
+      num: "02",
       title: "Facilities",
       items: [
         { label: "12 Fasilitas Utama", href: "#facilities" },
@@ -52,6 +61,7 @@ export default function MobileOffcanvas({
       ],
     },
     {
+      num: "03",
       title: "Hospitality",
       items: [
         { label: "FUGO Hotel & Suites", href: "#fugo" },
@@ -59,6 +69,7 @@ export default function MobileOffcanvas({
       ],
     },
     {
+      num: "04",
       title: "What's On",
       items: [
         { label: "Event & CSR", href: "#whatson" },
@@ -66,6 +77,7 @@ export default function MobileOffcanvas({
       ],
     },
     {
+      num: "05",
       title: "Visit",
       items: [
         { label: "Lokasi & Rute", href: "#location" },
@@ -84,7 +96,7 @@ export default function MobileOffcanvas({
         onClick={onClose}
         aria-hidden="true"
       />
-      {/* panel */}
+      {/* panel — the blueprint column, full height */}
       <div
         ref={panelRef}
         id="mobile-offcanvas"
@@ -94,58 +106,66 @@ export default function MobileOffcanvas({
         tabIndex={-1}
         data-open={open}
         aria-hidden={!open}
-        className="offcanvas fixed inset-y-0 right-0 z-[99] flex w-full max-w-[60rem] flex-col overflow-y-auto bg-ink text-paper outline-none"
+        className="offcanvas fixed inset-y-0 right-0 z-[99] flex w-full max-w-[600px] flex-col overflow-y-auto bg-bone text-ink outline-none"
       >
-        {/* head */}
-        <div className="flex items-center justify-between px-6 py-4 md:px-10">
-          <span className="font-sans text-xs font-bold uppercase tracking-widest text-paper/60">
+        {/* head — kicker grammar: brass code, hairline rule, wordmark */}
+        <div className="flex items-center justify-between border-b border-hairline px-6 py-4 md:px-10">
+          <span className="flex items-baseline gap-3 font-sans text-xs font-bold uppercase tracking-[0.22em] text-dim">
+            <span aria-hidden="true" className="font-bold tracking-widest text-brass">
+              00
+            </span>
+            <span aria-hidden="true" className="h-px w-6 self-center bg-brass-soft" />
             Duta Mall Banjarmasin
           </span>
           <button
             type="button"
             onClick={onClose}
             aria-label="Tutup menu navigasi"
-            className="flex size-11 items-center justify-center transition-colors hover:text-accent"
+            className="flex size-11 items-center justify-center transition-colors hover:text-brass"
           >
             <IconClose size={26} />
           </button>
         </div>
 
-        {/* menu — accordion groups, LWT item scale */}
+        {/* menu — accordion groups, League Gothic at LWT item scale */}
         <nav aria-label="Utama mobile" className="flex-1 px-6 pb-16 md:px-10">
           {groups.map((g) => {
             const isOpen = expanded === g.title;
             return (
-              <div key={g.title} className="border-b border-paper/15">
+              <div key={g.title} className="border-b border-hairline">
                 <button
                   type="button"
                   aria-expanded={isOpen}
                   onClick={() => setExpanded(isOpen ? null : g.title)}
-                  className={`flex w-full items-center justify-between py-5 text-left font-display text-4xl uppercase md:text-5xl ${
-                    isOpen ? "text-accent" : "text-paper"
-                  }`}
+                  className={`flex w-full items-baseline gap-4 py-5 text-left ${isOpen ? "text-brass" : "text-ink"}`}
                 >
-                  {g.title}
+                  <span
+                    aria-hidden="true"
+                    className={`font-sans text-sm font-bold tracking-widest ${isOpen ? "text-brass" : "text-ghost"}`}
+                  >
+                    {g.num}
+                  </span>
+                  <span className="font-display text-4xl uppercase md:text-5xl">{g.title}</span>
                   <IconArrow
                     size={22}
-                    className={`shrink-0 transition-transform duration-500 ${isOpen ? "rotate-90" : ""}`}
+                    className={`ml-auto shrink-0 self-center transition-transform duration-500 ${isOpen ? "rotate-90" : ""}`}
                   />
                 </button>
                 <div className="acc-body" data-open={isOpen}>
                   <div>
-                    <ul className="pb-6">
+                    <ul className="pb-6 pl-9">
                       {g.items.map((it) => (
                         <li key={it.label}>
                           <a
                             href={it.href}
                             onClick={onClose}
                             tabIndex={open ? 0 : -1}
-                            className="group flex items-center justify-between gap-4 py-2.5 font-sans text-base font-bold uppercase tracking-wide text-paper/80 transition-colors hover:text-accent"
+                            className="group flex items-center justify-between gap-4 py-2.5 font-sans text-base font-bold uppercase tracking-[0.14em] text-dim transition-colors hover:text-ink"
                           >
                             {it.label}
                             <span
                               aria-hidden="true"
-                              className="inline-block size-1.5 bg-paper/30 transition-colors group-hover:bg-accent"
+                              className="inline-block size-1.5 bg-ghost transition-colors group-hover:bg-brass"
                             />
                           </a>
                         </li>
@@ -158,16 +178,20 @@ export default function MobileOffcanvas({
           })}
 
           {/* footer meta — hours/hotline live here on mobile */}
-          <div className="mt-8 flex flex-col gap-2 font-sans text-sm font-bold uppercase tracking-wide text-paper/60">
+          <div className="mt-8 flex flex-col gap-2 border-t border-hairline pt-6 font-sans text-sm font-bold uppercase tracking-[0.18em] text-dim">
             <span>Open Daily 10:00–22:00 WITA</span>
-            <a href="tel:+625113278888" className="transition-colors hover:text-accent">
+            <a href="tel:+625113278888" className="transition-colors hover:text-brass">
               (0511) 327-8888
             </a>
           </div>
         </nav>
 
-        {/* wayfinding strip — the mall's structural codes, as on the INFO bar */}
-        <div className="border-t border-paper/15 px-6 py-5 md:px-10">
+        {/* wayfinding strip — the mall's structural codes as numbered
+            blueprint cells (hero 01–04 strip grammar) */}
+        <div className="border-t border-hairline px-6 py-5 md:px-10">
+          <p className="mb-3 font-sans text-xs font-bold uppercase tracking-[0.22em] text-dim">
+            Wayfinding
+          </p>
           <ul className="flex flex-wrap gap-2">
             {wayfinding.map((w) => (
               <li key={w.code}>
@@ -176,13 +200,12 @@ export default function MobileOffcanvas({
                   onClick={onClose}
                   tabIndex={open ? 0 : -1}
                   aria-label={`${w.label}, ${w.floor}`}
-                  className={`inline-block border border-paper/40 px-2 py-1 font-sans text-xs font-bold uppercase tracking-widest transition-colors ${
-                    w.accent
-                      ? "border-accent bg-accent text-paper"
-                      : "text-paper/80 hover:border-paper hover:text-paper"
-                  }`}
+                  className="inline-flex items-baseline gap-1.5 border border-ink/25 px-2.5 py-1.5 font-sans text-xs font-bold uppercase tracking-widest text-ink transition-colors hover:border-ink hover:bg-ink hover:text-paper"
                 >
-                  {w.code}
+                  <span aria-hidden="true" className="text-[11px] tracking-widest text-brass">
+                    {w.code}
+                  </span>
+                  {w.floor}
                 </a>
               </li>
             ))}
