@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Reveal from "@/components/ui/Reveal";
 import { IconArrow } from "@/components/ui/Icons";
+import { interpolate } from "@/app/i18n/format";
+import type { Dictionary } from "@/app/i18n/dictionaries";
 
 /* ============================================================
    HERO — blueprint restage (user mock, 2026-09-17, followed 1:1)
@@ -10,12 +12,12 @@ import { IconArrow } from "@/components/ui/Icons";
      League Gothic display, SUIT deck, two CTAs, coordinates/
      civic-scale facts row); right = full-bleed photo carousel
      with a white index chip (top-left) and a black annotation
-     chip (bottom-right); beneath both, the 01–04 stats strip
-     whose cells are ALSO the carousel control. One state drives
+     chip (bottom-right); beneath both, the 01–04 strip whose
+     cells are ALSO the carousel control. One state drives
      photo, chips, and strip together.
-   · Slides 02–04 reuse the site's documented poster-plate
-     convention for artworks not yet supplied as photos; a slide
-     becomes a real photo the moment one is placed at `image`.
+   · Slides = the mall's supplied promo artwork
+     (public/assets/carousel) — September events calendar,
+     tenant promos, and new-menu launches, 1:1.
    ============================================================ */
 
 const AUTOPLAY_MS = 6500; // hero-progress animation duration must match
@@ -28,81 +30,59 @@ interface HeroSlide {
   chip: string;
   /** black annotation chip, bottom-right of the photo */
   note: string;
-  /** plate display lines (photo slides don't render these) */
-  lines: string[];
-  /** poster-plate colorway for slides without a supplied photo */
-  plate: { bg: string; fg: string; accent?: boolean };
-  /** supplied photo — set it and the plate disappears */
-  image?: { src: string; alt: string };
+  /** supplied promo artwork (public/assets/carousel) */
+  image: { src: string };
 }
 
 const slides: HeroSlide[] = [
   {
-    id: "atrium",
+    id: "agenda",
     num: "01",
-    chip: "GRAND ATRIUM & CIVIC GALLERIA",
-    note: "LOTTE WORLD INFLUENCE · ARCHITECTURAL MONOLITH",
-    lines: ["GRAND ATRIUM", "& CIVIC GALLERIA"],
-    plate: { bg: "#101010", fg: "#ffffff" },
+    chip: "SEPTEMBER CALENDAR OF EVENTS",
+    note: "FESTIVAL · BAZAAR · GIVEAWAY · SEP 2026",
     image: {
-      src: "/assets/img/hero-campaign-01.png",
-      alt: "Kampanye musiman Duta Mall — sorotan utama",
+      src: "/assets/carousel/790081428_18621118255051614_3142629881017972139_n.jpg",
     },
   },
   {
-    id: "fugo",
+    id: "kimino",
     num: "02",
-    chip: "FUGO HOTEL & SUITES",
-    note: "180 ROOMS · PANORAMA KOTA BANJARMASIN",
-    lines: ["FUGO HOTEL", "& SUITES"],
-    plate: { bg: "#ffffff", fg: "#000000" },
+    chip: "KIMI NO COOKIE",
+    note: "PROMO SEPTEMBER CERIA · DISKON 10%",
+    image: {
+      src: "/assets/carousel/809373877_18625528207051614_8684399884656563031_n.jpg",
+    },
   },
   {
-    id: "cinema",
+    id: "garmin",
     num: "03",
-    chip: "CINEMA XXI · THE PREMIERE",
-    note: "DOLBY ATMOS · D-BOX · LANTAI 3",
-    lines: ["CINEMA XXI", "THE PREMIERE"],
-    plate: { bg: "#000000", fg: "#ffffff", accent: true },
+    chip: "DORAN GADGET × GARMIN",
+    note: "BIRTHDAY SALE · UP TO 18% OFF",
+    image: {
+      src: "/assets/carousel/809939776_18625529767051614_3754248681766776913_n.jpg",
+    },
   },
   {
-    id: "galleria",
+    id: "fore",
     num: "04",
-    chip: "RETAIL & LIFESTYLE GALLERIA",
-    note: "200+ TENANTS · GF–L2 · CURATED",
-    lines: ["RETAIL &", "LIFESTYLE"],
-    plate: { bg: "#f00808", fg: "#ffffff" },
+    chip: "FORE COFFEE",
+    note: "NEW · THE UNEXPECTED TWIST",
+    image: {
+      src: "/assets/carousel/812940258_18626152867051614_602661780079802863_n.jpg",
+    },
   },
 ];
 
-/** 01–04 strip cells — display facts that double as carousel controls. */
+/** 01–04 strip cells — display facts that double as carousel controls.
+    Kept in sync 1:1 with the slide list above (strip cell i = slide i). */
 const stats = [
-  { num: "01", value: "200+ CURATED", label: "TENANTS & BOUTIQUES" },
-  { num: "02", value: "FUGO HOTEL", label: "180 DESIGNER ROOMS" },
-  { num: "03", value: "CINEMA XXI", label: "PREMIERE & DOLBY ATMOS" },
-  { num: "04", value: "30,000+ DAILY", label: "URBAN VISITORS" },
+  { num: "01", value: "SEPTEMBER AGENDA", label: "FESTIVALS · BAZAAR · GIVEAWAY" },
+  { num: "02", value: "KIMI NO COOKIE", label: "PROMO CERIA · DISKON 10%" },
+  { num: "03", value: "GARMIN × DORAN", label: "BIRTHDAY SALE · 18% OFF" },
+  { num: "04", value: "FORE COFFEE", label: "NEW · UNEXPECTED TWIST" },
 ];
 
-/** Poster-plate art — the documented fallback when no photo is supplied. */
-function PlateArt({ slide }: { slide: HeroSlide }) {
-  return (
-    <div
-      aria-hidden="true"
-      className="absolute inset-0"
-      style={{ background: slide.plate.bg }}
-    >
-      <span
-        className="slide-tit pointer-events-none absolute left-[6%] max-lg:bottom-[26%] select-none whitespace-pre-line font-display text-[clamp(4rem,7vw,7.5rem)] uppercase leading-[0.9] lg:bottom-[7%]"
-        style={{ color: slide.plate.fg, opacity: slide.plate.accent ? 0.28 : 0.14 }}
-      >
-        {slide.lines.join("\n")}
-      </span>
-      <div className="absolute inset-x-0 bottom-0 h-3 bg-black/20" />
-    </div>
-  );
-}
-
-export default function Hero() {
+export default function Hero({ dict }: { dict: Dictionary }) {
   const [index, setIndex] = useState(0);
   const [userPaused, setUserPaused] = useState(false);
   const [holding, setHolding] = useState(false); // pointer over the stage
@@ -114,9 +94,9 @@ export default function Hero() {
   const select = useCallback(
     (n: number) => {
       setIndex(n);
-      setAnnounce(`${slides[n].num} — ${slides[n].chip}`);
+      setAnnounce(interpolate(dict.hero.slideSelected, { num: slides[n].num, chip: slides[n].chip }));
     },
-    [],
+    [dict],
   );
 
   const hold = useCallback((v: boolean) => setHolding(v), []);
@@ -205,8 +185,12 @@ export default function Hero() {
   const slide = slides[index];
 
   return (
-    <section id="hero" aria-label="Duta Mall — pengantar" className="bg-paper text-ink">
-      <div className="grid min-h-[100svh] grid-cols-1 lg:min-h-[calc(100svh-72px)] lg:grid-cols-[42fr_58fr]">
+    <section id="hero" aria-label={dict.hero.ariaLabel} className="bg-paper text-ink">
+      {/* the fixed opaque header (68px mobile / 72px desktop / 108px with
+         topbar) is compensated with matching padding-top, so the hero rests
+         cleanly BELOW the nav — chips and plate titles never slide under
+         it, and the strip still closes the first viewport exactly */}
+      <div className="grid min-h-[calc(100svh-68px)] grid-cols-1 pt-[68px] lg:min-h-[calc(100svh-72px)] lg:grid-cols-[42fr_58fr] lg:pt-[72px] xl:min-h-[calc(100svh-108px)] xl:pt-[108px]">
         {/* ================= LEFT — the blueprint column ================= */}
         <div className="order-2 flex flex-col justify-center bg-bone px-5 py-12 md:px-12 lg:order-1 lg:py-16 xl:pl-[max(4rem,6vw)] xl:pr-14">
           {/* kicker — number, brass rule, label (mock: 00 — LANDMARK BLUEPRINT) */}
@@ -214,7 +198,7 @@ export default function Hero() {
             <span className="font-sans text-sm font-bold tracking-widest text-brass">00</span>
             <span aria-hidden="true" className="h-px w-9 bg-brass-soft" />
             <span className="font-sans text-xs font-bold uppercase tracking-[0.22em] text-dim">
-              Landmark Blueprint
+              {dict.hero.kicker}
             </span>
           </Reveal>
 
@@ -236,10 +220,7 @@ export default function Hero() {
 
           {/* deck — SUIT, the only text face */}
           <Reveal delay={4} as="p" className="mt-7 max-w-[52ch] text-[clamp(1.05rem,1.35vw,1.35rem)] leading-relaxed text-dim">
-            Banjarmasin&rsquo;s preeminent lifestyle, retail, and hospitality
-            destination. An architectural civic atrium fusing haute couture
-            boutiques, high-fidelity entertainment, and elevated hospitality
-            under one grand canopy.
+            {dict.hero.deck}
           </Reveal>
 
           {/* CTAs — solid ink with bracketed arrow + outline FUGO HOTEL */}
@@ -248,7 +229,7 @@ export default function Hero() {
               href="#tenants"
               className="group/cta inline-flex min-h-[48px] items-center gap-3 bg-ink px-7 py-3.5 font-sans text-xs font-bold uppercase tracking-[0.2em] text-paper transition-colors duration-200 hover:bg-[#2b2b2b]"
             >
-              Explore Directory
+              {dict.hero.ctaDirectory}
               <IconArrow
                 size={13}
                 className="transition-transform duration-300 group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5"
@@ -258,7 +239,7 @@ export default function Hero() {
               href="#fugo"
               className="inline-flex min-h-[48px] items-center border border-ink bg-bone px-7 py-3.5 font-sans text-xs font-bold uppercase tracking-[0.2em] text-ink transition-colors duration-200 hover:bg-ink hover:text-paper"
             >
-              FUGO Hotel
+              {dict.hero.ctaFugo}
             </a>
           </Reveal>
 
@@ -267,18 +248,18 @@ export default function Hero() {
             <dl className="flex flex-wrap gap-x-14 gap-y-5">
               <div>
                 <dt className="font-sans text-xs font-bold uppercase tracking-[0.22em] text-dim">
-                  Coordinates
+                  {dict.hero.coordinates}
                 </dt>
                 <dd className="mt-1.5 font-sans text-sm font-semibold tracking-wide text-ink">
-                  3.3244° S, 114.5910° E · KM 2
+                  {dict.hero.coordsValue}
                 </dd>
               </div>
               <div>
                 <dt className="font-sans text-xs font-bold uppercase tracking-[0.22em] text-dim">
-                  Civic Scale
+                  {dict.hero.civicScale}
                 </dt>
                 <dd className="mt-1.5 font-sans text-sm font-semibold tracking-wide text-ink">
-                  120,000 SQM GFA
+                  {dict.hero.civicValue}
                 </dd>
               </div>
             </dl>
@@ -286,15 +267,15 @@ export default function Hero() {
         </div>
 
         {/* ================= RIGHT — the photo carousel ================= */}
-        {/* mobile: the stage starts below the fixed header (68px) */}
-        <div className="relative order-1 min-h-[72svh] lg:order-2 lg:min-h-0">
+        {/* mobile: the stage fills the first viewport minus the header */}
+        <div className="relative order-1 min-h-[60svh] lg:order-2 lg:min-h-0">
           <div
             ref={regionRef}
             data-hold="false"
-            className="hero-region absolute inset-x-0 bottom-0 top-[68px] lg:inset-0"
+            className="hero-region absolute inset-0"
             role="region"
             aria-roledescription="carousel"
-            aria-label="Sorotan Duta Mall"
+            aria-label={dict.hero.regionLabel}
             tabIndex={0}
             onKeyDown={onKeyDown}
             onPointerEnter={() => hold(true)}
@@ -315,17 +296,13 @@ export default function Hero() {
                   data-active={active}
                   className="hero-slide absolute inset-0"
                 >
-                  {s.image ? (
-                    // eslint-disable-next-line @next/next/no-img-element -- supplied hero artwork
-                    <img
-                      src={s.image.src}
-                      alt={s.image.alt}
-                      className="absolute inset-0 h-full w-full object-cover"
-                      loading={i === 0 ? "eager" : "lazy"}
-                    />
-                  ) : (
-                    <PlateArt slide={s} />
-                  )}
+                  {/* eslint-disable-next-line @next/next/no-img-element -- supplied promo artwork */}
+                  <img
+                    src={s.image.src}
+                    alt={dict.hero.slideAlts[i]}
+                    className="absolute inset-0 h-full w-full object-cover"
+                    loading={i === 0 ? "eager" : "lazy"}
+                  />
                 </div>
               );
             })}
@@ -354,7 +331,7 @@ export default function Hero() {
       <Reveal delay={2} className="relative border-y border-hairline bg-paper">
         <div
           role="tablist"
-          aria-label="Pilih sorotan"
+          aria-label={dict.hero.carouselAria}
           className="grid grid-cols-2 lg:grid-cols-4"
           onKeyDown={(e) => {
             if (e.key === "ArrowRight") {
@@ -407,7 +384,7 @@ export default function Hero() {
           type="button"
           onClick={() => setUserPaused((v) => !v)}
           aria-pressed={userPaused}
-          aria-label={userPaused ? "Putar otomatis" : "Jeda putar otomatis"}
+          aria-label={userPaused ? dict.hero.play : dict.hero.pause}
           className="absolute right-0 top-0 z-10 hidden size-9 -translate-y-full items-center justify-center border-b border-l border-hairline bg-paper text-ink transition-colors hover:bg-silver lg:flex"
         >
           {userPaused ? (

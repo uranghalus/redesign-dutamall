@@ -1,0 +1,341 @@
+{
+  "topbar": {
+    "hours": "Open Today 10:00 — 22:00 WITA",
+    "phone": "(0511) 327-8888"
+  },
+  "nav": {
+    "tenants": "Directory",
+    "facilities": "Facilities",
+    "cinema": "Cinema",
+    "fugo": "The Hotel",
+    "whatson": "Events",
+    "location": "Concierge"
+  },
+  "search": {
+    "open": "Search tenants, films, or facilities",
+    "close": "Close search",
+    "clear": "Clear search",
+    "placeholder": "Search films / tenants / facilities…",
+    "ariaLabel": "Search films, tenants, or facilities",
+    "type": { "film": "Film", "tenant": "Tenant", "service": "Service" },
+    "noResults": "No results for \"{q}\". Try different keywords.",
+    "hint": "Type at least 2 letters — e.g. “fore”, “coffee”, “parking”."
+  },
+  "menu": {
+    "open": "Open navigation menu",
+    "close": "Close navigation menu",
+    "brand": "Duta Mall Banjarmasin",
+    "wayfinding": "Wayfinding"
+  },
+  "cta": { "reserve": "Reserve Suite" },
+  "language": { "label": "Language", "switch": "Switch language" },
+  "hero": {
+    "ariaLabel": "Duta Mall — introduction",
+    "regionLabel": "Duta Mall highlights",
+    "carouselAria": "Choose a highlight",
+    "pause": "Pause autoplay",
+    "play": "Resume autoplay",
+    "slideSelected": "{num} — {chip}",
+    "slideAlts": [
+      "Duta Mall September calendar of events — festivals, bazaar, and giveaways",
+      "Kimi no Cookie September Ceria promo — 10% discount",
+      "Doran Gadget × Garmin Birthday Sale — up to 18% off",
+      "Fore Coffee new menu — The Unexpected Twist"
+    ],
+    "kicker": "Landmark Blueprint",
+    "deck": "Banjarmasin's preeminent lifestyle, retail, and hospitality destination. An architectural civic atrium fusing haute couture boutiques, high-fidelity entertainment, and elevated hospitality under one grand canopy.",
+    "ctaDirectory": "Explore Directory",
+    "ctaFugo": "FUGO Hotel",
+    "coordinates": "Coordinates",
+    "civicScale": "Civic Scale",
+    "civicValue": "120,000 SQM GFA",
+    "coordsValue": "3.3244° S, 114.5910° E · KM 2"
+  },
+  "tenants": {
+    "kicker": "Retail & Beauty Curation",
+    "title": "Architectural Directory / Tenants",
+    "floorLabel": "Tenant floor filter",
+    "floors": {
+      "all": "All",
+      "ground": "Ground Floor",
+      "first": "1st Fl",
+      "second": "2nd Fl",
+      "p2": "P2"
+    },
+    "searchPlaceholder": "Search tenants, units, floors…",
+    "searchAria": "Search tenants, units, or floors",
+    "clearSearch": "Clear search",
+    "categoryAria": "Tenant category filter",
+    "categories": {
+      "all": "All",
+      "beauty": "Beauty & Wellness",
+      "fnb": "F&B & Coffee",
+      "fashion": "Fashion & Lifestyle"
+    },
+    "status": "{count} tenants{forQuery}{category}",
+    "statusFor": " for \"{q}\"",
+    "picked": "Picked",
+    "floor": "Floor",
+    "unit": "Unit",
+    "category": "Category",
+    "seeRoute": "See route",
+    "closeDetail": "Close",
+    "openHours": "Open · 10:00–22:00",
+    "emptyTitle": "No results.",
+    "emptyNoQuery": "This filter holds no tenants yet",
+    "emptyMatch": "No tenants match \"{q}\"",
+    "emptyInCategory": " in category {c}",
+    "emptyOnFloor": " on {f}",
+    "emptyHint": " Try other keywords, or browse the full catalog.",
+    "emptyReset": "View all tenants",
+    "showing": "Showing {shown} of 200+ — curated boutiques, culinary experiences & services",
+    "showingAria": "View the complete floor directory — 200+ tenants, GF to L2",
+    "showingLink": "Access complete floor directory"
+  },
+  "cinema": {
+    "kicker": "Premier Cinematic Experience",
+    "title": "Cinema XXI & The Premiere",
+    "deck": "The epicenter of cinematic grandeur in Kalimantan. Equipped with motorized plush leather recliners, Dolby Atmos audio architecture, and private lounge service.",
+    "studioAria": "Choose a studio",
+    "regular": "Regular",
+    "premiere": "The Premiere",
+    "premiereTag": "The Premiere",
+    "regularTag": "Cinema XXI",
+    "selectTime": "Pick the {time} showing",
+    "new": "New",
+    "posterAlt": "Movie poster {code}",
+    "bookSeats": "Book Seats",
+    "bookSeatsFor": "Book seats for {code}",
+    "showing": "Showing {shown} of {total} films",
+    "railAria": "Film rail — drag, or use the arrow buttons",
+    "prev": "Previous film",
+    "next": "Next film",
+    "scheduleNote": "Schedule may change — confirm at the Cinema XXI lobby, Level 3."
+  },
+  "fugo": {
+    "kicker": "Hospitality Architecture",
+    "title": "FUGO Hotel Banjarmasin · Elevated Luxury Stay",
+    "badge": "5 Star Prestige · Top Floors",
+    "photoAlt": "FUGO Hotel Banjarmasin interior overlooking the Martapura River",
+    "sanctuary": "Top Floors Sanctuary",
+    "riverView": "Martapura River View & Cityscape Panoramas",
+    "ghostLabel": "Suites",
+    "storyKicker": "Urban Sanctuary Atop the Monolith",
+    "story": "Sophisticated modern accommodation suspended above Banjarmasin's premier shopping landmark.",
+    "body": "Located in the city center on the top floors of a prominent mall, surrounded by business and entertainment venues. Stunning views of the surrounding city. The hotel's design is a masterpiece in harmony with a capacity of up to 300 guests. All 180 rooms are decorated in a modern style.",
+    "statLabel": "{label} · {unit}",
+    "starsAria": "4-star hotel",
+    "starsLabel": "4-Star Hotel · Above the Mall",
+    "bookDirect": "Book Direct Now",
+    "bookAria": "Book a room on the official FUGO Hotels site — opens in a new tab",
+    "concierge": "VIP Concierge",
+    "accessNote": "Direct access from the mall lobby · Top floors"
+  },
+  "whatson": {
+    "kicker": "Atrium Exhibitions & Community",
+    "title": "What's On & Cultural Happenings",
+    "deck": "A vibrant tapestry of exhibitions, community wellness drives, and luxury pop-up hosts staged across our multi-level architectural atriums.",
+    "filterAria": "Agenda filter",
+    "filters": { "all": "All", "event": "Event", "csr": "CSR", "music": "Live Music" },
+    "agendaCount": "{count} events",
+    "venue": {
+      "event": "Main Atrium Mall",
+      "csr": "Central Oval Level 1",
+      "music": "Terrace Concourse"
+    },
+    "venueFallback": "Duta Mall",
+    "empty": "No events in this category.",
+    "readStory": "Read Story",
+    "saved": "Saved ✓",
+    "discover": "Discover All Recent Press & Happenings"
+  },
+  "facilities": {
+    "kicker": "Visitor Infrastructure",
+    "title": "Services & Concierge Facilities",
+    "meta": "Designed for seamless urban refinement",
+    "detailTitle": "Facility Detail",
+    "location": "Location",
+    "floor": "Floor",
+    "zone": "Zone",
+    "status": "Status",
+    "open": "Open",
+    "mapLink": "View on the floor map",
+    "grid": "GRID {from}–{to}",
+    "parkingStats": {
+      "cars": "Cars & Motorcycles",
+      "levels": "Four Parking Levels",
+      "access": "Hour Parking Access",
+      "zones": "Ladies & Accessibility Zones"
+    }
+  },
+  "location": {
+    "kicker": "Location & Access",
+    "title": "Arrive at the Landmark",
+    "deck": "Conveniently situated along the primary arterial boulevard of Banjarmasin, Duta Mall provides seamless vehicular, public transit, and airport connectivity.",
+    "address": "Civic Address",
+    "addressLines": [
+      "Jl. Ahmad Yani KM 2, Melayu, Banjarmasin Tengah,",
+      "Kota Banjarmasin, South Kalimantan 70232"
+    ],
+    "hours": "Operational Hours",
+    "hoursLines": [
+      "Monday to Sunday · 10:00 — 22:00 WITA",
+      "(Cinema XXI closes 00:30 WITA)"
+    ],
+    "contact": "Central Concierge & Leasing",
+    "contactLines": ["Phone: (0511) 327-8888 · Email: management@dutamall.co.id"],
+    "mapsCta": "Open Route in Maps",
+    "googleMaps": "Google Maps",
+    "formTitle": "VIP Inquiry & Feedback",
+    "formBadge": "Official Management",
+    "form": {
+      "name": "Full Name",
+      "namePlaceholder": "Enter guest name ...",
+      "email": "Email Address",
+      "emailPlaceholder": "name@domain.com",
+      "phone": "Contact Number",
+      "phonePlaceholder": "+62 8",
+      "category": "Inquiry Category",
+      "categories": [
+        "Commercial Tenancy & Leasing",
+        "Event & Exhibition Space",
+        "FUGO Hotel Reservation",
+        "Press & Media",
+        "General Feedback"
+      ],
+      "message": "Message or Requirements",
+      "messagePlaceholder": "Provide details regarding your visit or brand partnership.",
+      "submit": "Transmit to Concierge Desk",
+      "sentTitle": "Sent.",
+      "sentBody": "Your message has been forwarded to the concierge desk. Our team replies within 1×24 business hours.",
+      "sendAnother": "Send another message"
+    }
+  },
+  "footer": {
+    "kicker": "Lotte World Tower Inspired Civic Landmark",
+    "monolith": "The Monolith",
+    "descriptor": "Duta Mall Banjarmasin & FUGO Hotel Complex, South Kalimantan's premier architectural nexus of high fashion, gourmet hospitality, and cinematic culture.",
+    "governance": "Corporate Governance",
+    "member": "Member of Govindo Group",
+    "columns": {
+      "discover": { "title": "01 / Discover", "links": ["Floor Directory", "Luxury Boutiques"] },
+      "leisure": { "title": "02 / Leisure", "links": ["Great Cinema", "Hotel & Residences"] },
+      "atriums": { "title": "03 / Atriums", "links": ["Atrium Gallery", "VIP Concierge"] },
+      "media": { "title": "04 / Media", "links": ["Press & Media", "Privacy Policy"] },
+      "dial": { "title": "05 / Dial", "links": ["(0511) 327-8888", "Daily 10:00 – 22:00"] },
+      "social": { "title": "06 / Social", "links": ["Instagram", "YouTube", "Facebook"] },
+      "dispatch": { "title": "07 / Dispatch" }
+    },
+    "dispatchBlurb": "Join the private register for premier screenings and cocktail evenings.",
+    "dispatchPlaceholder": "YOUR EMAIL…",
+    "dispatchAria": "Dispatch email",
+    "dispatchCta": "Join Dispatch",
+    "legal": "© {year} The Monolith Landmark & Hotel. All rights reserved. Architectural Masterpiece.",
+    "legalTag1": "Duta Mall Banjarmasin",
+    "legalTag2": "FUGO Hotel 4 Star",
+    "legalTag3": "Cinema XXI Premiere"
+  },
+  "bottomBar": {
+    "aria": "Quick access",
+    "cinema": "Cinema",
+    "tenants": "Tenant",
+    "hotel": "Hotel",
+    "route": "Route"
+  },
+  "offcanvas": {
+    "groups": {
+      "directory": { "num": "01", "title": "Directory", "items": ["Tenant & Boutique", "Food Court & Coffee", "Floor Filters"] },
+      "cinema": { "num": "02", "title": "Cinema", "items": ["Cinema XXI Regular", "The Premiere"] },
+      "hotel": { "num": "03", "title": "Hotel", "items": ["FUGO Hotel & Suites", "Book Direct"] },
+      "whatson": { "num": "04", "title": "What's On", "items": ["Event & CSR", "Live Music"] },
+      "services": { "num": "05", "title": "Services", "items": ["Facilities & Concierge", "Parking & Access"] },
+      "concierge": { "num": "06", "title": "Concierge", "items": ["Location & Route", "VIP Inquiry", "Operational Hours"] }
+    },
+    "hours": "Open Daily 10:00–22:00 WITA"
+  },
+  "data": {
+    "facilities": [
+      { "name": "Information Center", "detail": "Concierge & guest services" },
+      { "name": "FUGO Hotel Lobby & Lift", "detail": "Direct hotel access" },
+      { "name": "ATM Center", "detail": "All national banks" },
+      { "name": "Ladies Parking", "detail": "Dedicated women's parking" },
+      { "name": "Disability Friendly", "detail": "Ramps & wheelchairs" },
+      { "name": "Medical Room", "detail": "First aid" },
+      { "name": "Nursing & Baby Room", "detail": "Nursery room" },
+      { "name": "Prayer Room", "detail": "Comfortable & air-conditioned" },
+      { "name": "Ample Parking", "detail": "2,500+ car & motorcycle capacity" },
+      { "name": "Hygienic Toilets", "detail": "Touchless & warm water" },
+      { "name": "Seating Area", "detail": "Sitting lounge" },
+      { "name": "Smoking Terrace", "detail": "Dedicated outdoor area" }
+    ],
+    "events": [
+      { "title": "Banjar Culture Shopping Festival", "excerpt": "Handicraft exhibitions, local cuisine, and up to 50% off across tenants." },
+      { "title": "Social Charity & Blood Drive", "excerpt": "Blood donation with the Indonesian Red Cross, South Kalimantan, Ground Floor, 10.00–15.00 WITA." },
+      { "title": "Weekend Live Acoustic", "excerpt": "Live acoustic music at the Main Atrium, 19.00–21.00 WITA. Free for visitors." },
+      { "title": "Automotive Show & Kids Festival", "excerpt": "Modified vehicles, test rides, and a kids' play zone at the P1 parking area." }
+    ],
+    "genres": {
+      "horror": "Horror",
+      "thriller": "Thriller",
+      "action": "Action",
+      "family": "Family"
+    },
+    "durations": { "m128": "2h 8m", "m107": "1h 47m", "m112": "1h 52m", "m141": "2h 21m", "m124": "2h 4m", "m99": "1h 39m" },
+    "tenants": {
+      "floors": {
+        "gf": "Ground Fl",
+        "1f": "1st Fl",
+        "2f": "2nd Fl",
+        "p2": "P2"
+      },
+      "categories": {
+        "beauty": "Beauty & Wellness",
+        "fnb": "F&B & Coffee",
+        "fashion": "Fashion & Lifestyle"
+      }
+    },
+    "fugoHighlights": [
+      { "label": "Rooms", "unit": "Deluxe & Suite" },
+      { "label": "Restaurants", "unit": "Fine Dining" },
+      { "label": "Ballroom", "unit": "pax capacity" },
+      { "label": "To Airport", "unit": "minutes — Samsudin Noor" }
+    ]
+  },
+  "map": {
+    "kicker": "1st Floor Plan — Interactive Directory",
+    "title": "DIRECTORY MAP",
+    "lede": "Click a zone on the plan to reveal its tenants, or pick a tenant from the list to spotlight its position.",
+    "reset": "Reset Map",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "legendAmenity": "Public facility",
+    "legendTenant": "Tenant",
+    "legendZone": "Zone",
+    "selectedUnit": "Unit",
+    "pinLabel": "View on map",
+    "floorPlate": "1st Floor — Duta Mall Banjarmasin",
+    "north": "N",
+    "zoneNames": {
+      "atrium": "Oval Atrium",
+      "hall": "Main Hall",
+      "rotunda": "Drop-off Rotunda",
+      "spine-west": "West Retail Spine",
+      "wing-east": "East Retail Wing",
+      "gate-south": "South Gate",
+      "parking-se": "South-East Parking",
+      "parking-south": "South Parking"
+    },
+    "amenityNames": {
+      "toilet": "Toilet",
+      "lift": "Lift",
+      "escalator": "Escalator",
+      "escalator-2": "East Escalator",
+      "musholla": "Prayer Room",
+      "atm": "ATM Center",
+      "nursery": "Nursery",
+      "info": "Information",
+      "parking": "Parking",
+      "clinic": "Clinic"
+    }
+  }
+}

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { IconClose, IconArrow } from "@/components/ui/Icons";
 import { wayfinding } from "@/app/data/home";
+import type { Dictionary } from "@/app/i18n/dictionaries";
 
 /**
  * Blueprint offcanvas — the hero's left column expanded full-screen:
@@ -10,14 +11,16 @@ import { wayfinding } from "@/app/data/home";
  * state, hairline dividers, and the wayfinding codes as numbered
  * blueprint cells (hero strip grammar). Expo-out slide, body-scroll
  * lock, Escape close, focus moves in on open and returns via the
- * header trigger.
+ * header trigger. Group labels flow from the locale dictionary.
  */
 export default function MobileOffcanvas({
   open,
   onClose,
+  dict,
 }: {
   open: boolean;
   onClose: () => void;
+  dict: Dictionary;
 }) {
   const [expanded, setExpanded] = useState<string | null>(null);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -37,54 +40,14 @@ export default function MobileOffcanvas({
     };
   }, [open, onClose]);
 
-  /* numbered groups — the hero's index grammar (00 kicker, 01–04 strip) */
-  const groups: {
-    num: string;
-    title: string;
-    items: { label: string; href: string }[];
-  }[] = [
-    {
-      num: "01",
-      title: "Shopping",
-      items: [
-        { label: "Cinema XXI & The Premiere", href: "#cinema" },
-        { label: "Tenant & Boutique", href: "#tenants" },
-        { label: "Food Court & Coffee", href: "#tenants" },
-      ],
-    },
-    {
-      num: "02",
-      title: "Facilities",
-      items: [
-        { label: "12 Fasilitas Utama", href: "#facilities" },
-        { label: "Parkir & Akses", href: "#location" },
-      ],
-    },
-    {
-      num: "03",
-      title: "Hospitality",
-      items: [
-        { label: "FUGO Hotel & Suites", href: "#fugo" },
-        { label: "Book Direct", href: "#fugo" },
-      ],
-    },
-    {
-      num: "04",
-      title: "What's On",
-      items: [
-        { label: "Event & CSR", href: "#whatson" },
-        { label: "Live Music", href: "#whatson" },
-      ],
-    },
-    {
-      num: "05",
-      title: "Visit",
-      items: [
-        { label: "Lokasi & Rute", href: "#location" },
-        { label: "Jam Operasional", href: "#location" },
-        { label: "Kontak", href: "#location" },
-      ],
-    },
+  /* numbered groups — dictionary copy + fixed anchors (offcanvas grammar) */
+  const groups = [
+    { ...dict.offcanvas.groups.directory, href: "#tenants" },
+    { ...dict.offcanvas.groups.cinema, href: "#cinema" },
+    { ...dict.offcanvas.groups.hotel, href: "#fugo" },
+    { ...dict.offcanvas.groups.whatson, href: "#whatson" },
+    { ...dict.offcanvas.groups.services, href: "#facilities" },
+    { ...dict.offcanvas.groups.concierge, href: "#location" },
   ];
 
   return (
@@ -102,7 +65,7 @@ export default function MobileOffcanvas({
         id="mobile-offcanvas"
         role="dialog"
         aria-modal="true"
-        aria-label="Menu navigasi"
+        aria-label={dict.menu.open}
         tabIndex={-1}
         data-open={open}
         aria-hidden={!open}
@@ -115,12 +78,12 @@ export default function MobileOffcanvas({
               00
             </span>
             <span aria-hidden="true" className="h-px w-6 self-center bg-brass-soft" />
-            Duta Mall Banjarmasin
+            {dict.menu.brand}
           </span>
           <button
             type="button"
             onClick={onClose}
-            aria-label="Tutup menu navigasi"
+            aria-label={dict.menu.close}
             className="flex size-11 items-center justify-center transition-colors hover:text-brass"
           >
             <IconClose size={26} />
@@ -154,15 +117,15 @@ export default function MobileOffcanvas({
                 <div className="acc-body" data-open={isOpen}>
                   <div>
                     <ul className="pb-6 pl-9">
-                      {g.items.map((it) => (
-                        <li key={it.label}>
+                      {g.items.map((label) => (
+                        <li key={label}>
                           <a
-                            href={it.href}
+                            href={g.href}
                             onClick={onClose}
                             tabIndex={open ? 0 : -1}
                             className="group flex items-center justify-between gap-4 py-2.5 font-sans text-base font-bold uppercase tracking-[0.14em] text-dim transition-colors hover:text-ink"
                           >
-                            {it.label}
+                            {label}
                             <span
                               aria-hidden="true"
                               className="inline-block size-1.5 bg-ghost transition-colors group-hover:bg-brass"
@@ -179,7 +142,7 @@ export default function MobileOffcanvas({
 
           {/* footer meta — hours/hotline live here on mobile */}
           <div className="mt-8 flex flex-col gap-2 border-t border-hairline pt-6 font-sans text-sm font-bold uppercase tracking-[0.18em] text-dim">
-            <span>Open Daily 10:00–22:00 WITA</span>
+            <span>{dict.offcanvas.hours}</span>
             <a href="tel:+625113278888" className="transition-colors hover:text-brass">
               (0511) 327-8888
             </a>
@@ -190,7 +153,7 @@ export default function MobileOffcanvas({
             blueprint cells (hero 01–04 strip grammar) */}
         <div className="border-t border-hairline px-6 py-5 md:px-10">
           <p className="mb-3 font-sans text-xs font-bold uppercase tracking-[0.22em] text-dim">
-            Wayfinding
+            {dict.menu.wayfinding}
           </p>
           <ul className="flex flex-wrap gap-2">
             {wayfinding.map((w) => (
@@ -202,7 +165,7 @@ export default function MobileOffcanvas({
                   aria-label={`${w.label}, ${w.floor}`}
                   className="inline-flex items-baseline gap-1.5 border border-ink/25 px-2.5 py-1.5 font-sans text-xs font-bold uppercase tracking-widest text-ink transition-colors hover:border-ink hover:bg-ink hover:text-paper"
                 >
-                  <span aria-hidden="true" className="text-[11px] tracking-widest text-brass">
+                  <span aria-hidden="true" className="text-xs tracking-widest text-brass">
                     {w.code}
                   </span>
                   {w.floor}

@@ -18,3 +18,11 @@ export const suit = localFont({
   variable: "--font-suit",
   display: "swap",
 });
+
+/** Playfair Display — high-contrast serif for film titles (mock language:
+    the cinema cards set their titles in an elegant bookish serif). */
+export const playfair = localFont({
+  src: "./fonts/PlayfairDisplay.woff2",
+  variable: "--font-playfair",
+  display: "swap",
+});

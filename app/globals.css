@@ -2,18 +2,19 @@
 
 /* ============================================================
    DESIGN SYSTEM — DUTA MALL BANJARMASIN
-   2026-09-16 restage: exact lwt.co.kr system, measured from the
-   reference site's own stylesheets (main.css / style-ui.css).
-   Pure #fff / #000, red #f00808, 1px hairlines everywhere,
-   League Gothic + SUIT, fluid max(rem, vw) type, 100% root (rem = 16px)
-   (1rem = 10px), expo-out easing, no shadows, no mono face.
+   2026-09-18 restage: "The Monolith" (user mock Versi1.png, followed 1:1).
+   Pure #fff / #000 paper bands, hairlines everywhere, brass-gold accent
+   (#B49B57 rules/fills · #8a6d2f text-safe), League Gothic + SUIT,
+   fluid max(rem, vw) type, 100% root (rem = 16px), expo-out easing,
+   no shadows, no mono face.
    ============================================================ */
 
 @theme {
   /* colors — LWT measured set (style-ui.css) */
   --color-paper: #ffffff;
   --color-ink: #000000;
-  --color-accent: #f00808;
+  /* brass-gold — the mock's accent; `brass` is the text-safe tone */
+  --color-accent: #8a6d2f;
   --color-hairline: #e5e5e5;
   --color-silver: #f4f4f4;
   --color-ghost: #bdbdbd;
@@ -22,12 +23,14 @@
 
   /* blueprint accents — user hero mock (2026-09-17): warm paper ground + brass */
   --color-bone: #f4f2ee;
-  --color-brass: #7d611f; /* text-safe gold (≥4.5:1 on bone/paper) */
-  --color-brass-soft: #c2a15c; /* decorative rules only */
+  --color-brass: #8a6d2f; /* text-safe gold (≥4.5:1 on paper/bone/ink) */
+  --color-brass-soft: #B49B57; /* decorative rules, chips & fills — ink text only */
+  --color-platinum: #f7f7f5; /* the mock's light section band (Facilities) */
 
   /* type — family */
   --font-display: var(--font-league), "Arial Narrow", "Oswald", sans-serif;
   --font-sans: var(--font-suit), "Helvetica Neue", Arial, sans-serif;
+  --font-serif: var(--font-playfair), Georgia, "Times New Roman", serif;
 
   /* motion — LWT signature easings (measured) */
   --ease-lwt: cubic-bezier(0.19, 1, 0.22, 1);
@@ -77,7 +80,14 @@ body {
 
 section[id],
 div[id] {
-  scroll-margin-top: 96px;
+  scroll-margin-top: 72px;
+}
+@media (min-width: 1280px) {
+  /* the black utility topbar (36px) joins the 72px nav bar */
+  section[id],
+  div[id] {
+    scroll-margin-top: 108px;
+  }
 }
 
 /* stark scrollbar */
@@ -95,6 +105,14 @@ div[id] {
 }
 *::-webkit-scrollbar-track {
   background: var(--color-paper);
+}
+
+/* ---------- topbar utility strip (the mock's black wayfinding row) ---------- */
+.topbar-scroll {
+  scrollbar-width: none;
+}
+.topbar-scroll::-webkit-scrollbar {
+  display: none;
 }
 
 /* ---------- display type — League Gothic (measured voice) ---------- */
@@ -191,7 +209,8 @@ a:hover .img-plate img,
 
 /* ---------- scroll reveals ----------
    LWT entrance language, gated behind the `.js` class (set before
-   paint in app/layout.tsx) so failed JS can never blank the page.
+   paint — see the noscript note in app/layout.tsx) so failed JS can
+   never blank the page.
 
    - rise  [data-reveal]:   fade + settle (images/cards)
    - ink   .reveal-ink:     pure fade (large masses)
@@ -279,6 +298,41 @@ a:hover .img-plate img,
 }
 .hero-region[data-hold="true"] .hero-progress {
   animation-play-state: paused;
+}
+
+/* ---------- cinema poster rail — the mock's film-card carousel ----------
+   Track slides with transform only; drag is pointer-captured; snap points
+   keep each card landed cleanly. Disabled under reduced motion. */
+.cinema-rail {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.cinema-rail::-webkit-scrollbar {
+  display: none;
+}
+.cinema-rail > * {
+  scroll-snap-align: start;
+}
+.cinema-rail[data-dragging="true"] {
+  scroll-snap-type: none;
+  cursor: grabbing;
+  user-select: none;
+}
+.cinema-rail[data-dragging="true"] .img-plate img {
+  transform: none;
+}
+.cinema-rail {
+  cursor: grab;
+}
+.cinema-rail button {
+  cursor: pointer;
+}
+.cinema-rail[data-dragging="true"],
+.cinema-rail[data-dragging="true"] * {
+  cursor: grabbing;
 }
 
 /* ---------- motion discipline ---------- */

@@ -1,34 +1,46 @@
 "use client";
 
-import { useState } from "react";
-import { Section, SectionHeading } from "@/components/ui/Section";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type PointerEvent as ReactPointerEvent,
+} from "react";
 import Reveal from "@/components/ui/Reveal";
-import { LwtButton } from "@/components/ui/Button";
-import { IconPlay, IconClock } from "@/components/ui/Icons";
+import { IconArrow } from "@/components/ui/Icons";
 import { movies, type Movie } from "@/app/data/home";
+import type { Locale } from "@/app/i18n/config";
+import { interpolate, formatDuration } from "@/app/i18n/format";
+import type { Dictionary } from "@/app/i18n/dictionaries";
 
 type Segment = "Regular" | "Premiere";
 
-/** Shared showtime button face — the row and the poster overlay use one language. */
+/** card width + rail gap (gap-4) — the drag/snap step */
+const STEP_EXTRA = 16;
+
+/** Shared showtime chip — the mock's gold-fill active / hairline idle. */
 function ShowtimeBtn({
   time,
   picked,
   onPick,
+  aria,
 }: {
   time: string;
   picked: boolean;
   onPick: () => void;
+  aria: string;
 }) {
   return (
     <button
       type="button"
       aria-pressed={picked}
-      aria-label={`Pilih kursi untuk tayang ${time}`}
+      aria-label={aria}
       onClick={onPick}
-      className={`min-w-[52px] border px-2 py-1.5 font-sans text-xs font-bold transition-colors ${
+      className={`min-h-[32px] min-w-[52px] border px-2 py-1 font-sans text-[11px] font-bold uppercase tracking-wide transition-colors ${
         picked
-          ? "border-accent bg-accent text-paper"
-          : "border-hairline text-ink hover:border-ink"
+          ? "border-brass-soft bg-brass-soft text-ink"
+          : "border-paper/30 text-paper/85 hover:border-brass-soft hover:text-brass-soft"
       }`}
     >
       {time}
@@ -36,187 +48,315 @@ function ShowtimeBtn({
   );
 }
 
-/**
- * Supplied banner photo with rating/fresh chips — the real artwork slot.
- * Falls back to the authored typographic plate when no photo exists.
- * Full-width 2/3 plate on mobile; fixed-width poster column at md+.
- * md+ hover/focus reveals a details overlay: genre + showtime quick-pick.
- */
-function Poster({
+/** Film card — the mock's poster-first cell: badge pill, duration·rating pill,
+    genre kicker, serif title, studio line, showtime chips, BOOK SEATS footer. */
+function MovieCard({
   movie,
-  picked,
-  onPick,
+  dict,
+  locale,
 }: {
   movie: Movie;
-  picked: string | null;
-  onPick: (time: string) => void;
+  dict: Dictionary;
+  locale: Locale;
 }) {
-  if (movie.image) {
-    return (
-      <div className="img-plate relative aspect-[2/3] w-full shrink-0 md:aspect-auto md:w-36 md:self-stretch xl:w-44">
+  const [picked, setPicked] = useState<string | null>(null);
+  const pick = (time: string) => setPicked((prev) => (prev === time ? null : time));
+  const premiere = movie.badges.includes("The Premiere");
+
+  return (
+    <li className="group relative flex w-[262px] shrink-0 flex-col border border-paper/20 bg-[#101010] transition-colors duration-300 hover:border-brass-soft/70 sm:w-[300px] lg:w-[318px]">
+      {/* poster — supplied artwork with the mock's two pills */}
+      <div className="img-plate relative aspect-[300/441] w-full">
         {/* eslint-disable-next-line @next/next/no-img-element -- supplied artwork slot, swap-ready */}
         <img
           src={movie.image}
-          alt={`Poster film ${movie.code}`}
+          alt={interpolate(dict.cinema.posterAlt, { code: movie.code })}
           className="absolute inset-0 h-full w-full"
           loading="lazy"
+          draggable={false}
         />
-        <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-2 p-3">
-          <span className="bg-ink px-1.5 py-0.5 font-sans text-xs font-bold uppercase tracking-widest text-paper">
-            {movie.rating}
+        <span className="absolute left-2.5 top-2.5 border border-brass-soft/80 bg-ink/85 px-2 py-1 font-sans text-[11px] font-bold uppercase tracking-[0.14em] text-brass-soft backdrop-blur-sm">
+          {premiere ? dict.cinema.premiereTag : dict.cinema.regularTag}
+        </span>
+        <span className="absolute inset-x-2.5 bottom-2.5 flex items-center justify-between bg-ink/85 px-2.5 py-1.5 font-sans text-[11px] font-bold uppercase tracking-[0.12em] text-paper backdrop-blur-sm">
+          <span>
+            {formatDuration(movie.duration, locale)} · {movie.rating}
           </span>
           {movie.fresh && (
-            <span className="bg-accent px-1.5 py-0.5 font-sans text-xs font-bold uppercase tracking-widest text-paper">
-              Baru
+            <span className="flex items-center gap-1.5 text-brass-soft">
+              <span aria-hidden="true" className="size-1 bg-brass-soft" />
+              {dict.cinema.new}
             </span>
           )}
-        </div>
-        {/* details overlay — desktop pointer hover or keyboard focus-within only */}
-        <div className="absolute inset-0 hidden flex-col justify-end bg-ink/85 p-4 opacity-0 transition-opacity duration-200 group-focus-within:opacity-100 group-hover:opacity-100 md:flex">
-          <p className="flex items-center gap-2 font-sans text-xs font-bold uppercase tracking-widest text-paper">
-            <span aria-hidden="true" className="inline-block size-2 bg-accent" />
-            {movie.genre}
-          </p>
-          <p className="mt-1.5 font-sans text-xs uppercase tracking-widest text-paper/70">
-            Pilih jadwal:
-          </p>
-          <div className="mt-3 flex flex-wrap gap-1.5">
-            {movie.showtimes.map((t) => (
-              <ShowtimeBtn key={t} time={t} picked={picked === t} onPick={() => onPick(t)} />
-            ))}
-          </div>
-        </div>
+        </span>
       </div>
-    );
-  }
-  const dark = movie.poster.bg === "#000000";
-  return (
-    <div
-      className={`relative aspect-[2/3] w-full md:aspect-auto md:w-auto md:shrink-0 md:self-stretch ${
-        dark ? "bg-ink text-paper" : "bg-paper text-ink"
-      }`}
-    >
-      <div className="flex h-full w-full flex-col justify-between p-4">
-        <div className="flex items-start justify-between gap-2">
-          <span
-            className={`inline-block px-1.5 py-0.5 font-sans text-xs font-bold uppercase tracking-widest ${
-              dark ? "bg-paper text-ink" : "bg-ink text-paper"
-            }`}
-          >
-            {movie.rating}
-          </span>
-          {movie.fresh && (
-            <span className="bg-accent px-1.5 py-0.5 font-sans text-xs font-bold uppercase tracking-widest text-paper">
-              Baru
-            </span>
-          )}
-        </div>
-        <p className="break-words font-display text-4xl uppercase">{movie.code}</p>
-        <div className="flex items-center justify-between font-sans text-xs uppercase tracking-widest">
-          <span>{movie.genre}</span>
-          <span>{movie.duration}</span>
-        </div>
-      </div>
-    </div>
-  );
-}
 
-/** One movie card — owns the shared picked-showtime state (row + overlay stay in sync). */
-function MovieCard({ movie }: { movie: Movie }) {
-  const [picked, setPicked] = useState<string | null>(null);
-  const pick = (time: string) => setPicked((prev) => (prev === time ? null : time));
+      {/* body — genre kicker, serif title, studio line */}
+      <div className="flex flex-1 flex-col p-4">
+        <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-paper/55">
+          {dict.data.genres[movie.genre]}
+        </p>
+        <h3 className="mt-1.5 font-serif text-[1.45rem] capitalize leading-[1.12] text-paper">
+          {movie.code}
+        </h3>
+        <p className="mt-1.5 font-sans text-xs uppercase tracking-[0.14em] text-paper/45">
+          {movie.studios}
+        </p>
 
-  return (
-    <article className="group flex flex-col border border-ink transition-colors duration-200 md:flex-row">
-      <Poster movie={movie} picked={picked} onPick={pick} />
-      <div className="flex min-w-0 flex-1 flex-col">
-        <div className="flex items-center border-b border-hairline px-4 py-2">
-          <h3 className="font-display text-3xl uppercase transition-colors duration-200 group-hover:text-accent">
-            {movie.code}
-          </h3>
-        </div>
-        <div className="flex flex-wrap gap-1.5 border-b border-hairline py-3 pl-4 pr-4">
-          {movie.badges.map((b) => (
-            <span
-              key={b}
-              className={`px-1.5 py-0.5 font-sans text-xs font-bold uppercase tracking-widest ${
-                b === "The Premiere" ? "bg-accent text-paper" : "border border-hairline text-mute"
-              }`}
-            >
-              {b}
-            </span>
-          ))}
-        </div>
-        <div className="flex items-center gap-2 border-b border-hairline py-2.5 pl-4 font-sans text-xs uppercase tracking-wide text-mute">
-          <IconClock size={13} className="shrink-0" />
-          {movie.duration} · {movie.genre} · {movie.rating}
-        </div>
-        <div className="flex flex-wrap items-center gap-2 border-b border-hairline py-3 pl-4 pr-4">
+        <div
+          className="mt-4 flex flex-wrap gap-1.5"
+          role="group"
+          aria-label={interpolate(dict.cinema.posterAlt, { code: movie.code })}
+        >
           {movie.showtimes.map((t) => (
-            <ShowtimeBtn key={t} time={t} picked={picked === t} onPick={() => pick(t)} />
+            <ShowtimeBtn
+              key={t}
+              time={t}
+              picked={picked === t}
+              onPick={() => pick(t)}
+              aria={interpolate(dict.cinema.selectTime, { time: t })}
+            />
           ))}
         </div>
-        <div className="mt-auto p-4">
-          <LwtButton
-            variant="solid"
-            size="sm"
-            className="w-full"
-            aria-label={`Pilih kursi untuk ${movie.code}${picked ? `, tayang ${picked}` : ""}`}
-          >
-            <IconPlay size={12} />
-            Pilih Kursi
-          </LwtButton>
-        </div>
+
+        <a
+          href="#cinema"
+          aria-label={
+            picked
+              ? `${interpolate(dict.cinema.bookSeatsFor, { code: movie.code })} · ${interpolate(dict.cinema.selectTime, { time: picked })}`
+              : interpolate(dict.cinema.bookSeatsFor, { code: movie.code })
+          }
+          className="cinema-cta mt-5 flex min-h-[44px] items-center justify-center border border-paper bg-paper font-sans text-xs font-bold uppercase tracking-[0.2em] text-ink transition-colors duration-200 hover:border-brass-soft hover:bg-brass-soft"
+        >
+          {dict.cinema.bookSeats}
+        </a>
       </div>
-    </article>
+    </li>
   );
 }
 
-export default function Cinema() {
+export default function Cinema({
+  dict,
+  locale,
+}: {
+  dict: Dictionary;
+  locale: Locale;
+}) {
   const [segment, setSegment] = useState<Segment>("Regular");
   const list = movies.filter((m) => m.title === segment);
 
-  return (
-    <Section id="cinema">
-      <div className="px-4 py-14 md:px-10 md:py-20">
-        <SectionHeading
-          index="01 / CINEMA XXI"
-          title="JADWAL HARI INI"
-          right={
-            <div className="flex border border-ink" role="tablist" aria-label="Pilih studio">
-              {(["Regular", "Premiere"] as Segment[]).map((seg) => (
-                <button
-                  key={seg}
-                  type="button"
-                  role="tab"
-                  aria-selected={segment === seg}
-                  onClick={() => setSegment(seg)}
-                  className={`px-4 py-2 font-sans text-xs font-bold uppercase tracking-widest transition-colors ${
-                    segment === seg
-                      ? seg === "Premiere"
-                        ? "bg-accent text-paper"
-                        : "bg-ink text-paper"
-                      : "bg-paper text-ink hover:bg-silver"
-                  }`}
-                >
-                  {seg}
-                </button>
-              ))}
-            </div>
-          }
-        />
+  const railRef = useRef<HTMLUListElement>(null);
+  const reducedRef = useRef(false);
+  const drag = useRef({ active: false, startX: 0, startLeft: 0, moved: false });
+  const [canPrev, setCanPrev] = useState(false);
+  const [canNext, setCanNext] = useState(true);
+  const [progress, setProgress] = useState(0);
 
-        <Reveal variant="seq" as="div" className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {list.map((movie) => (
-            <MovieCard key={movie.id} movie={movie} />
-          ))}
+  /* mirror scroll state → arrows + progress rule */
+  const sync = useCallback(() => {
+    const el = railRef.current;
+    if (!el) return;
+    const max = el.scrollWidth - el.clientWidth;
+    setCanPrev(el.scrollLeft > 4);
+    setCanNext(el.scrollLeft < max - 4);
+    setProgress(max > 0 ? Math.min(1, el.scrollLeft / max) : 1);
+  }, []);
+
+  useEffect(() => {
+    reducedRef.current = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    sync();
+    const el = railRef.current;
+    if (!el) return;
+    el.addEventListener("scroll", sync, { passive: true });
+    const ro = new ResizeObserver(sync);
+    ro.observe(el);
+    return () => {
+      el.removeEventListener("scroll", sync);
+      ro.disconnect();
+    };
+  }, [sync]);
+
+  /* reset to the head whenever the studio set changes */
+  useEffect(() => {
+    railRef.current?.scrollTo({ left: 0 });
+    sync();
+  }, [segment, sync]);
+
+  const slideBy = (dir: 1 | -1) => {
+    const el = railRef.current;
+    if (!el) return;
+    const card = el.querySelector("li");
+    const step = (card ? card.getBoundingClientRect().width : 300) + STEP_EXTRA;
+    el.scrollBy({ left: dir * step, behavior: reducedRef.current ? "auto" : "smooth" });
+  };
+
+  /* mouse drag-to-scroll — touch already scrolls natively */
+  const onPointerDown = (e: ReactPointerEvent<HTMLUListElement>) => {
+    if (e.pointerType !== "mouse" || e.button !== 0) return;
+    const el = railRef.current;
+    if (!el) return;
+    drag.current = { active: true, startX: e.clientX, startLeft: el.scrollLeft, moved: false };
+    el.dataset.dragging = "true";
+  };
+  const onPointerMove = (e: ReactPointerEvent<HTMLUListElement>) => {
+    const el = railRef.current;
+    if (!el || !drag.current.active) return;
+    const dx = e.clientX - drag.current.startX;
+    if (Math.abs(dx) > 6) drag.current.moved = true;
+    el.scrollLeft = drag.current.startLeft - dx;
+  };
+  const endDrag = () => {
+    const el = railRef.current;
+    if (!el || !drag.current.active) return;
+    drag.current.active = false;
+    el.dataset.dragging = "false";
+    if (drag.current.moved) {
+      const card = el.querySelector("li");
+      const step = card ? card.getBoundingClientRect().width + STEP_EXTRA : 316;
+      const max = el.scrollWidth - el.clientWidth;
+      const target = Math.min(Math.round(el.scrollLeft / step) * step, max);
+      el.scrollTo({ left: target, behavior: reducedRef.current ? "auto" : "smooth" });
+    }
+  };
+  /* a drag must not fire the card's links on release */
+  const onClickCapture = (e: React.MouseEvent) => {
+    if (drag.current.moved) {
+      e.preventDefault();
+      e.stopPropagation();
+      drag.current.moved = false;
+    }
+  };
+
+  return (
+    <section id="cinema" className="bg-ink text-paper">
+      <div className="px-4 py-14 md:px-10 md:py-20">
+        {/* blueprint section head — brass kicker, display title, right deck */}
+        <Reveal>
+          <div className="mb-4 flex items-center gap-4">
+            <span className="font-display text-xl uppercase text-brass-soft">02</span>
+            <span aria-hidden="true" className="h-px w-10 bg-brass-soft" />
+            <span className="font-sans text-xs font-bold uppercase tracking-[0.24em] text-paper/60">
+              {dict.cinema.kicker}
+            </span>
+          </div>
+        </Reveal>
+        <div className="mb-10 grid gap-6 md:mb-12 lg:grid-cols-[1.4fr_1fr] lg:items-end">
+          <Reveal variant="mask">
+            <h2 className="border-b border-paper/25 pb-4 font-display text-[clamp(2.2rem,4vw,3.6rem)] uppercase leading-[0.95]">
+              {dict.cinema.title}
+            </h2>
+          </Reveal>
+          <Reveal>
+            <p className="pb-1 font-sans text-sm leading-relaxed text-paper/60">
+              {dict.cinema.deck}
+            </p>
+          </Reveal>
+        </div>
+
+        {/* controls — studio tabs left, counter + arrows right */}
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex border border-paper/25" role="tablist" aria-label={dict.cinema.studioAria}>
+            {(["Regular", "Premiere"] as Segment[]).map((seg) => (
+              <button
+                key={seg}
+                type="button"
+                role="tab"
+                aria-selected={segment === seg}
+                onClick={() => setSegment(seg)}
+                className={`min-h-[44px] flex-1 px-5 py-2 font-sans text-xs font-bold uppercase tracking-widest transition-colors sm:flex-none ${
+                  segment === seg
+                    ? "bg-brass-soft text-ink"
+                    : "text-paper/70 hover:bg-paper/10 hover:text-paper"
+                }`}
+              >
+                {seg === "Premiere" ? dict.cinema.premiere : dict.cinema.regular}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-5">
+            <p aria-live="polite" className="font-sans text-xs uppercase tracking-[0.18em] text-paper/50">
+              {interpolate(dict.cinema.showing, { shown: list.length, total: movies.length })}
+            </p>
+            <div className="flex">
+              <button
+                type="button"
+                onClick={() => slideBy(-1)}
+                disabled={!canPrev}
+                aria-label={dict.cinema.prev}
+                className="flex size-11 items-center justify-center border border-paper/30 text-paper transition-colors hover:border-brass-soft hover:text-brass-soft disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-paper/30 disabled:hover:text-paper"
+              >
+                <IconArrow size={16} className="rotate-180" />
+              </button>
+              <button
+                type="button"
+                onClick={() => slideBy(1)}
+                disabled={!canNext}
+                aria-label={dict.cinema.next}
+                className="-ml-px flex size-11 items-center justify-center border border-paper/30 text-paper transition-colors hover:border-brass-soft hover:text-brass-soft disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-paper/30 disabled:hover:text-paper"
+              >
+                <IconArrow size={16} />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* the rail — drag / swipe / arrows / arrow keys, snap to each card.
+            Bleeds right to the viewport edge like the mock. */}
+        <Reveal>
+          <ul
+            ref={railRef}
+            role="region"
+            aria-label={dict.cinema.railAria}
+            tabIndex={0}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={endDrag}
+            onPointerLeave={endDrag}
+            onPointerCancel={endDrag}
+            onClickCapture={onClickCapture}
+            onKeyDown={(e) => {
+              if (e.key === "ArrowRight") {
+                e.preventDefault();
+                slideBy(1);
+              } else if (e.key === "ArrowLeft") {
+                e.preventDefault();
+                slideBy(-1);
+              } else if (e.key === "Home") {
+                e.preventDefault();
+                railRef.current?.scrollTo({ left: 0, behavior: reducedRef.current ? "auto" : "smooth" });
+              } else if (e.key === "End") {
+                e.preventDefault();
+                const el = railRef.current;
+                if (el) el.scrollTo({ left: el.scrollWidth, behavior: reducedRef.current ? "auto" : "smooth" });
+              }
+            }}
+            className="cinema-rail -mr-4 gap-4 pr-4 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-brass md:-mr-10 md:pr-10"
+          >
+            {list.map((movie) => (
+              <MovieCard key={movie.id} movie={movie} dict={dict} locale={locale} />
+            ))}
+          </ul>
         </Reveal>
 
-        <Reveal className="mt-8 flex items-center gap-2 font-sans text-xs uppercase tracking-wide text-mute">
-          <span aria-hidden="true" className="inline-block size-2 bg-accent" />
-          Jadwal dapat berubah — konfirmasi di lobi Cinema XXI, Lantai 3.
+        {/* progress rule — position within the rail */}
+        <div
+          aria-hidden="true"
+          className="mt-6 h-[2px] w-full bg-paper/15"
+        >
+          <div
+            className="h-full bg-brass-soft"
+            style={{ width: `${Math.round(progress * 100)}%` }}
+          />
+        </div>
+
+        <Reveal className="mt-8 flex items-center gap-2 font-sans text-xs uppercase tracking-[0.18em] text-paper/45">
+          <span aria-hidden="true" className="inline-block size-1.5 bg-brass-soft" />
+          {dict.cinema.scheduleNote}
         </Reveal>
       </div>
-    </Section>
+    </section>
   );
 }

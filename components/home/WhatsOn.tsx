@@ -1,131 +1,160 @@
 "use client";
 
 import { useState } from "react";
-import { Section } from "@/components/ui/Section";
 import Reveal from "@/components/ui/Reveal";
-import { IconCalendar, IconArrow } from "@/components/ui/Icons";
+import { IconArrow, IconCalendar } from "@/components/ui/Icons";
 import { events } from "@/app/data/home";
+import { interpolate } from "@/app/i18n/format";
+import type { Dictionary } from "@/app/i18n/dictionaries";
 
-type Filter = "Semua" | "Event" | "CSR" | "Live Music";
+type CategoryKey = "event" | "csr" | "music";
 
-const filters: Filter[] = ["Semua", "Event", "CSR", "Live Music"];
+/* data category → dictionary key + venue tag key */
+const categoryKeys: Record<string, CategoryKey> = {
+  Event: "event",
+  CSR: "csr",
+  "Live Music": "music",
+};
 
 /**
- * WHAT'S ON — the LWT §sectionEvent grammar: a sticky left menu whose
- * category links filter the list (red = active), bordered event cards
- * to the right. The remind toggle keeps its state per card.
+ * §04 — WHAT'S ON & CULTURAL HAPPENINGS (mock 1:1).
+ * Platinum ground, blueprint head with the right deck, then ruled event
+ * cards: big display title, excerpt, venue tag + READ STORY footer over
+ * a hairline rule. The category filters and remind toggle keep their
+ * state; the card chrome becomes the mock's paper-on-platinum language.
+ * All copy flows from the locale dictionary — data supplies only dates.
  */
-export default function WhatsOn() {
-  const [filter, setFilter] = useState<Filter>("Semua");
-  const list = events.filter((e) => filter === "Semua" || e.category === filter);
+export default function WhatsOn({ dict }: { dict: Dictionary }) {
+  const [filter, setFilter] = useState<CategoryKey | "all">("all");
+  const list = events.filter(
+    (e) => filter === "all" || categoryKeys[e.category] === filter,
+  );
 
   return (
-    <Section id="whatson">
-      <div className="flex flex-col gap-8 px-4 py-14 md:px-10 md:py-20 lg:flex-row lg:gap-14">
-        {/* left menu — LWT leftMenuBox */}
-        <nav
-          aria-label="Filter agenda"
-          className="shrink-0 lg:sticky lg:top-[calc(max(2.4em,1.6667vw)+90px)] lg:self-start"
-        >
-          <p className="mb-4 font-sans text-xs font-bold uppercase tracking-widest text-mute">
-            Agenda
+    <section id="whatson" className="bg-platinum text-ink">
+      <div className="px-4 py-14 md:px-10 md:py-20">
+        {/* blueprint section head */}
+        <div className="mb-4 flex items-center gap-4">
+          <span className="font-display text-xl uppercase text-brass">04</span>
+          <span aria-hidden="true" className="h-px w-10 bg-brass-soft" />
+          <span className="font-sans text-xs font-bold uppercase tracking-[0.24em] text-dim">
+            {dict.whatson.kicker}
+          </span>
+        </div>
+        <div className="mb-10 grid gap-6 md:mb-12 lg:grid-cols-[1.4fr_1fr] lg:items-end">
+          <h2 className="border-b border-ink pb-4 font-display text-[clamp(2.2rem,4vw,3.6rem)] uppercase leading-[0.95]">
+            {dict.whatson.title}
+          </h2>
+          <p className="pb-1 font-sans text-sm leading-relaxed text-dim">
+            {dict.whatson.deck}
           </p>
-          <ul className="flex flex-wrap gap-2 lg:flex-col lg:gap-3">
-            {filters.map((f) => (
-              <li key={f}>
-                <button
-                  type="button"
-                  aria-pressed={filter === f}
-                  onClick={() => setFilter(f)}
-                  className={`font-display text-3xl uppercase transition-colors md:text-4xl ${
-                    filter === f ? "text-accent" : "text-ink/35 hover:text-ink"
-                  }`}
-                >
-                  {f}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        </div>
 
-        {/* cards */}
-        <div className="min-w-0 flex-1">
-          <Reveal
-            key={filter}
-            variant="seq"
-            as="div"
-            className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4"
-          >
-            {list.map((ev) => (
+        {/* filter row */}
+        <div className="mb-8 flex flex-wrap items-center gap-2" role="group" aria-label={dict.whatson.filterAria}>
+          {(Object.keys(dict.whatson.filters) as Array<CategoryKey | "all">).map((f) => (
+            <button
+              key={f}
+              type="button"
+              aria-pressed={filter === f}
+              onClick={() => setFilter(f)}
+              className={`border px-4 py-2 font-sans text-xs font-bold uppercase tracking-widest transition-colors ${
+                filter === f
+                  ? "border-ink bg-ink text-paper"
+                  : "border-hairline bg-paper text-dim hover:border-ink hover:text-ink"
+              }`}
+            >
+              {dict.whatson.filters[f]}
+            </button>
+          ))}
+          <p role="status" aria-atomic="true" className="ml-auto font-sans text-xs font-bold uppercase tracking-widest text-mute">
+            {interpolate(dict.whatson.agendaCount, { count: list.length })}
+          </p>
+        </div>
+
+        {/* ruled event cards — the mock's paper cards with venue/READ STORY footers.
+            Titles/excerpts are positional in the dictionary; dates stay in data. */}
+        <Reveal key={filter} variant="seq" as="div" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {list.map((ev) => {
+            const i = events.indexOf(ev);
+            const t = dict.data.events[i];
+            return (
               <EventCard
                 key={ev.id}
+                dict={dict}
                 date={ev.date}
                 category={ev.category}
-                title={ev.title}
-                excerpt={ev.excerpt}
+                title={t.title}
+                excerpt={t.excerpt}
               />
-            ))}
-          </Reveal>
-          {list.length === 0 && (
-            <p className="border border-hairline p-8 text-center font-sans text-sm uppercase tracking-wide text-mute">
-              Tidak ada agenda pada kategori ini.
-            </p>
-          )}
+            );
+          })}
+        </Reveal>
+        {list.length === 0 && (
+          <p className="border border-hairline bg-paper p-8 text-center font-sans text-sm uppercase tracking-wide text-mute">
+            {dict.whatson.empty}
+          </p>
+        )}
+
+        {/* centered discover CTA — the mock's underlined link */}
+        <div className="mt-10 flex justify-center">
+          <a
+            href="#whatson"
+            className="group inline-flex items-center gap-2 border-b-2 border-ink pb-1 font-sans text-xs font-bold uppercase tracking-[0.2em] text-ink transition-colors hover:text-brass hover:border-brass"
+          >
+            {dict.whatson.discover}
+            <IconArrow
+              size={14}
+              className="transition-transform duration-300 group-hover:translate-x-1"
+            />
+          </a>
         </div>
       </div>
-    </Section>
+    </section>
   );
 }
 
-/** Event card — bordered white plate, black date chip, red category chip. */
+/** Event card — paper plate, display title, venue tag + READ STORY footer. */
 function EventCard({
+  dict,
   date,
   category,
   title,
   excerpt,
 }: {
+  dict: Dictionary;
   date: string;
   category: string;
   title: string;
   excerpt: string;
 }) {
   const [saved, setSaved] = useState(false);
+  const catKey = categoryKeys[category];
+  const venue =
+    (catKey && dict.whatson.venue[catKey]) || dict.whatson.venueFallback;
 
   return (
-    <article className="group flex h-full flex-col border border-ink bg-paper transition-colors duration-200 hover:bg-silver">
-      <div className="flex items-center justify-between border-b border-ink px-4 py-2.5">
-        <span
-          className={`font-sans text-xs font-bold uppercase tracking-widest ${
-            category === "CSR" ? "text-ink" : "bg-accent px-1.5 py-0.5 text-paper"
-          }`}
-        >
-          {category}
-        </span>
-        <span className="bg-ink px-1.5 py-0.5 font-sans text-xs font-bold uppercase tracking-widest text-paper">
-          {date}
-        </span>
-      </div>
-
-      <div className="flex flex-1 flex-col p-4">
-        <h3 className="font-display text-2xl uppercase leading-[1.02]">{title}</h3>
+    <article className="group flex h-full flex-col border border-hairline bg-paper transition-colors duration-200 hover:border-ink">
+      <div className="flex flex-1 flex-col p-5">
+        <p className="font-sans text-xs font-bold uppercase tracking-[0.2em] text-mute">
+          {date} · {dict.whatson.filters[catKey ?? "event"]}
+        </p>
+        <h3 className="mt-3 font-display text-2xl uppercase leading-[1.02]">{title}</h3>
         <p className="mt-2 flex-1 font-sans text-sm leading-relaxed text-dim">{excerpt}</p>
 
-        <div className="mt-4 flex items-center justify-between">
+        <div className="mt-5 flex items-center justify-between border-t border-hairline pt-3">
+          <span className="font-sans text-xs font-bold uppercase tracking-[0.16em] text-brass">
+            {venue}
+          </span>
           <button
             type="button"
             aria-pressed={saved}
             onClick={() => setSaved((v) => !v)}
-            className={`inline-flex items-center gap-2 border px-3 py-1.5 font-sans text-xs font-bold uppercase tracking-widest transition-colors ${
-              saved ? "border-ink bg-ink text-paper" : "border-ink bg-paper hover:bg-silver"
-            }`}
+            className="inline-flex items-center gap-1.5 font-sans text-xs font-bold uppercase tracking-[0.2em] text-ink transition-colors hover:text-brass"
           >
-            <IconCalendar size={13} />
-            {saved ? "Tersimpan ✓" : "Ingatkan Saya"}
+            <IconCalendar size={12} />
+            {saved ? dict.whatson.saved : dict.whatson.readStory}
           </button>
-          <IconArrow
-            size={18}
-            className="text-accent transition-transform duration-200 group-hover:translate-x-1.5"
-          />
         </div>
       </div>
     </article>
