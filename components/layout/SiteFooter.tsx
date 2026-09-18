@@ -1,106 +1,123 @@
-import { IconPin, IconPhone, IconClock } from "@/components/ui/Icons";
+"use client";
 
-const columns = [
-  {
-    title: "Direktori",
-    links: [
-      { label: "Cinema XXI", href: "#cinema" },
-      { label: "Tenant & Boutique", href: "#tenants" },
-      { label: "Fasilitas Mall", href: "#facilities" },
-      { label: "Food Court", href: "#tenants" },
-    ],
-  },
-  {
-    title: "Hospitality",
-    links: [
-      { label: "FUGO Hotel & Suites", href: "#fugo" },
-      { label: "Book Direct", href: "#fugo" },
-      { label: "Meeting & Events", href: "#fugo" },
-    ],
-  },
-  {
-    title: "Informasi",
-    links: [
-      { label: "What's On", href: "#whatson" },
-      { label: "Lokasi & Parkir", href: "#location" },
-      { label: "Jam Operasional", href: "#location" },
-    ],
-  },
-  {
-    title: "Korporat",
-    links: [
-      { label: "Tentang Govindo Group", href: "#top" },
-      { label: "Kebijakan Privasi", href: "#top" },
-      { label: "Syarat & Ketentuan", href: "#top" },
-      { label: "Sewa Unit (Leasing)", href: "#top" },
-    ],
-  },
-];
+import { IconArrow } from "@/components/ui/Icons";
+import { interpolate } from "@/app/i18n/format";
+import type { Dictionary } from "@/app/i18n/dictionaries";
 
-export default function SiteFooter() {
+/* column geometry is fixed; labels/links flow from the dictionary */
+const columnKeys = [
+  { key: "discover", links: [{ href: "#tenants", accent: false }, { href: "#tenants", accent: true }] },
+  { key: "leisure", links: [{ href: "#cinema", accent: false }, { href: "#fugo", accent: false }] },
+  { key: "atriums", links: [{ href: "#facilities", accent: false }, { href: "#location", accent: false }] },
+  { key: "media", links: [{ href: "#whatson", accent: false }, { href: "#top", accent: false }] },
+  { key: "dial", links: [{ href: "tel:+625113278888", accent: false }, { href: "#location", accent: false }] },
+  { key: "social", links: [{ href: "#top", accent: false }, { href: "#top", accent: false }, { href: "#top", accent: false }] },
+] as const;
+
+/**
+ * Footer — the mock's black monolith colophon: gold kicker, League Gothic
+ * THE MONOLITH, group descriptor + MEMBER OF GOVINDO GROUP right, then the
+ * 7-column 01/–07/ grid (dispatch newsletter in column 7) and the legal
+ * line with gold mid-dot separators. All copy flows from the dictionary.
+ */
+export default function SiteFooter({ dict }: { dict: Dictionary }) {
+  const c = dict.footer.columns;
+
   return (
-    <footer className="border-t-2 border-ink bg-ink text-paper">
-      <div className="px-4 pb-10 pt-12 md:px-10">
-        <div className="grid gap-12 lg:grid-cols-[1.4fr_2fr]">
-          {/* identity */}
+    <footer className="bg-ink text-paper">
+      <div className="px-4 pb-10 pt-12 md:px-10 md:pb-12 md:pt-16">
+        {/* identity row */}
+        <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
           <div>
-            <p className="font-display text-5xl uppercase leading-[0.9] md:text-6xl">
-              DUTA<span className="text-accent">/</span>MALL
-              <span className="text-outline-paper block">BANJARMASIN</span>
+            <p className="font-sans text-xs font-bold uppercase tracking-[0.28em] text-brass-soft">
+              {dict.footer.kicker}
             </p>
-            <p className="mt-5 max-w-sm font-sans text-sm leading-relaxed text-ash">
-              Pusat perbelanjaan, hiburan, dan gaya hidup terbesar di Kalimantan
-              Selatan — terintegrasi dengan FUGO Hotel &amp; Suites dan Cinema XXI /
-              The Premiere.
+            <p className="mt-3 font-display text-[clamp(3rem,6vw,5rem)] uppercase leading-[0.9]">
+              {dict.footer.monolith}
             </p>
-            <ul className="mt-6 space-y-2.5 font-mono text-xs uppercase tracking-wide">
-              <li className="flex items-center gap-2.5">
-                <IconPin size={14} className="shrink-0 text-accent" />
-                Jl. Ahmad Yani KM 2, Banjarmasin 70236
-              </li>
-              <li className="flex items-center gap-2.5">
-                <IconPhone size={14} className="shrink-0 text-accent" />
-                <a href="tel:+625113278888" className="px-0.5 underline-offset-4 hover:text-accent hover:underline">
-                  Hotline (0511) 327-8888
-                </a>
-              </li>
-              <li className="flex items-center gap-2.5">
-                <IconClock size={14} className="shrink-0 text-accent" />
-                Open Daily 10:00–22:00 WITA
-              </li>
-            </ul>
+            <p className="mt-4 max-w-md font-sans text-[13px] leading-relaxed text-paper/55">
+              {dict.footer.descriptor}
+            </p>
           </div>
-
-          {/* link columns */}
-          <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
-            {columns.map((col) => (
-              <nav key={col.title} aria-label={col.title}>
-                <h3 className="mb-4 inline-block bg-paper px-1.5 py-0.5 font-mono text-[11px] font-bold uppercase tracking-widest text-ink">
-                  {col.title}
-                </h3>
-                <ul className="space-y-2.5">
-                  {col.links.map((link) => (
-                    <li key={`${col.title}-${link.label}`}>
-                      <a
-                        href={link.href}
-                        className="font-sans text-sm text-ash underline-offset-4 transition-colors hover:text-accent hover:underline"
-                      >
-                        {link.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            ))}
+          <div className="md:pb-2 md:text-right">
+            <p className="font-sans text-[10px] font-bold uppercase tracking-[0.28em] text-paper/45">
+              {dict.footer.governance}
+            </p>
+            <p className="mt-2 font-sans text-xl font-semibold uppercase tracking-wide text-paper/85">
+              {dict.footer.member}
+            </p>
           </div>
         </div>
 
-        {/* legal band */}
-        <div className="mt-12 flex flex-col items-start justify-between gap-4 border-t border-paper/20 pt-6 font-mono text-[11px] uppercase tracking-wide text-ash md:flex-row md:items-center">
-          <p>© {new Date().getFullYear()} PT Govindo Utama — Govindo Group.</p>
-          <p className="flex items-center gap-2">
-            <span aria-hidden="true" className="inline-block size-2 bg-accent" />
-            Gawi Sabumi Kawa Manuntung
+        {/* 7-column link grid — 01/–06/ directories + 07/ dispatch newsletter */}
+        <div className="mt-12 grid grid-cols-2 gap-x-6 gap-y-10 border-t border-paper/15 pt-10 sm:grid-cols-3 lg:grid-cols-[repeat(6,1fr)_1.4fr]">
+          {columnKeys.map(({ key, links }) => (
+            <nav key={key} aria-label={c[key].title}>
+              <p className="font-sans text-[10px] font-bold uppercase tracking-[0.24em] text-brass-soft">
+                {c[key].title}
+              </p>
+              <ul className="mt-4 space-y-2.5">
+                {links.map((l, i) => (
+                  <li key={l.href + i}>
+                    <a
+                      href={l.href}
+                      className={`font-sans text-[13px] leading-snug transition-colors ${
+                        l.accent
+                          ? "font-bold text-brass-soft hover:text-paper"
+                          : "text-paper/70 hover:text-paper"
+                      }`}
+                    >
+                      {c[key].links[i]}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ))}
+
+          {/* 07/ dispatch — the mock's newsletter cell */}
+          <div>
+            <p className="font-sans text-[10px] font-bold uppercase tracking-[0.24em] text-brass-soft">
+              {c.dispatch.title}
+            </p>
+            <p className="mt-4 max-w-[26ch] font-sans text-[13px] leading-relaxed text-paper/70">
+              {dict.footer.dispatchBlurb}
+            </p>
+            <form
+              className="mt-4 flex border border-paper/30 focus-within:border-brass-soft"
+              onSubmit={(e) => e.preventDefault()}
+            >
+              <label htmlFor="dispatch-email" className="sr-only">
+                {dict.footer.dispatchAria}
+              </label>
+              <input
+                id="dispatch-email"
+                type="email"
+                required
+                placeholder={dict.footer.dispatchPlaceholder}
+                className="h-11 w-full bg-transparent px-3 font-sans text-xs font-bold uppercase tracking-[0.18em] text-paper placeholder:text-paper/40 focus:outline-none"
+              />
+              <button
+                type="submit"
+                aria-label={dict.footer.dispatchCta}
+                className="flex w-11 shrink-0 items-center justify-center bg-brass-soft text-ink transition-colors hover:bg-paper"
+              >
+                <IconArrow size={15} />
+              </button>
+            </form>
+          </div>
+        </div>
+
+        {/* legal line */}
+        <div className="mt-12 border-t border-paper/15 pt-5">
+          <p className="font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-paper/40">
+            {interpolate(dict.footer.legal, { year: new Date().getFullYear() })}
+            <span className="mx-2 text-brass-soft">·</span>
+            {dict.footer.legalTag1}
+            <span className="mx-2 text-brass-soft">·</span>
+            {dict.footer.legalTag2}
+            <span className="mx-2 text-brass-soft">·</span>
+            {dict.footer.legalTag3}
           </p>
         </div>
       </div>

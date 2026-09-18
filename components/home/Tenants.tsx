@@ -1,74 +1,122 @@
 "use client";
 
 import { useDeferredValue, useMemo, useRef, useState } from "react";
-import { Section, SectionHeading } from "@/components/ui/Section";
 import Reveal from "@/components/ui/Reveal";
-import { IconArrow, IconClose, IconRoute, IconSearch } from "@/components/ui/Icons";
-import { tenants, tenantCategories, type TenantCategory } from "@/app/data/home";
+import { IconArrow, IconClose, IconSearch } from "@/components/ui/Icons";
+import { tenants, type Tenant } from "@/app/data/home";
+import { interpolate } from "@/app/i18n/format";
+import type { Dictionary } from "@/app/i18n/dictionaries";
 
 const norm = (s: string) => s.toLowerCase().trim();
 
+/* raw floor values on the data + their dictionary keys */
+const floorKeys = [
+  { key: "all", value: null },
+  { key: "ground", value: "Ground Fl" },
+  { key: "first", value: "1st Fl" },
+  { key: "second", value: "2nd Fl" },
+  { key: "p2", value: "P2" },
+] as const;
+type FloorKey = (typeof floorKeys)[number]["key"];
+
+const categoryKeys = ["all", "beauty", "fnb", "fashion"] as const;
+type CategoryKey = (typeof categoryKeys)[number];
+
+const categoryOf = (t: Tenant): CategoryKey =>
+  t.category === "Beauty & Wellness" ? "beauty" : t.category === "F&B & Coffee" ? "fnb" : "fashion";
+
 /**
- * Tenant directory wall — an interactive plate field, not a static grid.
- * Search composes with category pills; picking a plate opens an ink detail
- * strip (floor, unit, category) with a route cross-link to #location;
- * an atomic live status announces result counts; the empty state resets.
+ * §01 — ARCHITECTURAL DIRECTORY / TENANTS (mock 1:1).
+ * Blueprint section head (brass kicker + display title, floor chips right),
+ * numbered tenant cards (index, floor plate, name, category line, open-hours
+ * footer with a brass arrow), and the "showing 10 of 200+" meta strip.
+ * Search, category + floor filters, the picked-detail strip and the live
+ * result status keep their a11y logic; the visual language is the mock's.
  */
-export default function Tenants() {
-  const [category, setCategory] = useState<TenantCategory>("Semua");
+export default function Tenants({ dict }: { dict: Dictionary }) {
+  const [category, setCategory] = useState<CategoryKey>("all");
+  const [floor, setFloor] = useState<FloorKey>("all");
   const [query, setQuery] = useState("");
   const [picked, setPicked] = useState<string | null>(null);
   const deferredQuery = useDeferredValue(query);
   const searchRef = useRef<HTMLInputElement>(null);
 
   const counts = useMemo(() => {
-    const map = new Map<TenantCategory, number>();
-    for (const c of tenantCategories) {
-      map.set(c, c === "Semua" ? tenants.length : tenants.filter((t) => t.category === c).length);
+    const map = new Map<CategoryKey, number>();
+    for (const c of categoryKeys) {
+      map.set(c, c === "all" ? tenants.length : tenants.filter((t) => categoryOf(t) === c).length);
     }
     return map;
   }, []);
 
   const q = norm(deferredQuery);
   const matched = useMemo(() => {
-    const base = category === "Semua" ? tenants : tenants.filter((t) => t.category === category);
-    if (!q) return base;
-    return base.filter((t) =>
+    const base = category === "all" ? tenants : tenants.filter((t) => categoryOf(t) === category);
+    const floorValue = floorKeys.find((f) => f.key === floor)?.value;
+    const floored = floorValue ? base.filter((t) => t.floor === floorValue) : base;
+    if (!q) return floored;
+    return floored.filter((t) =>
       [t.name, t.unit, t.floor, t.category].some((v) => norm(v).includes(q)),
     );
-  }, [category, q]);
+  }, [category, floor, q]);
 
-  // Picked plate only stays pinned while it survives the active filter/search.
+  // Picked card only stays pinned while it survives the active filter/search.
   const pickedTenant = matched.find((t) => t.name === picked) ?? null;
 
-  const status = `${matched.length} tenant${q ? ` untuk "${query.trim()}"` : ""}${
-    category !== "Semua" ? ` · ${category}` : ""
-  }`;
+  const status = interpolate(dict.tenants.status, {
+    count: matched.length,
+    forQuery: q ? interpolate(dict.tenants.statusFor, { q: query.trim() }) : "",
+    category: category !== "all" ? ` · ${dict.tenants.categories[category]}` : "",
+  });
 
   const resetAll = () => {
     setQuery("");
-    setCategory("Semua");
+    setCategory("all");
+    setFloor("all");
     setPicked(null);
     searchRef.current?.focus();
   };
 
   return (
-    <Section id="tenants" className="bg-ground:bg-paper">
+    <section id="tenants" className="bg-paper text-ink">
       <div
         className="px-4 py-14 md:px-10 md:py-20"
         onKeyDown={(e) => {
           if (e.key === "Escape") setPicked(null);
         }}
       >
-        <SectionHeading
-          index="03 / DIRECTORY"
-          title="TENANT & BOUTIQUE"
-          right={
-            <span className="font-mono text-xs font-bold uppercase tracking-widest text-smoke">
-              200+ tenant · GF–L2
-            </span>
-          }
-        />
+        {/* ============ blueprint section head (mock: 01 — kicker row) ============ */}
+        <div className="mb-4 flex items-center gap-4">
+          <span className="font-display text-xl uppercase text-brass">01</span>
+          <span aria-hidden="true" className="h-px w-10 bg-brass-soft" />
+          <span className="font-sans text-xs font-bold uppercase tracking-[0.24em] text-dim">
+            {dict.tenants.kicker}
+          </span>
+        </div>
+        <div className="mb-10 flex flex-wrap items-end justify-between gap-x-10 gap-y-6 md:mb-12">
+          <h2 className="border-b border-ink pb-4 font-display text-[clamp(2.2rem,4vw,3.6rem)] uppercase leading-[0.95]">
+            {dict.tenants.title}
+          </h2>
+
+          {/* floor chips — the mock's filter row */}
+          <div className="flex flex-wrap items-center gap-2 pb-1" role="group" aria-label={dict.tenants.floorLabel}>
+            {floorKeys.map((f) => (
+              <button
+                key={f.key}
+                type="button"
+                aria-pressed={floor === f.key}
+                onClick={() => setFloor(f.key)}
+                className={`border px-4 py-2 font-sans text-xs font-bold uppercase tracking-widest transition-colors ${
+                  floor === f.key
+                    ? "border-ink bg-ink text-paper"
+                    : "border-hairline bg-paper text-dim hover:border-ink hover:text-ink"
+                }`}
+              >
+                {dict.tenants.floors[f.key]}
+              </button>
+            ))}
+          </div>
+        </div>
 
         {/* search + category pills */}
         <div className="mb-3 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
@@ -84,9 +132,9 @@ export default function Tenants() {
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Cari tenant, unit, lantai…"
-              aria-label="Cari tenant, unit, atau lantai"
-              className="w-full border-2 border-ink bg-paper py-2.5 pl-10 pr-10 font-mono text-xs font-bold uppercase tracking-wide placeholder:font-normal placeholder:text-smoke focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              placeholder={dict.tenants.searchPlaceholder}
+              aria-label={dict.tenants.searchAria}
+              className="w-full border border-ink bg-paper py-2.5 pl-10 pr-10 font-sans text-sm uppercase tracking-wide placeholder:text-mute focus:outline-none focus:ring-2 focus:ring-brass focus:ring-offset-2"
             />
             {query !== "" && (
               <button
@@ -95,27 +143,27 @@ export default function Tenants() {
                   setQuery("");
                   searchRef.current?.focus();
                 }}
-                aria-label="Bersihkan pencarian"
-                className="absolute right-2 top-1/2 flex size-6 -translate-y-1/2 items-center justify-center border-2 border-ink bg-paper transition-colors hover:bg-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                aria-label={dict.tenants.clearSearch}
+                className="absolute right-2 top-1/2 flex size-6 -translate-y-1/2 items-center justify-center text-mute transition-colors hover:text-brass"
               >
-                <IconClose size={11} />
+                <IconClose size={12} />
               </button>
             )}
           </div>
 
-          <div className="flex flex-wrap gap-3" role="group" aria-label="Filter kategori tenant">
-            {tenantCategories.map((c) => (
+          <div className="flex flex-wrap gap-2" role="group" aria-label={dict.tenants.categoryAria}>
+            {categoryKeys.map((c) => (
               <button
                 key={c}
                 type="button"
                 aria-pressed={category === c}
                 onClick={() => setCategory(c)}
-                className={`border-2 border-ink px-4 py-2 font-mono text-xs font-bold uppercase tracking-widest transition-colors ${
-                  category === c ? "bg-ink text-paper" : "bg-paper hover:bg-silver"
+                className={`border px-4 py-2 font-sans text-xs font-bold uppercase tracking-widest transition-colors ${
+                  category === c ? "border-ink bg-ink text-paper" : "border-hairline bg-paper hover:border-ink"
                 }`}
               >
-                {c}
-                <span className={`ml-2 ${category === c ? "text-accent" : "text-smoke"}`}>
+                {dict.tenants.categories[c]}
+                <span className={`ml-2 ${category === c ? "text-brass-soft" : "text-mute"}`}>
                   {counts.get(c)}
                 </span>
               </button>
@@ -127,14 +175,14 @@ export default function Tenants() {
         <p
           role="status"
           aria-atomic="true"
-          className="mb-5 font-mono text-[11px] font-bold uppercase tracking-widest text-smoke"
+          className="mb-5 font-sans text-xs font-bold uppercase tracking-widest text-mute"
         >
           {status}
         </p>
 
-        {/* detail strip — the picked plate's wayfinding readout */}
+        {/* detail strip — the picked card's wayfinding readout */}
         {pickedTenant && (
-          <div className="mb-6 border-2 border-ink bg-ink p-4 text-paper md:p-5">
+          <div className="mb-6 border border-ink bg-ink p-4 text-paper md:p-5">
             <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
               {pickedTenant.image ? (
                 // eslint-disable-next-line @next/next/no-img-element -- supplied logo slot, swap-ready
@@ -146,40 +194,37 @@ export default function Tenants() {
               ) : (
                 <span
                   aria-hidden="true"
-                  className="flex size-10 items-center justify-center border-2 border-paper font-display text-xl uppercase leading-none"
+                  className="flex size-10 items-center justify-center border border-paper font-display text-xl uppercase"
                 >
                   {pickedTenant.name.charAt(0)}
                 </span>
               )}
               <div>
-                <p className="font-mono text-[11px] font-bold uppercase tracking-widest text-paper/60">
-                  Terpilih
+                <p className="font-sans text-xs font-bold uppercase tracking-widest text-paper/60">
+                  {dict.tenants.picked}
                 </p>
-                <p className="font-display text-2xl uppercase leading-tight">
-                  {pickedTenant.name}
-                </p>
+                <p className="font-display text-2xl uppercase">{pickedTenant.name}</p>
               </div>
-              <dl className="flex gap-6 font-mono text-[11px] uppercase tracking-widest">
+              <dl className="flex gap-6 font-sans text-xs uppercase tracking-widest">
                 <div>
-                  <dt className="text-paper/60">Lantai</dt>
+                  <dt className="text-paper/60">{dict.tenants.floor}</dt>
                   <dd className="font-bold">{pickedTenant.floor}</dd>
                 </div>
                 <div>
-                  <dt className="text-paper/60">Unit</dt>
-                  <dd className="font-bold text-accent">{pickedTenant.unit}</dd>
+                  <dt className="text-paper/60">{dict.tenants.unit}</dt>
+                  <dd className="font-bold text-brass-soft">{pickedTenant.unit}</dd>
                 </div>
                 <div>
-                  <dt className="text-paper/60">Kategori</dt>
-                  <dd className="font-bold">{pickedTenant.category}</dd>
+                  <dt className="text-paper/60">{dict.tenants.category}</dt>
+                  <dd className="font-bold">{dict.data.tenants.categories[categoryOf(pickedTenant) as Exclude<CategoryKey, "all">]}</dd>
                 </div>
               </dl>
               <div className="flex w-full gap-3 md:ml-auto md:w-auto">
                 <a
                   href="#location"
-                  className="flex flex-1 items-center justify-center gap-2 border-2 border-ink bg-accent px-4 py-2 font-mono text-xs font-bold uppercase tracking-widest text-ink transition-colors hover:bg-paper md:flex-none"
+                  className="flex flex-1 items-center justify-center gap-2 border border-brass-soft bg-brass-soft px-4 py-2 font-sans text-xs font-bold uppercase tracking-widest text-ink transition-colors hover:bg-paper hover:border-paper md:flex-none"
                 >
-                  <IconRoute size={14} />
-                  Lihat rute
+                  {dict.tenants.seeRoute}
                 </a>
                 <button
                   type="button"
@@ -187,20 +232,19 @@ export default function Tenants() {
                     setPicked(null);
                     searchRef.current?.focus();
                   }}
-                  className="flex-1 border-2 border-paper/40 px-4 py-2 font-mono text-xs font-bold uppercase tracking-widest transition-colors hover:bg-paper hover:text-ink md:flex-none"
+                  className="flex-1 border border-paper/40 px-4 py-2 font-sans text-xs font-bold uppercase tracking-widest transition-colors hover:bg-paper hover:text-ink md:flex-none"
                 >
-                  Tutup
+                  {dict.tenants.closeDetail}
                 </button>
               </div>
             </div>
           </div>
         )}
 
-        {/* logo wall — one plate field, hairline seams; plates select.
-            The field fades as one mass (the wall is the section's plate). */}
+        {/* tenant cards — the mock's numbered directory cards */}
         {matched.length > 0 ? (
-          <Reveal variant="ink" as="ul" className="grid grid-cols-2 gap-px border border-ink bg-ink sm:grid-cols-3 lg:grid-cols-4">
-            {matched.map((t) => {
+          <Reveal variant="seq" as="ul" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+            {matched.map((t, i) => {
               const selected = pickedTenant?.name === t.name;
               return (
                 <li key={t.name}>
@@ -209,46 +253,44 @@ export default function Tenants() {
                     aria-pressed={selected}
                     onClick={() => setPicked(selected ? null : t.name)}
                     aria-label={`${t.name} — ${t.category}, ${t.floor}, Unit ${t.unit}`}
-                    className={`cell-checker group relative flex h-full w-full min-h-[124px] flex-col items-center justify-between gap-2 p-4 text-center transition-[background-color,transform,box-shadow] duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
-                      selected ? "bg-silver" : "bg-paper hover:bg-silver"
-                    } md:hover:-translate-x-[1px] md:hover:-translate-y-[1px] md:hover:shadow-brutal-sm`}
+                    className={`group flex h-full min-h-[190px] w-full flex-col border p-4 text-left transition-colors duration-200 ${
+                      selected
+                        ? "border-brass-soft bg-silver"
+                        : "border-hairline bg-paper hover:border-ink"
+                    }`}
                   >
-                    {selected && (
-                      <span
-                        aria-hidden="true"
-                        className="pointer-events-none absolute inset-0 border-[3px] border-accent"
-                      />
-                    )}
-                    {selected && (
-                      <span aria-hidden="true" className="absolute right-0 top-0 size-2.5 bg-accent" />
-                    )}
-                    {t.image ? (
-                      // eslint-disable-next-line @next/next/no-img-element -- supplied logo slot, swap-ready
-                      <img
-                        src={t.image}
-                        alt=""
-                        loading="lazy"
-                        className="mx-auto max-h-14 w-auto max-w-[75%] object-contain md:max-h-16"
-                      />
-                    ) : (
-                      <span
-                        aria-hidden="true"
-                        className="mx-auto flex size-14 items-center justify-center border-2 border-ink font-display text-2xl uppercase leading-none md:size-16"
-                      >
-                        {t.name.charAt(0)}
+                    {/* index + floor plate */}
+                    <span className="flex items-start justify-between gap-3">
+                      <span className={`font-display text-2xl uppercase ${selected ? "text-brass" : "text-ink"}`}>
+                        {String(i + 1).padStart(2, "0")}
                       </span>
-                    )}
-                    <span className="block w-full">
-                      <span className="block truncate font-sans text-sm font-bold uppercase tracking-wide md:text-base">
+                      <span className="border border-hairline bg-bone px-2 py-1 font-sans text-[10px] font-bold uppercase tracking-[0.18em] text-dim">
+                        {t.floor}
+                      </span>
+                    </span>
+
+                    {/* identity */}
+                    <span className="mt-auto block w-full">
+                      <span className="block truncate font-sans text-base font-bold uppercase tracking-wide">
                         {t.name}
                       </span>
-                      <span
-                        className={`mt-0.5 block font-mono text-[11px] font-bold uppercase tracking-widest transition-colors ${
-                          selected ? "text-ink" : "text-smoke group-hover:text-ink"
-                        }`}
-                      >
-                        {t.floor} · {t.unit}
+                      <span className="mt-0.5 block font-sans text-xs font-semibold uppercase tracking-[0.14em] text-mute">
+                        {t.category}
                       </span>
+                    </span>
+
+                    {/* open-hours footer — the mock's brass hours row */}
+                    <span
+                      aria-hidden="true"
+                      className={`mt-3 flex items-center justify-between border-t pt-2.5 font-sans text-xs font-bold uppercase tracking-[0.18em] ${
+                        selected ? "border-brass-soft text-brass" : "border-hairline text-mute group-hover:text-brass"
+                      }`}
+                    >
+                      {dict.tenants.openHours}
+                      <IconArrow
+                        size={13}
+                        className="transition-transform duration-300 group-hover:translate-x-0.5"
+                      />
                     </span>
                   </button>
                 </li>
@@ -257,82 +299,50 @@ export default function Tenants() {
           </Reveal>
         ) : (
           /* empty state — always offers recovery, never a dead end */
-          <div className="border-2 border-ink p-8 text-center md:p-10">
-            <p className="font-display text-3xl uppercase leading-none">
-              Tidak ada hasil<span className="text-accent">.</span>
+          <div className="border border-ink p-8 text-center md:p-10">
+            <p className="font-display text-3xl uppercase">
+              {dict.tenants.emptyTitle}
             </p>
-            <p className="mx-auto mt-3 max-w-md font-mono text-xs uppercase tracking-wide text-smoke">
-              {q ? `Tidak ada tenant cocok "${query.trim()}"` : "Kategori ini belum berisi tenant"}
-              {category !== "Semua" ? ` di kategori ${category}` : ""}. Coba kata kunci lain,
-              atau lihat seluruh katalog.
+            <p className="mx-auto mt-3 max-w-md font-sans text-sm uppercase tracking-wide text-mute">
+              {q
+                ? interpolate(dict.tenants.emptyMatch, { q: query.trim() })
+                : dict.tenants.emptyNoQuery}
+              {category !== "all"
+                ? interpolate(dict.tenants.emptyInCategory, { c: dict.tenants.categories[category] })
+                : ""}
+              {floor !== "all"
+                ? interpolate(dict.tenants.emptyOnFloor, { f: dict.tenants.floors[floor] })
+                : ""}.
+              {dict.tenants.emptyHint}
             </p>
             <button
               type="button"
               onClick={resetAll}
-              className="mt-5 border-2 border-ink bg-ink px-5 py-2.5 font-mono text-xs font-bold uppercase tracking-widest text-paper transition-colors hover:bg-accent hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              className="mt-5 border border-ink bg-ink px-5 py-2.5 font-sans text-xs font-bold uppercase tracking-widest text-paper transition-colors hover:bg-brass hover:border-brass"
             >
-              Lihat semua tenant
+              {dict.tenants.emptyReset}
             </button>
           </div>
         )}
 
-        {/* directory band — full-width ink CTA closing the section. Lives outside
-            the grid on purpose: a spanned tile leaves grid-ground voids whenever
-            a filtered count doesn't fill its row. The link box covers headline +
-            arrow; the chip row below is a REAL second filter control (nested
-            interactive elements are invalid, so the chips are siblings, not
-            children, of the anchor). */}
-        <Reveal variant="ink" className="border border-ink">
-          <div className="bg-ink p-5 text-paper md:p-6">
-            <a
-              href="#tenants"
-              aria-label="Lihat direktori lengkap — 200+ tenant, GF sampai L2"
-              className="group flex flex-wrap items-center justify-between gap-x-8 gap-y-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-            >
-              <div>
-                <p className="font-mono text-[11px] font-bold uppercase tracking-widest text-paper/70">
-                  +200 brand lainnya · GF–L2
-                </p>
-                <p className="mt-2 font-display text-3xl uppercase leading-[0.95] md:text-4xl">
-                  Lihat direktori
-                  <br className="sm:hidden" />
-                  <span className="hidden sm:inline"> </span>
-                  lengkap<span className="text-accent">.</span>
-                </p>
-              </div>
-              <span className="flex size-12 items-center justify-center border-2 border-paper/30 transition-colors duration-150 group-hover:border-accent group-hover:bg-accent md:size-14">
-                <IconArrow
-                  size={22}
-                  className="text-accent transition-all duration-150 group-hover:translate-x-0.5 group-hover:text-ink"
-                />
-              </span>
-            </a>
-            <div className="mt-5 flex flex-wrap items-center gap-x-2 gap-y-2 border-t border-paper/15 pt-4" role="group" aria-label="Filter kategori dari indeks bawah">
-              {tenantCategories.map((c) => {
-                const active = c === category;
-                return (
-                  <button
-                    key={c}
-                    type="button"
-                    aria-pressed={active}
-                    onClick={() => setCategory(c)}
-                    className={`border px-2 py-1 font-mono text-[11px] font-bold uppercase tracking-widest transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
-                      active
-                        ? "border-accent bg-accent text-ink"
-                        : "border-transparent text-paper/60 hover:border-paper/40 hover:text-paper"
-                    }`}
-                  >
-                    {c}
-                  </button>
-                );
-              })}
-              <span className="ml-auto font-mono text-[11px] font-bold uppercase tracking-widest text-paper/60">
-                {matched.length}/{tenants.length} ditampilkan
-              </span>
-            </div>
-          </div>
-        </Reveal>
+        {/* meta strip — the mock's "SHOWING 10 OF 200+" row */}
+        <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-ink pt-4">
+          <p className="font-sans text-xs font-bold uppercase tracking-[0.2em] text-dim">
+            {interpolate(dict.tenants.showing, { shown: matched.length })}
+          </p>
+          <a
+            href="#location"
+            aria-label={dict.tenants.showingAria}
+            className="group inline-flex items-center gap-2 font-sans text-xs font-bold uppercase tracking-[0.2em] text-ink transition-colors hover:text-brass"
+          >
+            {dict.tenants.showingLink}
+            <IconArrow
+              size={14}
+              className="transition-transform duration-300 group-hover:translate-x-1"
+            />
+          </a>
+        </div>
       </div>
-    </Section>
+    </section>
   );
 }

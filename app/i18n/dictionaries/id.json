@@ -1,0 +1,341 @@
+{
+  "topbar": {
+    "hours": "Buka Hari Ini 10:00 — 22:00 WITA",
+    "phone": "(0511) 327-8888"
+  },
+  "nav": {
+    "tenants": "Direktori",
+    "facilities": "Fasilitas",
+    "cinema": "Cinema",
+    "fugo": "Hotel",
+    "whatson": "Acara",
+    "location": "Konsyierge"
+  },
+  "search": {
+    "open": "Cari tenant, film, atau fasilitas",
+    "close": "Tutup pencarian",
+    "clear": "Hapus pencarian",
+    "placeholder": "Cari film / tenant / fasilitas…",
+    "ariaLabel": "Cari film, tenant, atau fasilitas",
+    "type": { "film": "Film", "tenant": "Tenant", "service": "Layanan" },
+    "noResults": "Tidak ada hasil untuk \"{q}\". Coba kata kunci lain.",
+    "hint": "Ketik minimal 2 huruf — contoh: “fore”, “hutan”, “parkir”."
+  },
+  "menu": {
+    "open": "Buka menu navigasi",
+    "close": "Tutup menu navigasi",
+    "brand": "Duta Mall Banjarmasin",
+    "wayfinding": "Penunjuk Jalan"
+  },
+  "cta": { "reserve": "Pesan Kamar" },
+  "language": { "label": "Bahasa", "switch": "Ganti bahasa" },
+  "hero": {
+    "ariaLabel": "Duta Mall — pengantar",
+    "regionLabel": "Sorotan Duta Mall",
+    "carouselAria": "Pilih sorotan",
+    "pause": "Jeda putar otomatis",
+    "play": "Putar otomatis",
+    "slideSelected": "{num} — {chip}",
+    "slideAlts": [
+      "Kalender acara Duta Mall September — festival, bazar, dan giveaway",
+      "Promo September Ceria Kimi no Cookie — diskon 10%",
+      "Birthday Sale Doran Gadget × Garmin — diskon hingga 18%",
+      "Menu baru Fore Coffee — The Unexpected Twist"
+    ],
+    "kicker": "Cetak Biru Landmark",
+    "deck": "Destinasi gaya hidup, ritel, dan perhotelan terkemuka di Banjarmasin. Atrium sipil arsitektural yang memadukan butik mode tinggi, hiburan berkualitas, dan keramahan luar biasa di bawah satu kanopi agung.",
+    "ctaDirectory": "Jelajahi Direktori",
+    "ctaFugo": "FUGO Hotel",
+    "coordinates": "Koordinat",
+    "civicScale": "Skala Sipil",
+    "civicValue": "120.000 SQM GFA",
+    "coordsValue": "3,3244° S, 114,5910° E · KM 2"
+  },
+  "tenants": {
+    "kicker": "Kurasi Ritel & Kecantikan",
+    "title": "Direktori Arsitektural / Tenant",
+    "floorLabel": "Filter lantai tenant",
+    "floors": {
+      "all": "Semua",
+      "ground": "Ground Floor",
+      "first": "1st Fl",
+      "second": "2nd Fl",
+      "p2": "P2"
+    },
+    "searchPlaceholder": "Cari tenant, unit, lantai…",
+    "searchAria": "Cari tenant, unit, atau lantai",
+    "clearSearch": "Bersihkan pencarian",
+    "categoryAria": "Filter kategori tenant",
+    "categories": {
+      "all": "Semua",
+      "beauty": "Kecantikan & Wellness",
+      "fnb": "F&B & Kopi",
+      "fashion": "Fashion & Gaya Hidup"
+    },
+    "status": "{count} tenant{forQuery}{category}",
+    "statusFor": " untuk \"{q}\"",
+    "picked": "Terpilih",
+    "floor": "Lantai",
+    "unit": "Unit",
+    "category": "Kategori",
+    "seeRoute": "Lihat rute",
+    "closeDetail": "Tutup",
+    "openHours": "Buka · 10:00–22:00",
+    "emptyTitle": "Tidak ada hasil.",
+    "emptyNoQuery": "Filter ini belum berisi tenant",
+    "emptyMatch": "Tidak ada tenant cocok \"{q}\"",
+    "emptyInCategory": " di kategori {c}",
+    "emptyOnFloor": " di {f}",
+    "emptyHint": "Coba kata kunci lain, atau lihat seluruh katalog.",
+    "emptyReset": "Lihat semua tenant",
+    "showing": "Menampilkan {shown} dari 200+ — butik terkurasi, pengalaman kuliner & layanan",
+    "showingAria": "Lihat direktori lantai lengkap — 200+ tenant, GF sampai L2",
+    "showingLink": "Akses direktori lantai lengkap"
+  },
+  "cinema": {
+    "kicker": "Pengalaman Sinematik Premiere",
+    "title": "Cinema XXI & The Premiere",
+    "deck": "Pusat kemegahan sinematik di Kalimantan. Dilengkapi recliner kulit bermotor, arsitektur audio Dolby Atmos, dan layanan lounge privat.",
+    "studioAria": "Pilih studio",
+    "regular": "Reguler",
+    "premiere": "The Premiere",
+    "premiereTag": "The Premiere",
+    "regularTag": "Cinema XXI",
+    "selectTime": "Pilih tayang {time}",
+    "new": "Baru",
+    "posterAlt": "Poster film {code}",
+    "bookSeats": "Pesan Kursi",
+    "bookSeatsFor": "Pesan kursi untuk {code}",
+    "showing": "Menampilkan {shown} dari {total} film",
+    "railAria": "Bilah film — geser, atau gunakan tombol panah",
+    "prev": "Film sebelumnya",
+    "next": "Film berikutnya",
+    "scheduleNote": "Jadwal dapat berubah — konfirmasi di lobi Cinema XXI, Lantai 3."
+  },
+  "fugo": {
+    "kicker": "Arsitektur Perhotelan",
+    "title": "FUGO Hotel Banjarmasin · Menginap Mewah",
+    "badge": "Prestise 5 Bintang · Lantai Atas",
+    "photoAlt": "Interior FUGO Hotel Banjarmasin menghadap Sungai Martapura",
+    "sanctuary": "Sanctuary Lantai Atas",
+    "riverView": "Pemandangan Sungai Martapura & Panorama Kota",
+    "ghostLabel": "Suite",
+    "storyKicker": "Urban Sanctuary Di Atas Monolith",
+    "story": "Akomodasi modern yang sophisticated menggantung di atas landmark belanja premier Banjarmasin.",
+    "body": "Terletak di pusat kota pada lantai teratas mall yang menonjol, dikelilingi venue bisnis dan hiburan. Panorama kota yang memukau. Desain hotel merupakan mahakarya yang selaras dengan kapasitas hingga 300 tamu. Seluruh 180 kamar didekorasi gaya modern.",
+    "statLabel": "{label} · {unit}",
+    "starsAria": "Hotel bintang 4",
+    "starsLabel": "Hotel Bintang 4 · Di Atas Mall",
+    "bookDirect": "Pesan Langsung",
+    "bookAria": "Pesan kamar di situs resmi FUGO Hotels — buka di tab baru",
+    "concierge": "Konsyierge VIP",
+    "accessNote": "Akses langsung dari lobi mall · Lantai teratas"
+  },
+  "whatson": {
+    "kicker": "Pameran Atrium & Komunitas",
+    "title": "Apa yang Sedang Berlangsung & Kegiatan Budaya",
+    "deck": "Perpaduan vibrant pameran, gerakan kesehatan komunitas, dan pop-up mewah yang dipentaskan di atrium arsitektural kami yang berlapis-lapis.",
+    "filterAria": "Filter agenda",
+    "filters": { "all": "Semua", "event": "Event", "csr": "CSR", "music": "Live Music" },
+    "agendaCount": "{count} agenda",
+    "venue": {
+      "event": "Atrium Utama Mall",
+      "csr": "Central Oval Level 1",
+      "music": "Terrace Concourse"
+    },
+    "venueFallback": "Duta Mall",
+    "empty": "Tidak ada agenda pada kategori ini.",
+    "readStory": "Baca Cerita",
+    "saved": "Tersimpan ✓",
+    "discover": "Temukan Semua Berita & Kegiatan Terbaru"
+  },
+  "facilities": {
+    "kicker": "Infrastruktur Pengunjung",
+    "title": "Layanan & Fasilitas Konsyierge",
+    "meta": "Dirancang untuk penyempurnaan urban tanpa hambatan",
+    "detailTitle": "Detail Fasilitas",
+    "location": "Lokasi",
+    "floor": "Lantai",
+    "zone": "Zona",
+    "status": "Status",
+    "open": "Terbuka",
+    "mapLink": "Lihat di peta lantai",
+    "grid": "GRID {from}–{to}",
+    "parkingStats": {
+      "cars": "Mobil & Motor",
+      "levels": "Empat Lantai Parkir",
+      "access": "Jam Akses Parkir",
+      "zones": "Zona Ladies & Disabilitas"
+    }
+  },
+  "location": {
+    "kicker": "Lokasi & Akses",
+    "title": "Tiba di Landmark",
+    "deck": "Terletak di boulevard arteri utama Banjarmasin, Duta Mall menyediakan konektivitas kendaraan, transportasi publik, dan bandara yang mulus.",
+    "address": "Alamat Sipil",
+    "addressLines": [
+      "Jl. Ahmad Yani KM 2, Melayu, Banjarmasin Tengah,",
+      "Kota Banjarmasin, Kalimantan Selatan 70232"
+    ],
+    "hours": "Jam Operasional",
+    "hoursLines": [
+      "Senin sampai Minggu · 10:00 — 22:00 WITA",
+      "(Cinema XXI tutup 00:30 WITA)"
+    ],
+    "contact": "Konsyierge & Leasing Pusat",
+    "contactLines": ["Telepon: (0511) 327-8888 · Email: management@dutamall.co.id"],
+    "mapsCta": "Buka Rute di Maps",
+    "googleMaps": "Google Maps",
+    "formTitle": "Pertanyaan VIP & Masukan",
+    "formBadge": "Manajemen Resmi",
+    "form": {
+      "name": "Nama Lengkap",
+      "namePlaceholder": "Masukkan nama tamu...",
+      "email": "Alamat Email",
+      "emailPlaceholder": "nama@domain.com",
+      "phone": "Nomor Kontak",
+      "phonePlaceholder": "+62 8",
+      "category": "Kategori Pertanyaan",
+      "categories": [
+        "Sewa Unit Komersial",
+        "Ruang Event & Pameran",
+        "Reservasi FUGO Hotel",
+        "Pers & Media",
+        "Masukan Umum"
+      ],
+      "message": "Pesan atau Kebutuhan",
+      "messagePlaceholder": "Berikan detail mengenai kunjungan atau kemitraan brand Anda.",
+      "submit": "Kirim ke Meja Konsyierge",
+      "sentTitle": "Terkirim.",
+      "sentBody": "Pesan Anda telah diteruskan ke meja konsyierge. Tim kami membalas dalam 1×24 jam kerja.",
+      "sendAnother": "Kirim pesan lain"
+    }
+  },
+  "footer": {
+    "kicker": "Landmark Sipil Terinspirasi Lotte World Tower",
+    "monolith": "The Monolith",
+    "descriptor": "Kompleks Duta Mall Banjarmasin & FUGO Hotel, nexus arsitektural premier Kalimantan Selatan untuk mode tinggi, perhotelan gourmet, dan budaya sinematik.",
+    "governance": "Tata Kelola Korporat",
+    "member": "Anggota Govindo Group",
+    "columns": {
+      "discover": { "title": "01 / Jelajah", "links": ["Direktori Lantai", "Butik Mewah"] },
+      "leisure": { "title": "02 / Rekreasi", "links": ["Bioskop Terbaik", "Hotel & Residensial"] },
+      "atriums": { "title": "03 / Atrium", "links": ["Galeri Atrium", "Konsyierge VIP"] },
+      "media": { "title": "04 / Media", "links": ["Pers & Media", "Kebijakan Privasi"] },
+      "dial": { "title": "05 / Telepon", "links": ["(0511) 327-8888", "Buka Setiap Hari 10:00 – 22:00"] },
+      "social": { "title": "06 / Sosial", "links": ["Instagram", "YouTube", "Facebook"] },
+      "dispatch": { "title": "07 / Dispatch" }
+    },
+    "dispatchBlurb": "Gabung ke register privat untuk pemutaran premiere dan acara cocktail.",
+    "dispatchPlaceholder": "EMAIL ANDA…",
+    "dispatchAria": "Email untuk Dispatch",
+    "dispatchCta": "Daftar Dispatch",
+    "legal": "© {year} The Monolith Landmark & Hotel. Hak cipta dilindungi. Mahakarya Arsitektural.",
+    "legalTag1": "Duta Mall Banjarmasin",
+    "legalTag2": "FUGO Hotel 4 Bintang",
+    "legalTag3": "Cinema XXI Premiere"
+  },
+  "bottomBar": {
+    "aria": "Akses cepat",
+    "cinema": "Cinema",
+    "tenants": "Tenant",
+    "hotel": "Hotel",
+    "route": "Rute"
+  },
+  "offcanvas": {
+    "groups": {
+      "directory": { "num": "01", "title": "Direktori", "items": ["Tenant & Butik", "Food Court & Kopi", "Filter Lantai"] },
+      "cinema": { "num": "02", "title": "Cinema", "items": ["Cinema XXI Reguler", "The Premiere"] },
+      "hotel": { "num": "03", "title": "Hotel", "items": ["FUGO Hotel & Suites", "Pesan Langsung"] },
+      "whatson": { "num": "04", "title": "Acara", "items": ["Event & CSR", "Live Music"] },
+      "services": { "num": "05", "title": "Layanan", "items": ["Fasilitas & Konsyierge", "Parkir & Akses"] },
+      "concierge": { "num": "06", "title": "Konsyierge", "items": ["Lokasi & Rute", "Pertanyaan VIP", "Jam Operasional"] }
+    },
+    "hours": "Buka Setiap Hari 10:00–22:00 WITA"
+  },
+  "data": {
+    "facilities": [
+      { "name": "Pusat Informasi", "detail": "Concierge & layanan tamu" },
+      { "name": "Lobi & Lift FUGO Hotel", "detail": "Akses langsung ke hotel" },
+      { "name": "ATM Center", "detail": "Semua bank nasional" },
+      { "name": "Ladies Parking", "detail": "Area parkir khusus wanita" },
+      { "name": "Ramah Disabilitas", "detail": "Ramp & kursi roda" },
+      { "name": "Ruang Medis", "detail": "Pertolongan pertama" },
+      { "name": "Ruang Laktasi & Bayi", "detail": "Nursery room" },
+      { "name": "Musholla", "detail": "Nyaman & ber-AC" },
+      { "name": "Parkir Luas", "detail": "Kapasitas 2.500+ mobil & motor" },
+      { "name": "Toilet Higienis", "detail": "Touchless & air hangat" },
+      { "name": "Area Duduk", "detail": "Sitting lounge" },
+      { "name": "Smoking Terrace", "detail": "Area khusus outdoor" }
+    ],
+    "events": [
+      { "title": "Festival Belanja Budaya Banjar", "excerpt": "Pameran kerajinan tangan, kuliner lokal, dan diskon hingga 50% di seluruh tenant." },
+      { "title": "Bakti Sosial & Donor Darah", "excerpt": "Donor darah bersama PMI Kalimantan Selatan di Ground Floor, 10.00–15.00 WITA." },
+      { "title": "Weekend Live Acoustic", "excerpt": "Musik akustik live di Main Atrium, 19.00–21.00 WITA. Gratis untuk pengunjung." },
+      { "title": "Pameran Otomotif & Festival Anak", "excerpt": "Kendaraan modifikasi, test ride, dan zona bermain anak di area parkir P1." }
+    ],
+    "genres": {
+      "horror": "Horor",
+      "thriller": "Thriller",
+      "action": "Aksi",
+      "family": "Keluarga"
+    },
+    "durations": { "m128": "2j 8m", "m107": "1j 47m", "m112": "1j 52m", "m141": "2j 21m", "m124": "2j 4m", "m99": "1j 39m" },
+    "tenants": {
+      "floors": {
+        "gf": "Ground Fl",
+        "1f": "1st Fl",
+        "2f": "2nd Fl",
+        "p2": "P2"
+      },
+      "categories": {
+        "beauty": "Kecantikan & Wellness",
+        "fnb": "F&B & Kopi",
+        "fashion": "Fashion & Gaya Hidup"
+      }
+    },
+    "fugoHighlights": [
+      { "label": "Kamar", "unit": "Deluxe & Suite" },
+      { "label": "Restoran", "unit": "Fine Dining" },
+      { "label": "Ballroom", "unit": "kapasitas pax" },
+      { "label": "Ke Bandara", "unit": "menit — Samsudin Noor" }
+    ]
+  },
+  "map": {
+    "kicker": "Denah Lantai 1 — Direktori Interaktif",
+    "title": "PETA LANTAI",
+    "lede": "Klik zona pada denah untuk melihat tenant-nya, atau pilih tenant dari daftar untuk menyorot posisinya.",
+    "reset": "Atur Ulang Peta",
+    "zoomIn": "Perbesar",
+    "zoomOut": "Perkecil",
+    "legendAmenity": "Fasilitas umum",
+    "legendTenant": "Tenant",
+    "legendZone": "Zona",
+    "selectedUnit": "Unit",
+    "pinLabel": "Lihat pada peta",
+    "floorPlate": "Lantai 1 — Duta Mall Banjarmasin",
+    "north": "U",
+    "zoneNames": {
+      "atrium": "Atrium Oval",
+      "hall": "Aula Utama",
+      "rotunda": "Rotunda Drop-off",
+      "spine-west": "Spine Retail Barat",
+      "wing-east": "Sayap Retail Timur",
+      "gate-south": "Gerbang Selatan",
+      "parking-se": "Parkir Tenggara",
+      "parking-south": "Parkir Selatan"
+    },
+    "amenityNames": {
+      "toilet": "Toilet",
+      "lift": "Lift",
+      "escalator": "Eskalator",
+      "escalator-2": "Eskalator Timur",
+      "musholla": "Musholla",
+      "atm": "ATM Center",
+      "nursery": "Nursery",
+      "info": "Information",
+      "parking": "Parkir",
+      "clinic": "Klinik"
+    }
+  }
+}

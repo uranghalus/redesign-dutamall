@@ -13,9 +13,13 @@ export interface Movie {
   /** two-letter studio code for the typographic poster */
   code: string;
   rating: MovieRating;
-  duration: string;
-  genre: string;
+  /** runtime in minutes — localized via formatDuration() */
+  duration: number;
+  /** genre key — localized via the dictionary's data.genres */
+  genre: "horror" | "thriller" | "action" | "family";
   badges: TheaterBadge[];
+  /** the mock's studio line under each film title */
+  studios: string;
   /** authored poster colorway — fallback when no photo is supplied */
   poster: { bg: string; fg: string; accent?: boolean };
   /** supplied banner photo under /assets/banner-film (optional; falls back to the typographic plate) */
@@ -31,9 +35,10 @@ export const movies: Movie[] = [
     title: "Regular",
     code: "MUNAFIK",
     rating: "17+",
-    duration: "2j 8m",
-    genre: "Horror",
+    duration: 128,
+    genre: "horror",
     badges: ["Dolby Atmos", "D-BOX"],
+    studios: "Studio 1 (Premiere Recliner) · Studio 4",
     poster: { bg: "#000000", fg: "#ffffff", accent: true },
     image: "/assets/banner-film/16MMIS.jpg",
     fresh: true,
@@ -44,9 +49,10 @@ export const movies: Movie[] = [
     title: "Regular",
     code: "SUANGGI",
     rating: "17+",
-    duration: "1j 47m",
-    genre: "Horror",
+    duration: 107,
+    genre: "horror",
     badges: ["Dolby Atmos"],
+    studios: "Studio 2 (Dolby Atmos) · Studio 3",
     poster: { bg: "#ffffff", fg: "#000000" },
     image: "/assets/banner-film/16SIKN.jpg",
     showtimes: ["11:20", "13:55", "16:30", "19:00"],
@@ -56,9 +62,10 @@ export const movies: Movie[] = [
     title: "Regular",
     code: "HOPE",
     rating: "13+",
-    duration: "1j 52m",
-    genre: "Thriller",
+    duration: 112,
+    genre: "thriller",
     badges: ["Dolby Atmos"],
+    studios: "Studio 5 · Deluxe Hall",
     poster: { bg: "#000000", fg: "#ffffff" },
     image: "/assets/banner-film/26HOPE.jpg",
     showtimes: ["12:10", "14:45", "17:20", "21:35"],
@@ -68,9 +75,10 @@ export const movies: Movie[] = [
     title: "Regular",
     code: "RUNNER",
     rating: "17+",
-    duration: "2j 21m",
-    genre: "Aksi",
+    duration: 141,
+    genre: "action",
     badges: ["D-BOX"],
+    studios: "Studio 6 · D-BOX Motion",
     poster: { bg: "#ffffff", fg: "#000000", accent: true },
     image: "/assets/banner-film/26RUNR.jpg",
     fresh: true,
@@ -81,9 +89,10 @@ export const movies: Movie[] = [
     title: "Premiere",
     code: "RESIDENT EVIL",
     rating: "17+",
-    duration: "2j 4m",
-    genre: "Horror",
+    duration: 124,
+    genre: "horror",
     badges: ["The Premiere", "Dolby Atmos"],
+    studios: "Premiere 1 (Recliner) · Premiere 2",
     poster: { bg: "#000000", fg: "#ffffff", accent: true },
     image: "/assets/banner-film/26REVL.jpg",
     fresh: true,
@@ -94,9 +103,10 @@ export const movies: Movie[] = [
     title: "Premiere",
     code: "BABY UDON",
     rating: "13+",
-    duration: "1j 39m",
-    genre: "Keluarga",
+    duration: 99,
+    genre: "family",
     badges: ["The Premiere"],
+    studios: "Premiere 3 (Recliner)",
     poster: { bg: "#ffffff", fg: "#000000" },
     image: "/assets/banner-film/16BUDN.jpg",
     showtimes: ["11:45", "14:20", "17:00", "19:45"],
@@ -333,6 +343,8 @@ export const fugo = {
     { label: "Ke Bandara", value: "25", unit: "menit — Samsudin Noor" },
   ],
   phone: "(0511) 327-8888",
+  /** official booking site — the hotel CTA points here */
+  bookingUrl: "https://fugohotels.com/banjarmasin/",
 };
 
 export interface Event {

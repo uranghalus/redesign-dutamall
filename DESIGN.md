@@ -927,3 +927,169 @@ earned neo-brutalist layer (user brief: "a touch of neo-brutalism"):
   their persistent hard-offset shadows + hover lift at `md+` (mobile stays
   flat with fill inversion), superseding the earlier "border emphasis at all
   sizes" elevation decision.
+
+---
+
+## Project Layer — Root scaling fix (2026-09-17, user-directed)
+
+The 62.5% root (1rem = 10px) shrank every Tailwind rem utility to 62.5% of
+its authored size (text-xs rendered 7.5px, h-10 buttons 25px — below the
+44px touch floor). Root is now **100%**: rem values read at true px
+(text-xs = 12px, h-10 = 40px), matching DESIGN.md's 16px-convention rem
+literals. The handful of 10px-convention layout rems were converted to
+explicit px (header 72px, sticky offsets 90px, hero paddings 16/24/128px,
+offcanvas 600px); body text is explicitly 1rem = 16px. Detector: 0 findings
+on the touched files.
+
+---
+
+## Project Layer — Hero blueprint restage (2026-09-17, user mock 1:1)
+
+The hero was rebuilt to the user's supplied mock: a 42/58 split with a
+warm-bone blueprint column (kicker `00 — LANDMARK BLUEPRINT`, four-line
+League Gothic display with an ink→grey step, SUIT deck, solid + outline
+CTAs, coordinates/civic-scale facts row) and a right photo carousel with
+a white index chip (top-left) and black annotation chip (bottom-right).
+The 01–04 stats strip below doubles as the carousel control: one state
+drives photo, chips, and strip; the active cell carries a brass progress
+rule mirroring the 6.5s autoplay.
+
+New tokens: `--color-bone #f4f2ee` (hero ground), `--color-brass
+#7d611f` (text-safe gold, ≥4.5:1 on bone/paper), `--color-brass-soft
+#c2a15c` (decorative rules only). Slides 02–04 use the documented
+poster-plate convention until real photos are supplied; set `image` on a
+slide and the plate disappears. Autoplay discipline: stops for reduced
+motion, user pause, pointer hold, offscreen, hidden tab; strip is a real
+tablist; swipe on touch; arrow keys on the stage and strip.
+
+Navigation follows the hero's blueprint grammar (SiteHeader,
+MobileOffcanvas, BottomBar): desktop links are numbered index items
+(01–06) in SUIT caps with a brass underline rule on hover/active; the
+header's scrolled "light" state uses bone (not white) so it melts into
+the hero's paper column; the mobile offcanvas is the hero's blueprint
+column expanded full-screen — bone ground, numbered League Gothic groups
+with hairline dividers, brass active/expanded states, and wayfinding
+chips ("C21 L3") restyled as bone plate + brass number; the bottom bar
+quick-actions use the hero's ink-fill square CTA language for the primary
+action; the global focus ring is brass.
+
+## Project Layer — "The Monolith" full-page restage (2026-09-18, user mock Versi1.png 1:1)
+
+The whole homepage follows the user's full-page mock (1280×7250). Accent
+system moves from red `#f00808` to brass-gold: `--color-accent #8a6d2f`
+(text-safe), `--color-brass-soft #B49B57` (chips, rules, fills — ink text
+only on it), plus `--color-platinum #f7f7f5` (the mock's light section
+band). Ink/paper/hairline/bone/League Gothic/SUIT all unchanged.
+
+Section sequence: Hero → §01 Directory/Tenants (paper) → §02 Cinema
+(black) → §03 FUGO (paper) → §04 What's On (platinum) → §05 Facilities
+(platinum) → §06 Location + VIP concierge form (paper) → black footer.
+The Enter band was retired by the mock. Every section head is the
+blueprint grammar: brass number + hairline dash + caps kicker, then a
+League Gothic display title over an ink border-b rule, with the mock's
+right-side deck or filter row.
+
+Header: fixed black utility topbar (hours · address · hotline · Govindo
+cap, 11px) over a white nav bar — logo + "THE MONOLITH" stacked wordmark,
+unnumbered caps links, SEARCH toggle, black RESERVE SUITE CTA. Footer: gold
+cap kicker + League Gothic THE MONOLITH, MEMBER OF GOVINDO GROUP right,
+7-column gold-numbered link grid (01/ DISCOVER … 07/ DISPATCH newsletter)
+and a gold-mid-dot legal line. Scroll margin is 84px (124px at ≥1280px for
+the topbar). Header hide-on-scroll and dark-section tracking were removed
+with the mock's always-white bar.
+
+React 19 / Next 16.3.5 constraint surfaced during this work: <script> tags
+inside components (and next/script) raise a blocking dev error. The
+pre-paint boot flags became components/ui/MotionGate.tsx — useInsertionEffect
+adds `.js` during commit (before paint) and maintains `--vw`; reveal
+start-states are opt-in CSS gated behind `.js`, so no-JS still renders fully
+visible. Label sizes normalize to the 10/12px ramp (no 11px).
+
+## Project Layer — Navbar distillation (2026-09-18, user-directed)
+
+The Monolith header was refined after user feedback that it felt cluttered
+and too close to the hero. Distillation: the topbar keeps only open-hours +
+hotline (address/group live in §06 and the footer); the brand is the plate
+logo + one-baseline THE MONOLITH wordmark (the stacked sub-line was a
+duplicate of the logo's own name); SEARCH is a quiet icon (label in aria);
+the CTA drops its icon. The fixed header is always opaque, so the hero now
+compensates with matching padding-top (68px mobile / 72px desktop / 108px
+with topbar) and subtracts it from the min-height — the nav never overlaps
+the carousel stage, chips read in full, and the strip still closes the
+first viewport. Scroll margins match (72px / 108px).
+
+## i18n — Indonesian & English (2026-09-18)
+
+Official Next.js App Router i18n guide pattern, adapted to this repo's proxy
+convention (`proxy.ts` = middleware in Next 16):
+
+- **Routes**: static locales `/id` (default) and `/en` via `app/[lang]/`
+  (`generateStaticParams`); `notFound()` on unknown locales.
+- **Negotiation**: unprefixed paths redirect through `proxy.ts` —
+  `NEXT_LOCALE` cookie → `Accept-Language` parse (RFC 9110 q-ranking) →
+  default `id`. The redirect response also persists the cookie, so the
+  switcher click only carries the target prefix once.
+- **Dictionaries**: `app/i18n/dictionaries/{id,en}.json`, loaded per request
+  in `app/[lang]/page.tsx` and threaded through components as the `dict`
+  prop (official pattern — no per-component imports). Dynamic data copy
+  (facilities, events, genres, fugo stats, footer columns) is positional in
+  `dict.data.*`, keyed by index to the data arrays.
+- **Config neutrality**: `app/i18n/config.ts` holds constants only (no
+  `"use client"` — server components read them); `format.ts` supplies
+  locale-aware `formatDuration` / `formatCurrency` (Intl id-ID/en-ID).
+- **Switcher**: ID/EN pair in the black topbar (desktop) and the white nav
+  (mobile) — `router.push` preserving hash/params, `aria-pressed` state.
+- **SEO**: per-locale metadata + Open Graph in `[lang]/layout.tsx`,
+  `alternates.languages` hreflang (id/en), `<html lang>` per route.
+- **Display type stays English** (League Gothic headlines, THE MONOLITH) —
+  the mock's visual language, like PIM's practice; functional copy is
+  fully translated (nav, filters, forms, cards, aria labels).
+
+## Hero carousel — supplied promo artwork (2026-09-18)
+
+The hero's right-column carousel now shows the mall's own promo posters
+(`public/assets/carousel/*.jpg`, 4 slides, portrait social-format): the
+September Calendar of Events, Kimi no Cookie's September promo, the Garmin
+× Doran Gadget Birthday Sale, and Fore Coffee's Unexpected Twist launch.
+The white index chip, black annotation chip, and the 01–04 strip all read
+from the same slide list (strip cell i = slide i); photo alt text is
+localized via `hero.slideAlts` in both dictionaries. The poster-plate
+fallback convention remains for any section still awaiting real artwork.
+
+## Cinema §02 — poster-card carousel (2026-09-18 mock)
+
+Rebuilt to the user's attachment: poster-first cards in a horizontal rail.
+
+- **Card anatomy** (per mock): badge pill top-left (The Premiere / Cinema XXI,
+  brass text), `2j 8m · 17+` + NEW pill bottom-left/right on the poster,
+  genre kicker, **serif title** (Playfair Display — self-hosted variable
+  woff2, `--font-serif`), studio line, showtime chips (gold-fill active /
+  hairline idle), full-width **BOOK SEATS** footer (paper → brass hover).
+- **Rail**: `.cinema-rail` — flex + scroll-snap (mandatory, per-card),
+  mouse drag-to-scroll with capture (drag suppresses click-through and
+  re-snaps), native touch swipe, arrow buttons (disabled at ends, gold
+  hover), ← → Home End keys on the focused rail, live counter
+  ("4 dari 6 film"), brass progress rule tracking scroll position.
+- **Bleed**: rail's right margin mirrors the section padding (−mr-4/−mr-10)
+  so cards run to the viewport edge like the mock.
+- Carousel appears only when content overflows; at 1440px four Regular
+  cards fill the row exactly and arrows disable.
+- **A11y**: region + label, aria-pressed chips, aria-live counter, disabled
+  arrows are tabindex-inert, reduced-motion kills smooth scroll + snap.
+
+## Directory map — interactive floor plan (2026-09-18)
+
+§01B `DirectoryMap` — the CAD floor plan ("lantai 1.png") redrawn as living
+blueprint inside the Monolith world: ink ground, hairline zone envelopes,
+brass spotlight, numbered zone chips, tenant pins, amenity squares.
+- Geometry as data: `app/data/map.ts` (viewBox 1000×840, hand-traced
+  envelopes: rotunda + drop-off, oval atrium, main hall, west spine, east
+  wing, south gate, two parking decks). Edits are data edits, not code.
+- Interaction: click zone/tenant/list row → spotlight + auto-framing zoom
+  (1.9×) rendered via an inner `<g>` in VIEWBOX units (never CSS px on the
+  svg element — resolution independence); buttons + ctrl-wheel zoom; drag
+  pan with pointer capture, screen→viewBox scaling; ESC-free toggle picks;
+  aria-live announcements; sr-only zone buttons; reduced-motion-safe glide.
+- The tenant list is the map's mirror: filtering flows both directions
+  (zone → list, list → pin) and the title plate + list header always name
+  the current focus.

@@ -1,150 +1,267 @@
 "use client";
 
-import { Section, SectionHeading } from "@/components/ui/Section";
+import { useState } from "react";
 import Reveal from "@/components/ui/Reveal";
-import { BrutalButtonLink } from "@/components/ui/Button";
-import { IconPin, IconPhone, IconRoute, IconClock } from "@/components/ui/Icons";
+import { IconPin, IconPhone, IconRoute, IconClock, IconArrow } from "@/components/ui/Icons";
+import type { Dictionary } from "@/app/i18n/dictionaries";
 
 const mapUrl =
   "https://www.google.com/maps/search/?api=1&query=Duta+Mall+Banjarmasin";
 const routeUrl =
   "https://www.google.com/maps/dir/?api=1&destination=Duta+Mall+Banjarmasin";
 
-/** Stylized structural map — authored geometry, not a screenshot. */
-function MapPanel() {
-  return (
-    <div className="relative min-h-[320px] border-2 border-ink bg-paper p-4 md:shadow-brutal-sm">
-      {/* road frame */}
-      <div className="absolute inset-x-6 top-6 h-2 bg-ink" aria-hidden="true" />
-      <div className="absolute inset-y-6 right-6 w-2 bg-ink" aria-hidden="true" />
-      <span className="absolute right-3 top-9 bg-paper px-1 font-mono text-xs font-bold uppercase tracking-widest">
-        Jl. Ahmad Yani
+/** Icon info row — the mock's address/hours/contact rows with circular icons. */
+function InfoRow({
+  icon: Icon,
+  label,
+  lines,
+  href,
+  external = false,
+}: {
+  icon: (p: { size?: number; className?: string }) => React.ReactElement;
+  label: string;
+  lines: string[];
+  href?: string;
+  external?: boolean;
+}) {
+  const body = (
+    <>
+      <span className="flex size-10 shrink-0 items-center justify-center rounded-full border border-hairline bg-paper">
+        <Icon size={17} />
       </span>
-
-      {/* mall block */}
-      <div className="absolute bottom-16 left-6 right-16 top-12 border-4 border-ink bg-paper">
-        <div className="absolute inset-2 border-2 border-dashed border-smoke/40" aria-hidden="true" />
-        <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-paper px-2 font-display text-2xl uppercase md:text-3xl">
-          DUTA<span className="text-accent">/</span>MALL
+      <span className="min-w-0">
+        <span className="block font-sans text-xs font-bold uppercase tracking-[0.22em] text-ink">
+          {label}
         </span>
-        {/* FUGO tower */}
-        <div className="absolute bottom-2 right-2 flex h-16 w-12 flex-col justify-end border-2 border-ink bg-ink p-1">
-          <span className="text-center font-mono text-[11px] font-bold uppercase tracking-widest text-paper">
-            FUGO
+        {lines.map((l) => (
+          <span key={l} className="mt-0.5 block font-sans text-[13px] leading-relaxed text-dim">
+            {l}
           </span>
-        </div>
-        {/* parking */}
-        <div className="absolute bottom-2 left-2 border-2 border-ink bg-silver px-2 py-1 font-mono text-xs font-bold uppercase tracking-widest">
-          P 1—4
-        </div>
-        {/* entrance marker */}
-        <div className="absolute left-1/2 top-0 flex -translate-x-1/2 -translate-y-1/2 items-center gap-1.5 border-2 border-ink bg-accent px-2 py-1 font-mono text-xs font-bold uppercase tracking-widest text-ink">
-          <IconPin size={12} />
-          Main Gate
-        </div>
-      </div>
-
-      {/* coordinates readout */}
-      <span className="absolute bottom-3 left-6 font-mono text-xs font-bold uppercase tracking-widest text-smoke">
-        3.3186°S · 114.5934°E
+        ))}
       </span>
-    </div>
+    </>
   );
+
+  if (href) {
+    return (
+      <a
+        href={href}
+        {...(external ? { target: "_blank", rel: "noreferrer" } : {})}
+        className="group flex items-start gap-4 py-4 transition-colors hover:bg-bone/60"
+      >
+        {body}
+      </a>
+    );
+  }
+  return <div className="flex items-start gap-4 py-4">{body}</div>;
 }
 
-export default function LocationSection() {
+/**
+ * §06 — LOCATION & ACCESS (mock 1:1).
+ * Left: "ARRIVE AT THE LANDMARK" heading + deck, hairline-ruled icon rows
+ * (Civic Address, Operational Hours, Central Concierge & Leasing), and the
+ * Maps route buttons. Right: the VIP INQUIRY & FEEDBACK form — the mock's
+ * bordered concierge card with labeled inputs, category select, message
+ * textarea, and the black TRANSMIT TO CONCIERGE DESK submit.
+ * Every string flows from the locale dictionary; form state holds keys.
+ */
+export default function LocationSection({ dict }: { dict: Dictionary }) {
+  const [sent, setSent] = useState(false);
+  const [form, setForm] = useState({ name: "", email: "", phone: "", topic: 0, message: "" });
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSent(true);
+  };
+
   return (
-    <Section id="location">
+    <section id="location" className="bg-paper text-ink">
       <div className="px-4 py-14 md:px-10 md:py-20">
-        <SectionHeading
-          index="06 / LOCATION"
-          title="LOKASI & AKSES"
-          right={
-            <span className="font-mono text-xs font-bold uppercase tracking-widest text-smoke">
-              Banjarmasin · Kalsel
-            </span>
-          }
-        />
+        {/* blueprint section head */}
+        <div className="mb-4 flex items-center gap-4">
+          <span className="font-display text-xl uppercase text-brass">06</span>
+          <span aria-hidden="true" className="h-px w-10 bg-brass-soft" />
+          <span className="font-sans text-xs font-bold uppercase tracking-[0.24em] text-dim">
+            {dict.location.kicker}
+          </span>
+        </div>
 
-        <Reveal className="grid gap-8 lg:grid-cols-2">
+        <Reveal className="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-14">
+          {/* ============ left — arrive at the landmark ============ */}
           <div>
-            <ul className="divide-y-2 divide-ink border-2 border-ink">
-              <li className="flex items-center gap-4 bg-paper px-4 py-4">
-                <span className="flex size-10 shrink-0 items-center justify-center border-2 border-ink">
-                  <IconPin size={18} />
-                </span>
-                <div>
-                  <p className="font-sans text-sm font-bold uppercase tracking-wide">
-                    Alamat
-                  </p>
-                  <p className="font-mono text-xs uppercase tracking-wide text-smoke">
-                    Jl. Ahmad Yani KM 2, Banjarmasin 70236
-                  </p>
-                </div>
-              </li>
-              <li className="flex items-center gap-4 bg-paper px-4 py-4">
-                <span className="flex size-10 shrink-0 items-center justify-center border-2 border-ink">
-                  <IconClock size={18} />
-                </span>
-                <div>
-                  <p className="font-sans text-sm font-bold uppercase tracking-wide">
-                    Jam Operasional
-                  </p>
-                  <p className="font-mono text-xs uppercase tracking-wide text-smoke">
-                    Open Daily 10:00–22:00 WITA · Cinema s.d. 24:00
-                  </p>
-                </div>
-              </li>
-              <li className="flex items-center gap-4 bg-paper px-4 py-4">
-                <span className="flex size-10 shrink-0 items-center justify-center border-2 border-ink">
-                  <IconPhone size={18} />
-                </span>
-                <div>
-                  <p className="font-sans text-sm font-bold uppercase tracking-wide">
-                    Hotline
-                  </p>
-                  <a
-                    href="tel:+625113278888"
-                    className="font-mono text-xs font-bold tracking-wide text-ink underline decoration-accent decoration-2 underline-offset-4 hover:bg-accent"
-                  >
-                    (0511) 327-8888
-                  </a>
-                </div>
-              </li>
-            </ul>
+            <h2 className="border-b border-ink pb-4 font-display text-[clamp(2.2rem,4vw,3.6rem)] uppercase leading-[0.95]">
+              {dict.location.title}
+            </h2>
+            <p className="mt-5 max-w-lg font-sans text-sm leading-relaxed text-dim">
+              {dict.location.deck}
+            </p>
 
-            <div className="mt-6 flex flex-wrap gap-4">
-              <BrutalButtonLink
+            <div className="mt-6 divide-y divide-hairline border-y border-hairline">
+              <InfoRow
+                icon={IconPin}
+                label={dict.location.address}
+                lines={dict.location.addressLines}
+                href={mapUrl}
+                external
+              />
+              <InfoRow
+                icon={IconClock}
+                label={dict.location.hours}
+                lines={dict.location.hoursLines}
+              />
+              <InfoRow
+                icon={IconPhone}
+                label={dict.location.contact}
+                lines={dict.location.contactLines}
+                href="tel:+625113278888"
+              />
+            </div>
+
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a
                 href={routeUrl}
-                variant="primary"
-                size="md"
                 target="_blank"
                 rel="noreferrer"
+                className="inline-flex min-h-[48px] items-center gap-2 bg-ink px-6 font-sans text-xs font-bold uppercase tracking-[0.2em] text-paper transition-colors duration-200 hover:bg-brass hover:text-ink"
               >
                 <IconRoute size={16} />
-                Buka Rute di Maps
-              </BrutalButtonLink>
-              <BrutalButtonLink href={mapUrl} variant="outline" size="md" target="_blank" rel="noreferrer">
+                {dict.location.mapsCta}
+              </a>
+              <a
+                href={mapUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex min-h-[48px] items-center gap-2 border border-ink bg-paper px-6 font-sans text-xs font-bold uppercase tracking-[0.2em] text-ink transition-colors duration-200 hover:bg-ink hover:text-paper"
+              >
                 <IconPin size={16} />
-                Google Maps
-              </BrutalButtonLink>
+                {dict.location.googleMaps}
+              </a>
             </div>
           </div>
 
-          <MapPanel />
-        </Reveal>
+          {/* ============ right — VIP inquiry & feedback form ============ */}
+          <div className="border border-hairline bg-paper p-6 md:p-8">
+            <div className="mb-6 flex items-center justify-between gap-4 border-b border-hairline pb-4">
+              <h3 className="font-sans text-xs font-bold uppercase tracking-[0.22em] text-ink">
+                {dict.location.formTitle}
+              </h3>
+              <span className="font-sans text-[10px] font-bold uppercase tracking-[0.22em] text-mute">
+                {dict.location.formBadge}
+              </span>
+            </div>
 
-        <Reveal variant="ink" className="mt-8 flex flex-col items-start justify-between gap-4 border-2 border-ink bg-paper p-5 md:shadow-brutal-sm sm:flex-row sm:items-center">
-          <p className="font-sans text-sm text-smoke">
-            <strong className="font-bold text-ink">25 menit</strong> dari Bandara
-            Samsudin Noor · <strong className="font-bold text-ink">akses langsung</strong>{" "}
-            dari Lobi FUGO Hotel.
-          </p>
-          <span className="font-mono text-[11px] font-bold uppercase tracking-widest">
-            KODE LOKASI: <span className="bg-ink px-1.5 py-0.5 text-paper">DTM-KLS-02</span>
-          </span>
+            {sent ? (
+              <div role="status" className="py-10 text-center">
+                <p className="font-display text-4xl uppercase">
+                  {dict.location.form.sentTitle}
+                  <span className="text-brass">.</span>
+                </p>
+                <p className="mx-auto mt-3 max-w-sm font-sans text-sm leading-relaxed text-dim">
+                  {dict.location.form.sentBody}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSent(false);
+                    setForm({ name: "", email: "", phone: "", topic: 0, message: "" });
+                  }}
+                  className="mt-6 inline-flex items-center gap-2 border border-ink px-5 py-2.5 font-sans text-xs font-bold uppercase tracking-widest transition-colors hover:bg-ink hover:text-paper"
+                >
+                  {dict.location.form.sendAnother}
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={submit} className="flex flex-col gap-5">
+                <div>
+                  <label htmlFor="inq-name" className="block font-sans text-xs font-bold uppercase tracking-[0.2em] text-dim">
+                    {dict.location.form.name}
+                  </label>
+                  <input
+                    id="inq-name"
+                    type="text"
+                    required
+                    value={form.name}
+                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    placeholder={dict.location.form.namePlaceholder}
+                    className="mt-2 h-11 w-full border border-hairline bg-platinum px-3 font-sans text-sm placeholder:text-mute focus:border-ink focus:outline-none"
+                  />
+                </div>
+
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <div>
+                    <label htmlFor="inq-email" className="block font-sans text-xs font-bold uppercase tracking-[0.2em] text-dim">
+                      {dict.location.form.email}
+                    </label>
+                    <input
+                      id="inq-email"
+                      type="email"
+                      required
+                      value={form.email}
+                      onChange={(e) => setForm({ ...form, email: e.target.value })}
+                      placeholder={dict.location.form.emailPlaceholder}
+                      className="mt-2 h-11 w-full border border-hairline bg-platinum px-3 font-sans text-sm placeholder:text-mute focus:border-ink focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="inq-phone" className="block font-sans text-xs font-bold uppercase tracking-[0.2em] text-dim">
+                      {dict.location.form.phone}
+                    </label>
+                    <input
+                      id="inq-phone"
+                      type="tel"
+                      value={form.phone}
+                      onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                      placeholder={dict.location.form.phonePlaceholder}
+                      className="mt-2 h-11 w-full border border-hairline bg-platinum px-3 font-sans text-sm placeholder:text-mute focus:border-ink focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="inq-topic" className="block font-sans text-xs font-bold uppercase tracking-[0.2em] text-dim">
+                    {dict.location.form.category}
+                  </label>
+                  <select
+                    id="inq-topic"
+                    value={form.topic}
+                    onChange={(e) => setForm({ ...form, topic: Number(e.target.value) })}
+                    className="mt-2 h-11 w-full border border-hairline bg-platinum px-2 font-sans text-sm text-ink focus:border-ink focus:outline-none"
+                  >
+                    {dict.location.form.categories.map((c, i) => (
+                      <option key={c} value={i}>
+                        {c}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label htmlFor="inq-msg" className="block font-sans text-xs font-bold uppercase tracking-[0.2em] text-dim">
+                    {dict.location.form.message}
+                  </label>
+                  <textarea
+                    id="inq-msg"
+                    required
+                    rows={4}
+                    value={form.message}
+                    onChange={(e) => setForm({ ...form, message: e.target.value })}
+                    placeholder={dict.location.form.messagePlaceholder}
+                    className="mt-2 w-full border border-hairline bg-platinum px-3 py-2.5 font-sans text-sm placeholder:text-mute focus:border-ink focus:outline-none"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="mt-1 inline-flex min-h-[48px] items-center justify-center gap-2 bg-ink px-6 font-sans text-xs font-bold uppercase tracking-[0.2em] text-paper transition-colors duration-200 hover:bg-brass hover:text-ink"
+                >
+                  {dict.location.form.submit}
+                  <IconArrow size={14} />
+                </button>
+              </form>
+            )}
+          </div>
         </Reveal>
       </div>
-    </Section>
+    </section>
   );
 }
