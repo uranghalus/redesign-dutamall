@@ -79,3 +79,11 @@ URL lives in `fugo.bookingUrl` (app/data/home.ts). Orphaned dictionary keys
 estimateLine) pruned from both locales; `FugoSpotlight` no longer needs the
 `locale` prop. VIP CONCIERGE still drops to #location. Verified both
 locales via curl + browser: CTA href/aria correct, no estimate remnants.
+
+### Hero facts row — useful facts replace coordinates (2026-09-19)
+User request: the mock's "coordinates / civic scale" bottom row carried no visitor value.
+Replaced with actionable facts only: street address (Jl. Ahmad Yani KM 2, Melayu,
+Banjarmasin Tengah — matches LocationSection, rendered two-line via `whitespace-pre-line`)
+and "200+ tenants" (official PRD figure) as a brass display value. Keys renamed in both
+dictionaries (`addressLabel`, `directoryLabel`, `directoryValue`; `coordsValue` repurposed
+as the address string). No other consumers of the old keys.

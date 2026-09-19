@@ -142,8 +142,8 @@ export default function SiteHeader({
                       aria-pressed={l === locale}
                       aria-label={`${dict.language.label}: ${localeNames[l]}`}
                       className={`px-1 transition-colors ${l === locale
-                          ? "text-brass-soft"
-                          : "text-paper/60 hover:text-paper"
+                        ? "text-brass-soft"
+                        : "text-paper/60 hover:text-paper"
                         }`}
                     >
                       {localeNames[l]}
@@ -231,12 +231,7 @@ export default function SiteHeader({
                   </span>
                 ))}
               </span>
-              <a
-                href="#fugo"
-                className="inline-flex h-11 items-center bg-ink px-5 font-sans text-xs font-bold uppercase tracking-[0.18em] text-paper transition-colors duration-200 hover:bg-[#2b2b2b]"
-              >
-                {dict.cta.reserve}
-              </a>
+
               <button
                 type="button"
                 aria-expanded={menuOpen}

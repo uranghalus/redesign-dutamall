@@ -46,10 +46,10 @@
     "deck": "Banjarmasin's preeminent lifestyle, retail, and hospitality destination. An architectural civic atrium fusing haute couture boutiques, high-fidelity entertainment, and elevated hospitality under one grand canopy.",
     "ctaDirectory": "Explore Directory",
     "ctaFugo": "FUGO Hotel",
-    "coordinates": "Coordinates",
-    "civicScale": "Civic Scale",
-    "civicValue": "120,000 SQM GFA",
-    "coordsValue": "3.3244° S, 114.5910° E · KM 2"
+    "addressLabel": "Address",
+    "directoryLabel": "Directory",
+    "directoryValue": "200+ tenants",
+    "coordsValue": "Jl. Ahmad Yani KM 2, Melayu,\nBanjarmasin Tengah"
   },
   "tenants": {
     "kicker": "Retail & Beauty Curation",
