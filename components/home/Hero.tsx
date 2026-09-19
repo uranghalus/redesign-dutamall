@@ -243,23 +243,23 @@ export default function Hero({ dict }: { dict: Dictionary }) {
             </a>
           </Reveal>
 
-          {/* facts row — coordinates / civic scale (mock bottom row) */}
+          {/* facts row — street address + tenant scale (mock bottom row) */}
           <Reveal delay={6} className="mt-10 border-t border-hairline pt-6">
             <dl className="flex flex-wrap gap-x-14 gap-y-5">
               <div>
                 <dt className="font-sans text-xs font-bold uppercase tracking-[0.22em] text-dim">
-                  {dict.hero.coordinates}
+                  {dict.hero.addressLabel}
                 </dt>
-                <dd className="mt-1.5 font-sans text-sm font-semibold tracking-wide text-ink">
+                <dd className="mt-1.5 whitespace-pre-line font-sans text-sm font-semibold tracking-wide text-ink">
                   {dict.hero.coordsValue}
                 </dd>
               </div>
               <div>
                 <dt className="font-sans text-xs font-bold uppercase tracking-[0.22em] text-dim">
-                  {dict.hero.civicScale}
+                  {dict.hero.directoryLabel}
                 </dt>
-                <dd className="mt-1.5 font-sans text-sm font-semibold tracking-wide text-ink">
-                  {dict.hero.civicValue}
+                <dd className="mt-1.5 font-display text-xl uppercase tracking-wide text-brass">
+                  {dict.hero.directoryValue}
                 </dd>
               </div>
             </dl>

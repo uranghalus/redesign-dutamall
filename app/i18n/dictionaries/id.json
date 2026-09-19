@@ -46,10 +46,10 @@
     "deck": "Destinasi gaya hidup, ritel, dan perhotelan terkemuka di Banjarmasin. Atrium sipil arsitektural yang memadukan butik mode tinggi, hiburan berkualitas, dan keramahan luar biasa di bawah satu kanopi agung.",
     "ctaDirectory": "Jelajahi Direktori",
     "ctaFugo": "FUGO Hotel",
-    "coordinates": "Koordinat",
-    "civicScale": "Skala Sipil",
-    "civicValue": "120.000 SQM GFA",
-    "coordsValue": "3,3244° S, 114,5910° E · KM 2"
+    "addressLabel": "Alamat",
+    "directoryLabel": "Direktori",
+    "directoryValue": "200+ tenant",
+    "coordsValue": "Jl. Ahmad Yani KM 2, Melayu,\nBanjarmasin Tengah"
   },
   "tenants": {
     "kicker": "Kurasi Ritel & Kecantikan",
@@ -270,7 +270,7 @@
     ],
     "events": [
       { "title": "Festival Belanja Budaya Banjar", "excerpt": "Pameran kerajinan tangan, kuliner lokal, dan diskon hingga 50% di seluruh tenant." },
-      { "title": "Bakti Sosial & Donor Darah", "excerpt": "Donor darah bersama PMI Kalimantan Selatan di Ground Floor, 10.00–15.00 WITA." },
+      { "title":      "Bakti Sosial & Donor Darah", "excerpt": "Donor darah bersama PMI Kalimantan Selatan di Ground Floor, 10.00–15.00 WITA." },
       { "title": "Weekend Live Acoustic", "excerpt": "Musik akustik live di Main Atrium, 19.00–21.00 WITA. Gratis untuk pengunjung." },
       { "title": "Pameran Otomotif & Festival Anak", "excerpt": "Kendaraan modifikasi, test ride, dan zona bermain anak di area parkir P1." }
     ],
