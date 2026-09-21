@@ -7,8 +7,10 @@ import {
   IconSearch,
   IconClose,
   IconMenu,
+  IconPin,
 } from "@/components/ui/Icons";
 import { movies, tenants, wayfinding } from "@/app/data/home";
+import { mapTenantPins } from "@/app/data/map";
 import MobileOffcanvas from "@/components/layout/MobileOffcanvas";
 import { locales, localeNames, type Locale } from "@/app/i18n/config";
 import type { Dictionary } from "@/app/i18n/dictionaries";
@@ -19,15 +21,19 @@ interface SearchHit {
   title: string;
   meta: string;
   href: string;
+  /** set for tenants with a floor-map pin — renders a deep-link action
+      to /peta?tenant=… alongside the primary hit link */
+  mapTenant?: string;
 }
 
-/* structural nav — six honest section links (refined: one voice each) */
+/* structural nav — order mirrors the page flow 1:1 (tenants → cinema → hotel
+   → what's on → facilities → concierge), so nav position = scroll position */
 const nav = [
   { href: "#tenants", label: "tenants" as const },
-  { href: "#facilities", label: "facilities" as const },
   { href: "#cinema", label: "cinema" as const },
   { href: "#fugo", label: "fugo" as const },
   { href: "#whatson", label: "whatson" as const },
+  { href: "#facilities", label: "facilities" as const },
   { href: "#location", label: "location" as const },
 ];
 
@@ -93,6 +99,9 @@ export default function SiteHeader({
         title: t.name,
         meta: `${t.floor} — ${dict.tenants.unit} ${t.unit}`,
         href: "#tenants",
+        /* pinned tenants deep-link into the map; match on the pin's
+           name so the slug stays owned by app/data/map.ts */
+        mapTenant: mapTenantPins.find((p) => p.name === t.name)?.slug,
       }));
 
     const serviceHits: SearchHit[] = wayfinding
@@ -121,6 +130,15 @@ export default function SiteHeader({
               </span>
             </div>
             <div className="flex items-center gap-8 whitespace-nowrap">
+              {/* wayfinding — the floor map as a utility link (nav stays
+                  structural; the topbar carries services like this) */}
+              <a
+                href={`/${locale}/peta`}
+                className="flex items-center gap-2 font-sans text-xs font-bold uppercase tracking-[0.18em] text-paper/85 transition-colors hover:text-brass-soft"
+              >
+                <IconPin size={13} className="shrink-0" />
+                {dict.nav.map}
+              </a>
               <a
                 href="tel:+625113278888"
                 className="font-sans text-xs font-bold uppercase tracking-[0.18em] text-paper/85 transition-colors hover:text-brass-soft"
@@ -283,26 +301,46 @@ export default function SiteHeader({
                     <ul className="divide-y divide-hairline border border-ink">
                       {hits.map((hit) => (
                         <li key={`${hit.type}-${hit.title}`}>
-                          <a
-                            href={hit.href}
-                            onClick={() => {
-                              setSearchOpen(false);
-                              setQuery("");
-                            }}
-                            className="flex items-center justify-between gap-4 bg-paper px-4 py-3 transition-colors hover:bg-bone"
-                          >
-                            <span className="flex min-w-0 items-baseline gap-3">
-                              <span className="shrink-0 bg-ink px-1.5 py-0.5 font-sans text-xs font-bold uppercase text-paper">
-                                {hit.type}
+                          <div className="flex items-stretch bg-paper transition-colors hover:bg-bone">
+                            <a
+                              href={hit.href}
+                              onClick={() => {
+                                setSearchOpen(false);
+                                setQuery("");
+                              }}
+                              className="flex min-w-0 flex-1 items-center justify-between gap-4 px-4 py-3"
+                            >
+                              <span className="flex min-w-0 items-baseline gap-3">
+                                <span className="shrink-0 bg-ink px-1.5 py-0.5 font-sans text-xs font-bold uppercase text-paper">
+                                  {hit.type}
+                                </span>
+                                <span className="truncate font-sans text-sm font-bold uppercase">
+                                  {hit.title}
+                                </span>
                               </span>
-                              <span className="truncate font-sans text-sm font-bold uppercase">
-                                {hit.title}
+                              <span className="max-sm:hidden shrink-0 items-center gap-3 font-sans text-xs uppercase text-mute sm:flex">
+                                {hit.meta}
                               </span>
-                            </span>
-                            <span className="max-sm:hidden shrink-0 items-center gap-3 font-sans text-xs uppercase text-mute sm:flex">
-                              {hit.meta}
-                            </span>
-                          </a>
+                            </a>
+                            {hit.mapTenant && (
+                              <a
+                                href={`/${locale}/peta?tenant=${hit.mapTenant}`}
+                                onClick={() => {
+                                  setSearchOpen(false);
+                                  setQuery("");
+                                }}
+                                aria-label={dict.search.mapActionAria.replace(
+                                  "{name}",
+                                  hit.title,
+                                )}
+                                title={dict.search.mapAction}
+                                className="group/map flex shrink-0 items-center gap-2 border-l border-hairline px-4 font-sans text-xs font-bold uppercase tracking-wide text-mute transition-colors hover:bg-ink hover:text-brass-soft"
+                              >
+                                <IconPin size={14} className="shrink-0" />
+                                <span className="max-md:hidden">{dict.search.mapAction}</span>
+                              </a>
+                            )}
+                          </div>
                         </li>
                       ))}
                     </ul>
