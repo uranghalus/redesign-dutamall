@@ -45,7 +45,13 @@
       "Birthday Sale Doran Gadget × Garmin — diskon hingga 18%",
       "Menu baru Fore Coffee — The Unexpected Twist"
     ],
-    "kicker": "Cetak Biru Landmark",
+    "kicker": "Pusat Belanja & Hiburan",
+    "headline": [
+      "Sentra Belanja",
+      "Hiburan &",
+      "Perhotelan",
+      "Banjarmasin"
+    ],
     "deck": "Destinasi belanja, hiburan, dan perhotelan terdepan di Banjarmasin. Dari butik mode hingga pawagam premium — semuanya bersatu di bawah satu atap agung.",
     "ctaDirectory": "Jelajahi Direktori",
     "ctaFugo": "FUGO Hotel",
@@ -124,7 +130,7 @@
     "riverView": "Pemandangan Sungai Martapura & Panorama Kota",
     "ghostLabel": "Suite",
     "storyKicker": "Urban Sanctuary Di Atas Monolith",
-    "story": "Akomodasi modern berkelas yang melayang di atas landmark belanja utama Banjarmasin.",
+    "story": "Akomodasi modern berkelas yang melayang di atas pusat perbelanjaan di pusat kota Banjarmasin.",
     "body": "Terletak di lantai teratas mall di jantung kota, dikelilingi pusat bisnis dan hiburan. Desainnya berpadu dengan panorama kota, dengan kapasitas hingga 300 tamu. Seluruh 180 kamar berdesain modern.",
     "statLabel": "{label} · {unit}",
     "starsAria": "Hotel bintang 4",
@@ -173,7 +179,7 @@
   },
   "location": {
     "kicker": "Lokasi & Akses",
-    "title": "Tiba di Landmark",
+    "title": "Tiba di Pusat Kota",
     "deck": "Berada di jalan arteri utama Banjarmasin, Duta Mall mudah dijangkau — baik dengan kendaraan pribadi, transportasi publik, maupun dari bandara.",
     "address": "Alamat",
     "addressLines": [
@@ -290,6 +296,11 @@
     ]
   },
   "map": {
+    "mobileNotice": {
+      "title": "PETA LANTAI INTERAKTIF",
+      "body": "Denah lantai tersedia di layar yang lebih besar. Buka Duta Mall Banjarmasin dari tablet atau komputer untuk menjelajahi denah interaktif — cari pintu eskalator, lift, musholla, ATM, dan lokasi tenant.",
+      "fallbackAria": "Buka peta di Google Maps — Duta Mall Banjarmasin"
+    },
     "kicker": "Denah Lantai 1 — Direktori Interaktif",
     "title": "PETA LANTAI",
     "lede": "Klik zona pada denah untuk melihat tenant-nya, atau pilih tenant dari daftar untuk menyorot posisinya.",

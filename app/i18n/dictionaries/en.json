@@ -45,7 +45,13 @@
       "Doran Gadget × Garmin Birthday Sale — up to 18% off",
       "Fore Coffee new menu — The Unexpected Twist"
     ],
-    "kicker": "Landmark Blueprint",
+    "kicker": "Shopping & Lifestyle Destination",
+    "headline": [
+      "The Prominent",
+      "Shopping &",
+      "Lifestyle",
+      "Destination"
+    ],
     "deck": "Banjarmasin's preeminent lifestyle, retail, and hospitality destination. An architectural civic atrium fusing haute couture boutiques, high-fidelity entertainment, and elevated hospitality under one grand canopy.",
     "ctaDirectory": "Explore Directory",
     "ctaFugo": "FUGO Hotel",
@@ -124,7 +130,7 @@
     "riverView": "Martapura River View & Cityscape Panoramas",
     "ghostLabel": "Suites",
     "storyKicker": "Urban Sanctuary Atop the Monolith",
-    "story": "Sophisticated modern accommodation suspended above Banjarmasin's premier shopping landmark.",
+    "story": "Sophisticated modern accommodation suspended above the mall in Banjarmasin's city center.",
     "body": "Located in the city center on the top floors of a prominent mall, surrounded by business and entertainment venues. Stunning views of the surrounding city. The hotel's design is a masterpiece in harmony with a capacity of up to 300 guests. All 180 rooms are decorated in a modern style.",
     "statLabel": "{label} · {unit}",
     "starsAria": "4-star hotel",
@@ -173,7 +179,7 @@
   },
   "location": {
     "kicker": "Location & Access",
-    "title": "Arrive at the Landmark",
+    "title": "Arrive at the City Center",
     "deck": "Conveniently situated along the primary arterial boulevard of Banjarmasin, Duta Mall provides seamless vehicular, public transit, and airport connectivity.",
     "address": "Civic Address",
     "addressLines": [
@@ -290,6 +296,11 @@
     ]
   },
   "map": {
+    "mobileNotice": {
+      "title": "INTERACTIVE FLOOR MAP",
+      "body": "The floor plan is available on larger screens. Open Duta Mall Banjarmasin from a tablet or computer to explore the interactive map — find escalator doors, lifts, musholla, ATMs, and tenant locations.",
+      "fallbackAria": "Open Duta Mall Banjarmasin on Google Maps"
+    },
     "kicker": "1st Floor Plan — Interactive Directory",
     "title": "DIRECTORY MAP",
     "lede": "Click a zone on the plan to reveal its tenants, or pick a tenant from the list to spotlight its position.",

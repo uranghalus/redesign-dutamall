@@ -58,7 +58,7 @@ function InfoRow({
 
 /**
  * §06 — LOCATION & ACCESS (mock 1:1).
- * Left: "ARRIVE AT THE LANDMARK" heading + deck, hairline-ruled icon rows
+ * Left: "ARRIVE AT THE CITY CENTER" heading + deck, hairline-ruled icon rows
  * (Civic Address, Operational Hours, Central Concierge & Leasing), and the
  * Maps route buttons. Right: the VIP INQUIRY & FEEDBACK form — the mock's
  * bordered concierge card with labeled inputs, category select, message
@@ -87,7 +87,7 @@ export default function LocationSection({ dict }: { dict: Dictionary }) {
         </div>
 
         <Reveal className="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-14">
-          {/* ============ left — arrive at the landmark ============ */}
+          {/* ============ left — arrive at the city center ============ */}
           <div>
             <h2 className="border-b border-ink pb-4 font-display text-[clamp(2.2rem,4vw,3.6rem)] uppercase leading-[0.95]">
               {dict.location.title}

@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { IconClose, IconArrow } from "@/components/ui/Icons";
 import { wayfinding } from "@/app/data/home";
 import type { Dictionary } from "@/app/i18n/dictionaries";
+import type { Locale } from "@/app/i18n/config";
 
 /**
  * Blueprint offcanvas — the hero's left column expanded full-screen:
@@ -17,13 +19,24 @@ export default function MobileOffcanvas({
   open,
   onClose,
   dict,
+  lang,
 }: {
   open: boolean;
   onClose: () => void;
   dict: Dictionary;
+  lang: Locale;
 }) {
   const [expanded, setExpanded] = useState<string | null>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+
+  /* anchors resolve against the live pathname — from /peta, `#tenants`
+     becomes `/${lang}#tenants`, so the offcanvas stays functional on every
+     page (mirrors SiteHeader / BottomBar normalization) */
+  const subPath =
+    pathname.replace(/^\/(id|en)(\/|$)/, "/").replace(/\/+$/, "") || "/";
+  const anchor = (hash: string) =>
+    subPath === "/" ? hash : `/${lang}${hash}`;
 
   /* focus in on open + Escape to close */
   useEffect(() => {
@@ -40,15 +53,19 @@ export default function MobileOffcanvas({
     };
   }, [open, onClose]);
 
-  /* numbered groups — dictionary copy + fixed anchors (offcanvas grammar) */
+  /* numbered groups — dictionary copy + cross-page anchors */
   const groups = [
-    { ...dict.offcanvas.groups.directory, href: "#tenants" },
-    { ...dict.offcanvas.groups.cinema, href: "#cinema" },
-    { ...dict.offcanvas.groups.hotel, href: "#fugo" },
-    { ...dict.offcanvas.groups.whatson, href: "#whatson" },
-    { ...dict.offcanvas.groups.services, href: "#facilities" },
-    { ...dict.offcanvas.groups.concierge, href: "#location" },
+    { ...dict.offcanvas.groups.directory, href: anchor("#tenants") },
+    { ...dict.offcanvas.groups.cinema, href: anchor("#cinema") },
+    { ...dict.offcanvas.groups.hotel, href: anchor("#fugo") },
+    { ...dict.offcanvas.groups.whatson, href: anchor("#whatson") },
+    { ...dict.offcanvas.groups.services, href: anchor("#facilities") },
+    { ...dict.offcanvas.groups.concierge, href: anchor("#location") },
   ];
+  const wayfindingLinks = wayfinding.map((w) => ({
+    ...w,
+    href: anchor(w.href),
+  }));
 
   return (
     <div className={`xl:hidden ${open ? "" : "pointer-events-none"}`}>
@@ -156,7 +173,7 @@ export default function MobileOffcanvas({
             {dict.menu.wayfinding}
           </p>
           <ul className="flex flex-wrap gap-2">
-            {wayfinding.map((w) => (
+            {wayfindingLinks.map((w) => (
               <li key={w.code}>
                 <a
                   href={w.href}

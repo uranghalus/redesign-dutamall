@@ -81,7 +81,13 @@ export default async function RootLayout({
       suppressHydrationWarning
       className={`${leagueGothic.variable} ${suit.variable} ${playfair.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-paper font-sans text-ink">
+      {/* suppressHydrationWarning: browser extensions (e.g. Grammarly's
+          data-new-gr-c-s-check-loaded / data-gr-ext-installed on <body>)
+          mutate the DOM before React hydrates; the app's own markup is clean. */}
+      <body
+        suppressHydrationWarning
+        className="flex min-h-full flex-col bg-paper font-sans text-ink"
+      >
         {/* Motion gate & fluid-viewport flag, without a <script> tag: React 19
             forbids script tags inside components (Next 16.3.5 surfaces it as
             a blocking dev error), and next/script executes too late for

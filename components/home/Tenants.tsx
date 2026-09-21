@@ -330,10 +330,11 @@ export default function Tenants({ dict }: { dict: Dictionary }) {
           <p className="font-sans text-xs font-bold uppercase tracking-[0.2em] text-dim">
             {interpolate(dict.tenants.showing, { shown: matched.length })}
           </p>
+          {/* /peta is desktop-only — hidden on mobile with the map */}
           <a
             href="peta"
             aria-label={dict.tenants.showingAria}
-            className="group inline-flex items-center gap-2 font-sans text-xs font-bold uppercase tracking-[0.2em] text-ink transition-colors hover:text-brass"
+            className="group hidden items-center gap-2 font-sans text-xs font-bold uppercase tracking-[0.2em] text-ink transition-colors hover:text-brass md:inline-flex"
           >
             {dict.tenants.showingLink}
             <IconArrow

@@ -151,9 +151,10 @@ export default function Facilities({ dict }: { dict: Dictionary }) {
                   </dd>
                 </div>
               </dl>
+              {/* /peta is desktop-only — hidden on mobile with the map */}
               <a
                 href="peta"
-                className="mt-5 inline-flex items-center gap-2 border border-ink px-3 py-2 font-sans text-xs font-bold uppercase tracking-widest transition-colors hover:bg-ink hover:text-paper"
+                className="mt-5 hidden items-center gap-2 border border-ink px-3 py-2 font-sans text-xs font-bold uppercase tracking-widest transition-colors hover:bg-ink hover:text-paper md:inline-flex"
               >
                 {dict.facilities.mapLink}
                 <IconArrow size={14} />
