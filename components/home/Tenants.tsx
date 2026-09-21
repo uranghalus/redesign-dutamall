@@ -331,7 +331,7 @@ export default function Tenants({ dict }: { dict: Dictionary }) {
             {interpolate(dict.tenants.showing, { shown: matched.length })}
           </p>
           <a
-            href="#location"
+            href="peta"
             aria-label={dict.tenants.showingAria}
             className="group inline-flex items-center gap-2 font-sans text-xs font-bold uppercase tracking-[0.2em] text-ink transition-colors hover:text-brass"
           >

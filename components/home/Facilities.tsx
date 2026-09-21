@@ -152,7 +152,7 @@ export default function Facilities({ dict }: { dict: Dictionary }) {
                 </div>
               </dl>
               <a
-                href="#location"
+                href="peta"
                 className="mt-5 inline-flex items-center gap-2 border border-ink px-3 py-2 font-sans text-xs font-bold uppercase tracking-widest transition-colors hover:bg-ink hover:text-paper"
               >
                 {dict.facilities.mapLink}

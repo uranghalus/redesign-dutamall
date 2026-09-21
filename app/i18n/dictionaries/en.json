@@ -9,7 +9,8 @@
     "cinema": "Cinema",
     "fugo": "The Hotel",
     "whatson": "Events",
-    "location": "Concierge"
+    "location": "Concierge",
+    "map": "Floor Map"
   },
   "search": {
     "open": "Search tenants, films, or facilities",
@@ -19,7 +20,9 @@
     "ariaLabel": "Search films, tenants, or facilities",
     "type": { "film": "Film", "tenant": "Tenant", "service": "Service" },
     "noResults": "No results for \"{q}\". Try different keywords.",
-    "hint": "Type at least 2 letters — e.g. “fore”, “coffee”, “parking”."
+    "hint": "Type at least 2 letters — e.g. “fore”, “coffee”, “parking”.",
+    "mapAction": "View on floor map",
+    "mapActionAria": "View {name} on the interactive floor map"
   },
   "menu": {
     "open": "Open navigation menu",
@@ -89,8 +92,8 @@
     "emptyHint": " Try other keywords, or browse the full catalog.",
     "emptyReset": "View all tenants",
     "showing": "Showing {shown} of 200+ — curated boutiques, culinary experiences & services",
-    "showingAria": "View the complete floor directory — 200+ tenants, GF to L2",
-    "showingLink": "Access complete floor directory"
+    "showingAria": "Open the interactive floor map — 200+ tenants, GF to L2",
+    "showingLink": "Open the floor map"
   },
   "cinema": {
     "kicker": "Premier Cinematic Experience",
@@ -212,35 +215,20 @@
     }
   },
   "footer": {
-    "kicker": "Lotte World Tower Inspired Civic Landmark",
-    "monolith": "The Monolith",
-    "descriptor": "Duta Mall Banjarmasin & FUGO Hotel Complex, South Kalimantan's premier architectural nexus of high fashion, gourmet hospitality, and cinematic culture.",
     "governance": "Corporate Governance",
     "member": "Member of Govindo Group",
-    "columns": {
-      "discover": { "title": "01 / Discover", "links": ["Floor Directory", "Luxury Boutiques"] },
-      "leisure": { "title": "02 / Leisure", "links": ["Great Cinema", "Hotel & Residences"] },
-      "atriums": { "title": "03 / Atriums", "links": ["Atrium Gallery", "VIP Concierge"] },
-      "media": { "title": "04 / Media", "links": ["Press & Media", "Privacy Policy"] },
-      "dial": { "title": "05 / Dial", "links": ["(0511) 327-8888", "Daily 10:00 – 22:00"] },
-      "social": { "title": "06 / Social", "links": ["Instagram", "YouTube", "Facebook"] },
-      "dispatch": { "title": "07 / Dispatch" }
-    },
-    "dispatchBlurb": "Join the private register for premier screenings and cocktail evenings.",
-    "dispatchPlaceholder": "YOUR EMAIL…",
-    "dispatchAria": "Dispatch email",
-    "dispatchCta": "Join Dispatch",
-    "legal": "© {year} The Monolith Landmark & Hotel. All rights reserved. Architectural Masterpiece.",
-    "legalTag1": "Duta Mall Banjarmasin",
-    "legalTag2": "FUGO Hotel 4 Star",
-    "legalTag3": "Cinema XXI Premiere"
+    "phone": "(0511) 327-8888",
+    "hours": "Open Daily 10:00 – 22:00 WITA",
+    "social": ["Instagram", "YouTube", "Facebook"],
+    "legal": "© {year} Duta Mall Banjarmasin · FUGO Hotel — Member of Govindo Group. All rights reserved."
   },
   "bottomBar": {
     "aria": "Quick access",
     "cinema": "Cinema",
     "tenants": "Tenant",
     "hotel": "Hotel",
-    "route": "Route"
+    "route": "Route",
+    "map": "Map"
   },
   "offcanvas": {
     "groups": {
@@ -336,6 +324,31 @@
       "info": "Information",
       "parking": "Parking",
       "clinic": "Clinic"
+    },
+    "route": {
+      "title": "WALKING ROUTE",
+      "from": "From",
+      "to": "To",
+      "clear": "Clear route",
+      "clearAria": "Clear the walking route",
+      "entrances": {
+        "gate-south-door": "South Gate",
+        "rotunda-door": "Rotunda Drop-off",
+        "parking-door": "SE Parking"
+      },
+      "meters": "{n} m",
+      "minutes": "± {n} min walk",
+      "via": "via {zone}",
+      "legendRoute": "Route",
+      "legendDoor": "Entrance",
+      "announce": "Route from {from} to {to}: {meters} meters, about {minutes} minutes.",
+      "listAria": "Show the walking route to {name}",
+      "pick": "PICK ON MAP",
+      "pickAria": "Pick your route start point directly on the map",
+      "pickHint": "Tap your current location on the map",
+      "cancelPick": "Cancel point selection (Escape)",
+      "freeStart": "Your point",
+      "reposition": "Drag the crosshair to move your point"
     }
   }
 }
