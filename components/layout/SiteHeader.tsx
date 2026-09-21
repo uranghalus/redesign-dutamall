@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   IconSearch,
@@ -45,11 +45,22 @@ export default function SiteHeader({
   lang: string;
 }) {
   const router = useRouter();
+  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const locale = lang as Locale;
+
+  /* section anchors resolve against the live pathname — from /peta (where
+     homepage sections don't exist) `#tenants` becomes `/${locale}#tenants`;
+     the structural nav, search results, and the offcanvas stay functional
+     on every page. Mirrors BottomBar's normalization. */
+  const subPath = pathname
+    .replace(/^\/(id|en)(\/|$)/, "/")
+    .replace(/\/+$/, "") || "/";
+  const anchor = (hash: string) =>
+    subPath === "/" ? hash : `/${locale}${hash}`;
 
   /* language switch — cookie is written by the proxy on navigation, so the
      click only carries the target locale and swaps the path prefix,
@@ -88,7 +99,7 @@ export default function SiteHeader({
         type: dict.search.type.film,
         title: m.code,
         meta: `${formatDuration(m.duration, locale)} · ${dict.data.genres[m.genre]} · ${m.rating}`,
-        href: "#cinema",
+        href: anchor("#cinema"),
       }));
 
     const tenantHits: SearchHit[] = tenants
@@ -98,7 +109,7 @@ export default function SiteHeader({
         type: dict.search.type.tenant,
         title: t.name,
         meta: `${t.floor} — ${dict.tenants.unit} ${t.unit}`,
-        href: "#tenants",
+        href: anchor("#tenants"),
         /* pinned tenants deep-link into the map; match on the pin's
            name so the slug stays owned by app/data/map.ts */
         mapTenant: mapTenantPins.find((p) => p.name === t.name)?.slug,
@@ -111,11 +122,14 @@ export default function SiteHeader({
         type: dict.search.type.service,
         title: w.label,
         meta: `${w.floor} · ${w.hours}`,
-        href: w.href,
+        href: anchor(w.href),
       }));
 
     return [...filmHits, ...tenantHits, ...serviceHits];
   }, [query, dict, locale]);
+
+  /* structural nav — links resolve cross-page (see anchor above) */
+  const navItems = nav.map((item) => ({ ...item, href: anchor(item.href) }));
 
   return (
     <>
@@ -193,7 +207,7 @@ export default function SiteHeader({
 
             {/* structural nav — links plus a quiet icon search (label lives in aria) */}
             <nav aria-label="Utama" className="hidden items-center gap-7 xl:flex">
-              {nav.map((item) => (
+              {navItems.map((item) => (
                 <a
                   key={item.label}
                   href={item.href}
@@ -219,12 +233,14 @@ export default function SiteHeader({
 
             {/* actions — mobile search + CTA + offcanvas trigger */}
             <div className="flex items-center gap-2">
+              {/* mobile search — visible below xl, where the desktop nav
+                  (and its inline search) is hidden */}
               <button
                 type="button"
                 aria-label={searchOpen ? dict.search.close : dict.search.open}
                 aria-expanded={searchOpen}
                 onClick={() => setSearchOpen((v) => !v)}
-                className="flex size-11 items-center justify-center text-ink/80 transition-colors hover:text-ink max-xl:hidden xl:hidden"
+                className="flex size-11 items-center justify-center text-ink/80 transition-colors hover:text-ink xl:hidden"
               >
                 {searchOpen ? <IconClose size={17} /> : <IconSearch size={17} />}
               </button>
@@ -334,7 +350,9 @@ export default function SiteHeader({
                                   hit.title,
                                 )}
                                 title={dict.search.mapAction}
-                                className="group/map flex shrink-0 items-center gap-2 border-l border-hairline px-4 font-sans text-xs font-bold uppercase tracking-wide text-mute transition-colors hover:bg-ink hover:text-brass-soft"
+                                /* /peta is desktop-only — the deep-link
+                                   action hides with the map on phones */
+                                className="group/map hidden shrink-0 items-center gap-2 border-l border-hairline px-4 font-sans text-xs font-bold uppercase tracking-wide text-mute transition-colors hover:bg-ink hover:text-brass-soft md:flex"
                               >
                                 <IconPin size={14} className="shrink-0" />
                                 <span className="max-md:hidden">{dict.search.mapAction}</span>
@@ -357,7 +375,12 @@ export default function SiteHeader({
         </div>
       </header>
 
-      <MobileOffcanvas open={menuOpen} onClose={() => setMenuOpen(false)} dict={dict} />
+      <MobileOffcanvas
+        open={menuOpen}
+        onClose={() => setMenuOpen(false)}
+        dict={dict}
+        lang={locale}
+      />
     </>
   );
 }

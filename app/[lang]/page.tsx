@@ -27,8 +27,7 @@ export default async function Home({
   const dict = await getDictionary(locale);
 
   return (
-    <div id="top" className="flex min-h-full flex-col">
-      <SiteHeader dict={dict} lang={locale} />
+    <div id="top" className="flex min-h-full flex-col">      <SiteHeader dict={dict} lang={locale} />
       <main id="main" className="flex-1 pb-[60px] md:pb-0">
         <Hero dict={dict} />
         <Tenants dict={dict} />

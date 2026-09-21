@@ -193,7 +193,7 @@ export default function Hero({ dict }: { dict: Dictionary }) {
       <div className="grid min-h-[calc(100svh-68px)] grid-cols-1 pt-[68px] lg:min-h-[calc(100svh-72px)] lg:grid-cols-[42fr_58fr] lg:pt-[72px] xl:min-h-[calc(100svh-108px)] xl:pt-[108px]">
         {/* ================= LEFT — the blueprint column ================= */}
         <div className="order-2 flex flex-col justify-center bg-bone px-5 py-12 md:px-12 lg:order-1 lg:py-16 xl:pl-[max(4rem,6vw)] xl:pr-14">
-          {/* kicker — number, brass rule, label (mock: 00 — LANDMARK BLUEPRINT) */}
+          {/* kicker — number, brass rule, label (dictionary copy) */}
           <Reveal delay={1} className="flex items-center gap-3">
             <span className="font-sans text-sm font-bold tracking-widest text-brass">00</span>
             <span aria-hidden="true" className="h-px w-9 bg-brass-soft" />
@@ -202,20 +202,22 @@ export default function Hero({ dict }: { dict: Dictionary }) {
             </span>
           </Reveal>
 
-          {/* display — League Gothic, mock line breaks, ink→grey step */}
+          {/* display — League Gothic, four masked lines from the dictionary
+              (hero.headline), ink → grey step on the lower half */}
           <h1 className="mt-5 font-display uppercase leading-[0.92] tracking-[-0.01em]">
-            <Reveal variant="mask" as="span" className="block text-[clamp(3.2rem,6vw,6rem)] text-ink">
-              The Vertical
-            </Reveal>
-            <Reveal variant="mask" delay={1} as="span" className="block text-[clamp(3.2rem,6vw,6rem)] text-ink">
-              Landmark
-            </Reveal>
-            <Reveal variant="mask" delay={2} as="span" className="block text-[clamp(3.2rem,6vw,6rem)] text-[#6f6a5f]">
-              of South
-            </Reveal>
-            <Reveal variant="mask" delay={3} as="span" className="block text-[clamp(3.2rem,6vw,6rem)] text-[#6f6a5f]">
-              Kalimantan
-            </Reveal>
+            {dict.hero.headline.map((line, i) => (
+              <Reveal
+                key={line}
+                variant="mask"
+                delay={i}
+                as="span"
+                className={`block text-[clamp(3.2rem,6vw,6rem)] ${
+                  i >= 2 ? "text-[#6f6a5f]" : "text-ink"
+                }`}
+              >
+                {line}
+              </Reveal>
+            ))}
           </h1>
 
           {/* deck — SUIT, the only text face */}
